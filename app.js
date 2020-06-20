@@ -12,7 +12,8 @@ let express  		    =  		require('express'),
 	  userRoutes		=		require('./routes/users'),
 	  vendorRoutes		=		require('./routes/vendors'),
 	  methodOverride	= 		require("method-override"),
-	  indexRoutes		=		require('./routes/index');
+	  indexRoutes		=		require('./routes/index'),
+	  port 				= 		process.env.PORT || 3000;
 	  
 
 const url 				= 		"mongodb://localhost/schickidb",
@@ -165,7 +166,7 @@ app.use(vendorRoutes);
 app.use(indexRoutes);
 
 
-app.listen(process.env.PORT, ()=>{
+app.listen(port, ()=>{
 	console.log("Server is running on port 3000");
 	}
 );
