@@ -1,0 +1,38 @@
+var mongoose 	=	require('mongoose');
+
+
+var vendorSchema		=	new mongoose.Schema({
+	vendorname			:	{ 	type : String, required : true, unique : true },
+	user_id				:	{
+							 	type : mongoose.Schema.Types.ObjectId,
+							 	ref  : 'user'
+							},
+	status				:	{ 	type : String, default : 'Awaiting Approval'},
+	requestdate			:	{ 	type : Date, default : Date.now() },
+	approvedate			:	{ 	type : Date },
+	blockeddate			:	{ 	type : Date },
+	approvedby			:	{	type : String},
+	blockedby			:	{	type : String},
+	blockedtimes		:	{	type : Number, default : 0 },
+	contact_id			: 	{
+							 	type : mongoose.Schema.Types.ObjectId,
+							 	ref  : 'vendorcontact'
+							},
+	billingAddress_id	: 	{
+							 	type : mongoose.Schema.Types.ObjectId,
+							 	ref  : 'billinglocation'
+							},
+	store				:	{
+								products: [
+										{
+											id	 :	{
+														type : 	mongoose.Schema.Types.ObjectId,
+														ref  : 	'product'
+													}
+										}
+									  ]
+								}
+
+							});
+
+module.exports	=	mongoose.model('vendor', vendorSchema );

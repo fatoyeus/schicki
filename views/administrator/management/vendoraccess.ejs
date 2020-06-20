@@ -1,0 +1,158 @@
+<%- include('../../partials/header') %>
+<div class="container col-md-8 col-xl-6 mt-5">
+	<div class="container mt-2">
+		<div class="container d-flex flex-column mb-3">
+			<div class="align-self-center">
+				<h2 class="text-capitalize">Vendor Access</h2>
+			</div>
+		</div>
+		
+		<div class="container d-flex flex-column"> 
+			<ul class="nav nav-tabs" id="vendorTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<a class="nav-link text-secondary active" id="allvendors-tab" data-toggle="tab" href="#allvendors" role="tab" aria-controls="allvendors" aria-selected="true">All Vendors</a>
+				</li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link text-secondary" id="approvedvendors-tab" data-toggle="tab" href="#approvedvendors" role="tab" aria-controls="approvedvendors" aria-selected="false">Active</a>
+				</li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link text-secondary" id="unapprovedvendors-tab" data-toggle="tab" href="#unapprovedvendors" role="tab" aria-controls="unapprovedvendors" aria-selected="false">Unapproved</a>
+				</li>
+				<li class="nav-item" role="presentation">
+					<a class="nav-link text-secondary" id="suspendedvendors-tab" data-toggle="tab" href="#suspendedvendors" role="tab" aria-controls="suspendedvendors" aria-selected="false">Suspended</a>
+				</li>
+			</ul>
+			
+			<div class="tab-content" id="vendorTabContent">
+				
+				
+				<div class="tab-pane fade show active" id="allvendors" role="tabpanel" aria-labelledby="allvendors-tab">
+				<% vendors.forEach((vendor)=>{ %>
+				<%if(vendor.status){%>
+				<div id="form-id">
+					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 my-1">
+					<div class="row col-lg-9">
+						<div class="container d-flex flex-column">
+						<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="vendor-header" value="<%=vendor._id%>"><%=vendor.vendorname%></data></h4>
+						</div>
+						<div clas="align-self-end">
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="vendor-rdate">Requested: <%=vendor.requestdate.toUTCString()%></p>
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="vendor-status"> Status: <%=vendor.status%></p>
+						</div>
+						<div id="vendor-id" hidden><%vendor._id%></div>
+					</div>
+					</div>
+					<div class="row col-lg-3">
+						<div class="container d-flex flex-column">
+						<div class="align-self-end my-auto">
+							<%if(vendor.status==='Active'){%>
+							<button class="btn btn-success btn-lg shadow" type="submit">Block</button>
+							<%}else if(vendor.status==='Blocked'){%>
+							<button class="btn btn-success btn-lg shadow" type="submit">Unblock</button>
+							<%}else{%>
+							<button class="btn btn-success btn-lg shadow" type="submit">Approve</button>
+							<%}%>
+						</div>
+					</div>
+					</div>
+					</div>	
+				</div>
+				<%}%>	
+				<% })%>
+				</div>
+				
+				<div class="tab-pane fade" id="approvedvendors" role="tabpanel" aria-labelledby="approvedvendors-tab">
+				<% vendors.forEach((vendor)=>{ %>
+				<%if(vendor.status==='Active'){%>
+				<div id="form-id">
+					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 my-1">
+					<div class="row col-lg-9">
+						<div class="container d-flex flex-column">
+						<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="vendor-header" value="<%=vendor._id%>"><%=vendor.vendorname%></data></h4>
+						</div>
+						<div clas="align-self-end">
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="vendor-rdate">Requested: <%=vendor.requestdate.toUTCString()%></p>
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="vendor-status"> Status: <%=vendor.status%></p>
+						</div>
+						<div id="vendor-id" hidden><%vendor._id%></div>
+					</div>
+					</div>
+					<div class="row col-lg-3">
+						<div class="container d-flex flex-column">
+						<div class="align-self-end my-auto">
+							<button class="btn btn-success btn-lg shadow" type="submit">Block</button>
+						</div>
+					</div>
+					</div>
+				</div>	
+				</div>
+				<%}%>
+				<% })%>
+				</div>
+				<div class="tab-pane fade" id="unapprovedvendors" role="tabpanel" aria-labelledby="unapprovedvendors-tab">
+				<% vendors.forEach((vendor)=>{ %>
+				<%if(vendor.status==='Awaiting Approval'){%>
+				<div id="form-id">
+					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 my-1">
+					<div class="row col-lg-9">
+						<div class="container d-flex flex-column">
+						<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="vendor-header" value="<%=vendor._id%>"><%=vendor.vendorname%></data></h4>
+						</div>
+						<div clas="align-self-end">
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="vendor-rdate">Requested: <%=vendor.requestdate.toUTCString()%></p>
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="vendor-status"> Status: <%=vendor.status%></p>
+						</div>
+						<div id="vendor-id" hidden><%vendor._id%></div>
+					</div>
+					</div>
+					<div class="row col-lg-3">
+						<div class="container d-flex flex-column">
+						<div class="align-self-end my-auto">
+							<button class="btn btn-success btn-lg shadow" type="submit">Approve</button>
+						</div>
+					</div>
+					</div>
+				</div>	
+				</div>
+				<%}%>
+				<% })%>
+				</div>
+				<div class="tab-pane fade" id="suspendedvendors" role="tabpanel" aria-labelledby="suspendedvendors-tab">
+				<% vendors.forEach((vendor)=>{ %>
+				<%if(vendor.status==='Blocked'){%>
+				<div id="form-id">
+					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 my-1">
+					<div class="row col-lg-9">
+						<div class="container d-flex flex-column">
+						<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="vendor-header" value="<%=vendor._id%>"><%=vendor.vendorname%></data></h4>
+						</div>
+						<div clas="align-self-end">
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="vendor-rdate">Requested: <%=vendor.requestdate.toUTCString()%></p>
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="vendor-status"> Status: <%=vendor.status%></p>
+						</div>
+						<div id="vendor-id" hidden><%vendor._id%></div>
+					</div>
+					</div>
+					<div class="row col-lg-3">
+						<div class="container d-flex flex-column">
+						<div class="align-self-end my-auto">
+							<button class="btn btn-success btn-lg shadow" type="submit">Unblock</button>
+						</div>
+					</div>
+					</div>
+				</div>	
+				</div>
+				<%}%>
+				<% })%>
+				</div
+			
+				
+			 	
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+<script src="/sc_static/scripts/vendoraccess.js" type="text/javascript"></script>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,23 @@
+<%- include('../../partials/header') %>
+<%- include('../../partials/login_header') %>
+				<form action="<%=action%>" method="post">
+					<div class="form-row">
+						<div class="form-group col-xs-12">
+							<input class="form-control" type="text" name="username" placeholder="username">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-xs-12">
+							<input class="form-control" type="password" name="password" placeholder="password">
+						</div>
+					</div>
+	<% if(!lastChecked){ %>
+
+	<% }else{ %>
+					<input type="hidden" name="lastChecked" value="<%=lastChecked%>">
+	<% } %>
+
+					<button type="submit" class="btn btn-success shadow mt-3 mb-5 mz-3">Sign In</button>
+				</form>
+<%- include('../../partials/login_footer') %>
+<%- include('../../partials/footer') %>

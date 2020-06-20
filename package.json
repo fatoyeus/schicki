@@ -1,0 +1,24 @@
+{
+  "name": "schicknglam",
+  "version": "1.0.0",
+  "description": "schicknglam webapp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+	"start":"node app.js"
+  },
+  "author": "Olakunle Fajorin",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^4.3.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "client-sessions": "^0.8.0",
+    "csurf": "^1.11.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.8.3",
+    "request": "^2.88.0"
+  }
+}
