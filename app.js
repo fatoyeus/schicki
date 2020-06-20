@@ -167,6 +167,10 @@ app.use(indexRoutes);
 
 
 app.listen(port, ()=>{
-	console.log("Server is running on port 3000");
+	if(process.env.PORT){
+		console.log("server is running on port " + process.env.PORT)
+	}else{
+		console.log("Server is running on port 3000");
+		}
 	}
 );
