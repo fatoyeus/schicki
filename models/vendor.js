@@ -22,16 +22,12 @@ var vendorSchema		=	new mongoose.Schema({
 							 	type : mongoose.Schema.Types.ObjectId,
 							 	ref  : 'billinglocation'
 							},
-	store				:	{
-								products: [
-										{
-											id	 :	{
-														type : 	mongoose.Schema.Types.ObjectId,
-														ref  : 	'product'
-													}
-										}
-									  ]
-								}
+	stores				:	{
+								type	:	mongoose.Schema.Types.Array,
+								ref		:	'store'
+							},
+								
+								
 
 							});
 

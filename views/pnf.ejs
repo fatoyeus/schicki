@@ -1,6 +1,9 @@
 <%- include('partials/header') %>
- <div container d-flex justify-content-center>
-	 <h3>PAGE NOT FOUND</h3>
+<%- include('partials/form_header') %>
+ <div container d-flex justify-content-center p-5>
+	 <div container d-flex mb-5>
+		<p class="text-justify">The page <span class="font-italic font-weight-bold">"<%=path%>"</span>, you were trying to reach was not found</p> 
+	 </div>
 </div>
-
+<%- include('partials/form_footer') %>
 <%- include('partials/footer') %>

@@ -32,7 +32,7 @@ app.use(sessions({
 				}));
 
 
-
+//middleware to check session
 app.use((req, res, next)=>{
 	var loggedIn;
 	if(req.schikiSession.userId||req.schikiSession.adminId){
@@ -42,6 +42,7 @@ app.use((req, res, next)=>{
 		
 		var loggedIn = (req.schikiSession.userId ? req.schikiSession.userId : req.schikiSession.adminId)
 		console.log(loggedIn);
+		console.log('schickisession is : '+ req.schikiSession);
 	}else{
 		var loggedIn = 'not loggedIn';
 	}

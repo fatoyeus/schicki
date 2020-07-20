@@ -7,6 +7,7 @@ let express			=		require('express'),
 	Location 		=		require('../models/location'),
 	Contact 		= 		require('../models/contact'),
 	Vendor 			=		require('../models/vendor'),
+	Billing			=		require('../models/billinglocation'),
 	title			=		'schicki';
 	
 
@@ -46,24 +47,20 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 	
 	Birthday.create(userBirthday).then((nUserBirthday)=>{
 																
-			User.findByIdAndUpdate(req.user._id, {birthday_id : nUserBirthday._id}, (err, foundUser)=>{
-																							if(err||!foundUser){
-																								console.log('No user found');
-																								res.redirect('/');
-																							}
-																						});														
-															}).catch((err)=>{
-																console.log(err);
-															});
-	Contact.create(contact).then((usercontact)=>{
+			User.findByIdAndUpdate(req.user._id, {birthday_id : nUserBirthday._id}, (b_err, foundUser)=>{
+																					if(b_err||!foundUser){
+																						console.log('Unable to create profile');
+																						res.redirect('/');
+																						}else{
+				Contact.create(contact).then((usercontact)=>{
 		
-			Email.create(userEmail).then((nUserEmail)=>{
+					Email.create(userEmail).then((nUserEmail)=>{
 														usercontact.userEmail_id = nUserEmail._id;
 														console.log('email created');
-		    Phone.create(userPhone).then((nUserPhone)=>{
+		    			Phone.create(userPhone).then((nUserPhone)=>{
 														usercontact.userPhone_id = nUserPhone._id;
 														console.log('phone created');
-			Location.create(userLocation).then((nUserLocation)=>{
+							Location.create(userLocation).then((nUserLocation)=>{
 																usercontact.userLocation_id = nUserLocation._id;
 																usercontact.save();
 																console.log('location created and contact saved');
@@ -87,9 +84,15 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 					res.redirect('/');
 				}
 		})
-	}).catch((err)=>{
-			console.log(err.message);
-		});
+															}).catch((err)=>{
+																	console.log(err.message);
+															});
+														}
+													});														
+												}).catch((err)=>{
+													console.log(err);
+											});
+	
 	
 	console.log('User profile updated successfully');
 	res.redirect('/');
@@ -119,14 +122,36 @@ router.get('/user/:id/profile/show', checkLogin, (req, res)=>{
 														});
 													});
 //delete user account
-router.get('/user/:id/profile/delete', checkLogin, (req, res)=>{
+router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 	User.findById(req.params.id, (err, user)=>{
 		if(user.isVendor){
 			console.log('Delete vendor account first');
 			res.redirect('/user/:id/profile/show');
 		}else{
 			User.findByIdAndRemove(req.params.id, (u_err, foundUser)=>{
-				
+				if(foundUser){
+					if(foundUser.billingAddress_id){
+						Billing.findByIdAndRemove(foundUser.billingAddress_id,(b_err, foundBilling)=>{
+							console.log('successfully deleted billing address');
+						})
+					}
+				Contact.findByIdAndRemove(foundUser.contact_id, (c_err, foundContact)=>{
+						if(foundContact){
+							Location.findByIdAndRemove(foundContact.userLocation_id, (l_err,foundLocation)=>{
+								if(foundLocation){
+									res.redirect('/logout');
+									console.log('User account successfully deleted')
+								}else{
+									console.log('User location not found');
+								}
+							})
+						}else{
+							console.log('User contact not found');
+						}
+																									})	
+																								}else{
+																									console.log('User not found')
+																								}
 		
 				});
 		}
@@ -135,7 +160,8 @@ router.get('/user/:id/profile/delete', checkLogin, (req, res)=>{
 });
 
 router.get('/user/*', checkLogin, (req, res)=>{
-	res.render('pnf', {title: 'page not found'});
+	var path;
+	res.render('pnf', {title: 'page not found', path: req._parsedUrl.pathname });
 });
 
 module.exports	=		router;

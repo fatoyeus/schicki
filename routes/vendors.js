@@ -165,6 +165,9 @@ router.delete('/vendor/:id/profile/delete', checkLogin, (req, res)=>{
 	
 			});
 });
-	
+router.get('/vendor/*', checkLogin, (req, res)=>{
+	var path;
+	res.render('pnf', {title: 'page not found', path: req._parsedUrl.pathname });
+});	
 
 module.exports	=		router;

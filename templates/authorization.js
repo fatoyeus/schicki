@@ -2,7 +2,7 @@ let   express  		    =  		require('express'),
       router			=		express.Router(),
 	  bcrypt			=		require('bcryptjs');
 
- console.log(encodeURI('/admin/create/c15/new/profile'));
+
 	
 const authorization = [
 {

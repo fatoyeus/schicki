@@ -1,70 +1,98 @@
 <%- include('../../partials/header') %>
-	<div class="container col-md-8 d-flex flex-column justify-content-center my-auto">
-		<div class="container d-flex flex-column">
-			<div class="container d-flex flex-row justify-content-sm-center border border-secondary rounded my-2 p-4">
-				<div class="row mb-3 d-flex align-items-center">
-					<h1 class="text-capitalize"><%=vprofile.vendorname%></h1>
+	
+		<div class="row no-gutters d-flex">
+			<div class="container-fluid no-gutters col-lg-3 d-none d-lg-block my-5">
+				<div class="d-flex flex-column">
+					<ul class="nav flex-column ml-0">
+						<li class="nav-item">
+							<a class="nav-link active text-light" href="#">Build a store</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-light" href="#">Store</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-light" href="#">Move to Mall</a>
+						</li>
+					</ul>
 				</div>
 			</div>
-		</div>	
-		<div class="container d-flex flex-column">
-			<dl>
-				<div class="container d-flex flex-column justify-content-sm-center border border-secondary rounded my-3 p-4">
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6">Status</dt>
-							<dd class="col-sm-6"><%=vprofile.status%></dd>
+			<div class="container col-lg-6 d-flex flex-column justify-content-center my-5">
+				<div class="container d-flex flex-column">
+					<div class="container d-flex flex-row justify-content-sm-center border border-secondary shadow rounded my-auto p-4">
+						<div class="row mb-3 d-flex align-items-center">
+							<h1 class="text-capitalize"><%=vprofile.vendorname%></h1>
 						</div>
-						
-				</div>
-				<div class="container d-flex flex-column justify-content-sm-center border border-secondary rounded my-3 p-4">
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6">Email</dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.email_id.email%></dd>
-						</div>
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6">Business Phone</dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.phone_id.phone%></dd>
-						</div>
-						<div class="d-flex flex-row ml-auto">
-							<a class="btn btn-secondary" href="#">Edit</a>
-						</div>
+					</div>
 				</div>	
-				<div class="container d-flex flex-column justify-content-sm-center border border-secondary rounded my-3 p-4">
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6">Location</dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.country%></dd>
+				<div class="container d-flex flex-column">
+					<dl>
+						<div class="container d-flex flex-column justify-content-sm-center border border-secondary shadow rounded my-3 p-4">
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6">Status</dt>
+									<dd class="col-sm-6"><%=vprofile.status%></dd>
+								</div>
+
 						</div>
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6"></dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.address%></dd>
+						<div class="container d-flex flex-column justify-content-sm-center border border-secondary shadow rounded my-3 p-4">
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6">Email</dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.email_id.email%></dd>
+								</div>
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6">Business Phone</dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.phone_id.phone%></dd>
+								</div>
+								<div class="d-flex flex-row ml-auto">
+									<a class="btn btn-warning shadow" href="#">Edit</a>
+								</div>
+						</div>	
+						<div class="container d-flex flex-column justify-content-sm-center border border-secondary shadow rounded my-3 p-4">
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6">Location</dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.country%></dd>
+								</div>
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6"></dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.address%></dd>
+								</div>
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6"></dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.city%></dd>
+								</div>
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6"></dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.state%></dd>
+								</div>
+								<div class="d-sm-flex flex-row p-auto">
+									<dt class="col-sm-6"></dt>
+									<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.zipcode%></dd>
+								</div>
+								<div class="d-flex flex-row ml-auto">
+									<a class="btn btn-warning shadow" href="#">Edit</a>
+								</div>
 						</div>
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6"></dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.city%></dd>
-						</div>
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6"></dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.state%></dd>
-						</div>
-						<div class="d-sm-flex flex-row p-auto">
-							<dt class="col-sm-6"></dt>
-							<dd class="col-sm-6"><%=vprofile.contact_id.vendorlocation_id.zipcode%></dd>
-						</div>
-						<div class="d-flex flex-row ml-auto">
-							<a class="btn btn-secondary" href="#">Edit</a>
-						</div>
+					</dl>
 				</div>
-			</dl>
-		</div>
-		<div class="container d-flex flex-column">
-			<form action="/vendor/<%=vprofile._id%>/profile/delete?_method=DELETE" method="POST">
-				<div class="container d-flex flex-row justify-content-sm-center border border-secondary rounded my-1 p-3">
-				<div class="row d-flex align-items-center">
-					<input class="btn btn-danger btn-lg" type="submit" value="Delete Vendor">
+			<div class="container d-flex flex-column">
+				<form action="/vendor/<%=vprofile._id%>/profile/delete?_method=DELETE" method="POST">
+					<div class="container d-flex flex-row justify-content-sm-center border border-secondary shadow rounded my-1 p-3">
+						<div class="row d-flex align-items-center">
+							<input class="btn btn-danger btn-lg shadow" type="submit" value="Delete Account">
+						</div>
+					</div>
+				</form>
+			</div>
+			</div>
+			<div class="container-fluid no-gutters col-lg-3 d-none d-lg-block my-5 ">
+				<div class="container d-flex flex-column">
+					<div class="container d-flex flex-column text-right">
+						<h5>
+							Under construction
+						</h5>
+					</div>
 				</div>
 			</div>
-			</form>
-			
 		</div>
-	</div>
+	
+	
 <%- include('../../partials/footer') %>

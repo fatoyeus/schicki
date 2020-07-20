@@ -13,7 +13,7 @@
 		<nav class="navbar navbar-expand-large navbar-light sticky-top bg-dark justify-content-end" id="navalign">
 				<a class="navbar-brand text-light" id="brandmove" hidden href="/">Schicki</a>
 				
-							<ul class="nav d-flex justify-content-end">
+					<ul class="nav d-flex justify-content-end">
 						<% if (!(user||admin)){ %>
 						<li class="nav-item">
 							
@@ -44,7 +44,7 @@
 										<a class="text-white dropdown-item" href="/user/profile/new">Create Profile</a>
 										<%}%>
 										<%if(user.isVendor){%>
-										<a class="text-white dropdown-item" href="/vendor/<%=user._id%>/profile/show">Vendor profile</a>
+										<a class="text-white dropdown-item" href="/vendor/<%=user._id%>/profile/show">Vendor Dashboard</a>
 										<%}else{%>
 								      	<a class="text-white dropdown-item" href="/vendor/enroll">Register as vendor</a>
 										<%}%>
@@ -67,15 +67,8 @@
 						
 		</nav>
 						
-		<div class="container-fluid mx-2">
-			<div class="row no-gutters">
-				<div class="col-sm-12">
-					
-				</div>
-			</div>
-			<div class="row no-gutters">
-			
-			<div class="col-sm-12">
+		<div class="container-fluid no-gutters">
+			<div class="container-fluid col-sm-12">
 			 
 			
 		

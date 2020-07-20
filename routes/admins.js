@@ -174,8 +174,9 @@ router.get('/admin/dashboard', checkLogin, (req, res)=>{
 	res.render('administrator/admins/dashboard', { title : 'Admin Dashboard', dashboard : authorization});
 });
 
-router.get('/admin/*', (req, res)=>{
-	res.render('pnf', {title: 'page not found'});
+router.get('/admin/*', checkLogin, (req, res)=>{
+	var path;
+	res.render('pnf', {title: 'page not found', path: req._parsedUrl.pathname });
 });
 
 module.exports	=		router;

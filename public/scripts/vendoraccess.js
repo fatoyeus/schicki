@@ -16,7 +16,7 @@ function l(b, c, f, g, h){
 	n.open('POST', d, true);
 	n.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	n.send();
-} 
+						} 
 function r(v, y){
 	let w  = v.querySelector('data#vendor-header').innerHTML;
 	let s  = v.querySelector('button').innerHTML;
@@ -44,9 +44,7 @@ function r(v, y){
 		});
 	
 	return y;
-}
-
-
+				}
 u.forEach((p)=>{
 	var w 	=	p.querySelector('button');
 	var f 	=	p.querySelector('p#vendor-status');
@@ -66,4 +64,4 @@ u.forEach((p)=>{
 									 l(f, z, p, u, 'unblock');
 							}
 						}
-});
+				});
