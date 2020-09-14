@@ -13,6 +13,7 @@ let express  		    =  		require('express'),
 	  vendorRoutes		=		require('./routes/vendors'),
 	  methodOverride	= 		require("method-override"),
 	  indexRoutes		=		require('./routes/index'),
+	  storeRoutes		=		require('./routes/store'),
 	  port 				= 		process.env.PORT || 3000;
 	  
 
@@ -162,9 +163,11 @@ mongoose.connect(url , {useNewUrlParser: true, useUnifiedTopology: true}).then((
 app.use(adminRoutes);
 app.use(authRoutes);
 app.use(productRoutes);
+app.use(storeRoutes);
 app.use(userRoutes);
 app.use(vendorRoutes);
 app.use(indexRoutes);
+
 
 
 app.listen(port, ()=>{

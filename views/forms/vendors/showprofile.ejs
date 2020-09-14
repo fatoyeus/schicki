@@ -1,21 +1,6 @@
 <%- include('../../partials/header') %>
-	
-		<div class="row no-gutters d-flex">
-			<div class="container-fluid no-gutters col-lg-3 d-none d-lg-block my-5">
-				<div class="d-flex flex-column">
-					<ul class="nav flex-column ml-0">
-						<li class="nav-item">
-							<a class="nav-link active text-light" href="#">Build a store</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-light" href="#">Store</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-light" href="#">Move to Mall</a>
-						</li>
-					</ul>
-				</div>
-			</div>
+<%- include('../../partials/vendordash_header.ejs') %>	
+		
 			<div class="container col-lg-6 d-flex flex-column justify-content-center my-5">
 				<div class="container d-flex flex-column">
 					<div class="container d-flex flex-row justify-content-sm-center border border-secondary shadow rounded my-auto p-4">
@@ -73,26 +58,17 @@
 						</div>
 					</dl>
 				</div>
-			<div class="container d-flex flex-column">
-				<form action="/vendor/<%=vprofile._id%>/profile/delete?_method=DELETE" method="POST">
-					<div class="container d-flex flex-row justify-content-sm-center border border-secondary shadow rounded my-1 p-3">
-						<div class="row d-flex align-items-center">
-							<input class="btn btn-danger btn-lg shadow" type="submit" value="Delete Account">
-						</div>
-					</div>
-				</form>
-			</div>
-			</div>
-			<div class="container-fluid no-gutters col-lg-3 d-none d-lg-block my-5 ">
 				<div class="container d-flex flex-column">
-					<div class="container d-flex flex-column text-right">
-						<h5>
-							Under construction
-						</h5>
-					</div>
+					<form action="/vendor/<%=vprofile._id%>/profile/delete?_method=DELETE" method="POST">
+						<div class="container d-flex flex-row justify-content-sm-center border border-secondary shadow rounded my-1 p-3">
+							<div class="row d-flex align-items-center">
+								<input class="btn btn-danger btn-lg shadow" type="submit" value="Delete Account">
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
-		</div>
+			
 	
-	
+<%- include('../../partials/vendordash_footer.ejs') %>	
 <%- include('../../partials/footer') %>

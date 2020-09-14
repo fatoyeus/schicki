@@ -1,5 +1,5 @@
 var a = document.querySelectorAll('div#dropMenu a');
-console.log(a);
+
 
 a.forEach((a)=>{
 	a.addEventListener("mouseover", ()=>{
@@ -20,5 +20,4 @@ if(!(document.title === 'schicki')){
 	b.classList.remove("justify-content-end");
 	c.removeAttribute('hidden');
 	
-	console.log('brandmove done');
 }

@@ -86,8 +86,12 @@ const authorization = [
 	module		:	'Stores',
 	ref			:	[
 						{
-							name	:	'',
-							path	:	''
+							name	:	'Store Access',
+							path	:	'/admin/c8/all/store/accessmanagement'
+						},
+						{
+							name	:	'Store Category',
+							path	:	'/admin/c8/store/category'
 						}
 					],
 	description	:	'Manage store components'

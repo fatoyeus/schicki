@@ -1,8 +1,8 @@
 var mongoose 	=	require('mongoose');
 
 
-var prodCatSchema	=	new mongoose.Schema({
+var prodcatSchema	=	new mongoose.Schema({
 	type :	string
 });
 
-module.exports	=	mongoose.model('prodCat', prodCatSchema );
+module.exports	=	mongoose.model('prodcat', prodcatSchema );

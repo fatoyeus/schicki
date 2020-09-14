@@ -14,6 +14,8 @@ let   express  		    =  		require('express'),
 	  VendorEmail   	=		require('../models/vendoremail'),
 	  VendorPhone		=		require('../models/vendorphone'),
 	  VendorLocation	=		require('../models/vendorlocation'),
+	  Store				= 		require('../models/store'),
+	  Storecat			=		require('../models/storecat'),
 	  createStore		= 		require('../APIs/schicki_storage/createstore'),		  
 	  title				=		'schicki',
 	  lastChecked,
@@ -85,8 +87,55 @@ router.post('/admin/login', (req, res)=>{
 		
 	});
 
+//Vendor access management
+ router.get('/admin/c10/all/vendor/accessmanagement', (req, res)=>{
+	 Vendor.find({},'_id vendorname status requestdate',(err, unapprovedVendors)=>{
+		 var vendors;
+		 res.render('administrator/management/vendoraccess', {vendors: unapprovedVendors, title:'vendor access'})
+	 });
+ });
+//Approve vendors-c10
+router.post('/admin/c10/vendor/:id/approve',(req, res)=>{
+	Vendor.findByIdAndUpdate(req.params.id, {status: 'Active', approvedate: Date.now(), approvedby: req.admin._id},(err, vendor)=>{
+		if (err){
+			console.log(err);
+			res.send('Status: Awaiting Approval');
+			}else{
+			console.log(vendor);
+			res.send('Status: Active');
+			}
+	});
+});
+//Block vendors
+router.post('/admin/c10/vendor/:id/block',(req, res)=>{
+	Vendor.findById(req.params.id, (f_err, fvendor)=>{
+		if(fvendor){
+			Vendor.findByIdAndUpdate(req.params.id, {status: 'Blocked', blockeddate: Date.now(), blockedby: req.admin._id, blockedtimes: ++fvendor.blockedtimes},(err, vendor)=>{
+		if (err){
+			console.log(err);
+			res.redirect('/admin/c10/all/vendor/accessmanagement');
+			}else{
+			console.log(vendor);
+			res.send('Status: Blocked');
+			}
+	});
+		}
+	})
+	
+});
+//Unblock vendors
+router.post('/admin/c10/vendor/:id/unblock',(req, res)=>{
+	Vendor.findByIdAndUpdate(req.params.id, {status: 'Active', unblockedby: req.admin._id , blockeddate: null, blockedby: null },(err, vendor)=>{
+		if (err){
+			console.log(err);
+			res.redirect('/admin/c10/all/vendor/accessmanagement');
+			}else{
+			console.log(vendor);
+			res.send('Status: Active');
+			}
+	});
+});
 //Create Admins
-//Get form
 router.get('/admin/c14/new/profile', (req, res)=>{
 	res.render('administrator/admins/new', {title: 'create admin'});
 			});
@@ -118,37 +167,67 @@ router.post('/admin/c14/new/profile', (req, res)=>{
 	
 	res.redirect('/admin/new/profile');
 			});
-
-
-//Vendor access management
- router.get('/admin/c10/all/vendor/accessmanagement', (req, res)=>{
-	 Vendor.find({},'_id vendorname status requestdate blockeddate blockedby approvedby blockedtimes',(err, unapprovedVendors)=>{
-		 var vendors;
-		 res.render('administrator/management/vendoraccess', {vendors: unapprovedVendors, title:'vendor access'})
+//Store access management
+ router.get('/admin/c8/all/store/accessmanagement', (req, res)=>{
+	 Store.find({},'_id storename status requestdate',(err, unapprovedstores)=>{
+		 var stores;
+		 res.render('administrator/management/storeaccess', {stores: unapprovedstores, title:'store access'});
 	 });
  });
-//Approve vendors-c10
-router.post('/admin/c10/vendor/:id/approve',(req, res)=>{
-	Vendor.findByIdAndUpdate(req.params.id, {status: 'Active', approvedate: Date.now(), approvedby: req.admin.username},(err, vendor)=>{
+
+//Manage store category
+router.get('/admin/c8/store/category', (req, res)=>{
+ Storecat.find({}, (err, cat)=>{
+	 		var categories;
+	 		res.render('administrator/management/storecategory', {categories: cat, title:'store category'});
+	 });
+});
+router.post('/admin/c8/store/category', (req, res)=>{
+	
+	Storecat.create({name : req.body.categoryname}).then((ncat)=>{
+		
+		res.send(`${ncat._id}`);
+	}).catch((err)=>{
+		if (err){
+				res.send(444);
+		}
+	})
+})
+router.post('/admin/c8/store/category/activate', (req, res)=>{
+	Storecat.findByIdAndUpdate(req.body.selectedcat, {status: 222}, (err, cat)=>{
+		console.log(cat);
+		res.send(cat._id);
+	})
+})
+router.post('/admin/c8/store/category/deactivate', (req, res)=>{
+	
+	Storecat.findByIdAndUpdate(req.body.selectedcat, {status: 444}, (err, cat)=>{
+		console.log(cat);
+		res.send(cat._id);
+	})
+})
+//Approve stores-c8
+router.post('/admin/c8/store/:id/approve',(req, res)=>{
+	Store.findByIdAndUpdate(req.params.id, {status: 'Active', approvedate: Date.now(), approvedby: req.admin._id},(err, store)=>{
 		if (err){
 			console.log(err);
 			res.send('Status: Awaiting Approval');
 			}else{
-			console.log(vendor);
+			console.log(store);
 			res.send('Status: Active');
 			}
 	});
 });
-//Block vendors
-router.post('/admin/c10/vendor/:id/block',(req, res)=>{
-	Vendor.findById(req.params.id, (f_err, fvendor)=>{
-		if(fvendor){
-			Vendor.findByIdAndUpdate(req.params.id, {status: 'Blocked', blockeddate: Date.now(), blockedby: req.admin.username, blockedtimes: ++fvendor.blockedtimes},(err, vendor)=>{
+//Block stores
+router.post('/admin/c8/store/:id/block',(req, res)=>{
+	Store.findById(req.params.id, (f_err, fstore)=>{
+		if(fstore){
+			Store.findByIdAndUpdate(req.params.id, {status: 'Blocked', blockeddate: Date.now(), blockedby: req.admin._id, blockedtimes: ++fstore.blockedtimes},(err, store)=>{
 		if (err){
 			console.log(err);
-			res.redirect('/admin/c10/all/vendor/accessmanagement');
+			res.redirect('/admin/c10/all/store/accessmanagement');
 			}else{
-			console.log(vendor);
+			console.log(store);
 			res.send('Status: Blocked');
 			}
 	});
@@ -156,18 +235,19 @@ router.post('/admin/c10/vendor/:id/block',(req, res)=>{
 	})
 	
 });
-//Unblock vendors
-router.post('/admin/c10/vendor/:id/unblock',(req, res)=>{
-	Vendor.findByIdAndUpdate(req.params.id, {status: 'Active', blockeddate: null, blockedby: null },(err, vendor)=>{
+//Unblock stores
+router.post('/admin/c8/store/:id/unblock',(req, res)=>{
+	Store.findByIdAndUpdate(req.params.id, {status: 'Active', unblockedby: req.admin._id , blockeddate: null, blockedby: null },(err, store)=>{
 		if (err){
 			console.log(err);
-			res.redirect('/admin/c10/all/vendor/accessmanagement');
+			res.redirect('/admin/c10/all/store/accessmanagement');
 			}else{
-			console.log(vendor);
+			console.log(store);
 			res.send('Status: Active');
 			}
 	});
 });
+
 //admin dashboard
 router.get('/admin/dashboard', checkLogin, (req, res)=>{
 	var dashboard;
