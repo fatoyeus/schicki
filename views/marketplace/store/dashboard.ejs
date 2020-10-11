@@ -1,0 +1,42 @@
+<%- include('../../partials/header') %>
+<%- include('../../partials/vendordash_header.ejs') %>	
+<div class="container col-md-8 col-xl-6 mt-5">
+	<div class="container mt-2">
+		<div class="container d-flex flex-column mb-3">
+			<div class="align-self-center">
+				<h2 class="text-capitalize">Stores</h2>
+			</div>
+		</div>
+		
+		<div class="tab-pane fade show active" id="allstores" role="tabpanel" aria-labelledby="allstores-tab">
+				<% stores.forEach((store)=>{ %>
+				<%if(store.status){%>
+				<div id="form-id">
+					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 my-1">
+					<div class="row col-lg-9">
+						<div class="container d-flex flex-column">
+						<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="store-header" value="<%=store._id%>"><%=store.storename%></data></h4>
+						</div>
+						<div clas="align-self-end">
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="store-rdate">Date Requested: <%=store.requestdate.toUTCString()%></p>
+						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="store-status"> Status: <%=store.status%></p>
+						</div>
+						<div id="store-id" hidden><%store._id%></div>
+					</div>
+					</div>
+					<div class="row col-lg-3">
+						<div class="container d-flex flex-column">
+						<div class="align-self-end my-auto">
+							<button class="btn btn-success btn-lg shadow" type="submit">Manage</button>
+						</div>
+					</div>
+					</div>
+					</div>	
+				</div>
+				<%}%>	
+				<% })%>
+		</div>
+	</div>
+</div>
+<%- include('../../partials/vendordash_footer.ejs') %>
+<%- include('../../partials/footer') %>

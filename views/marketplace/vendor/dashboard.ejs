@@ -1,0 +1,38 @@
+<%- include('../../partials/header') %>
+<%- include('../../partials/vendordash_header.ejs') %>	
+<div class="col-lg-6 d-none d-lg-block my-5">
+	<div  class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="container border border-secondary rounded">
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<p class="nav-link active text-light my-0">Users:<span><a href="#"> 1</a></span></p>
+						</li>
+						<li class="nav-item">
+							<p class="nav-link text-light my-0">Stores:<span><a href="/stores/view"> <%=vendor.stores.length%> </a></span></p>
+						</li>
+						<li class="nav-item">
+							<%if(vendor.status === 'blocked'){%>
+							<p class="nav-link text-light my-0">Status:<span class="text-danger"> <%=vendor.status%></span></p>
+							<%}else if(vendor.status === 'Awaiting Approval'){%>
+							<p class="nav-link text-light my-0">Status:<span class="text-secondary"> <%=vendor.status%></span></p>
+							<%}else{%>
+							<p class="nav-link text-light my-0">Status:<span class="text-success"> <%=vendor.status%></span></p>
+							<%}%>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="container border border-secondary rounded">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<%- include('../../partials/vendordash_footer.ejs') %>	
+<script src="/sc_static/scripts/" type="text/javascript"></script>
+
+<%- include('../../partials/footer') %>

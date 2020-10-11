@@ -12,13 +12,18 @@ function checkLogin(req, res, next){
 	if(!req.user){
 		return res.render('forms/authentication/login', {lastChecked: req._parsedUrl.pathname,action:'/login', title:'login'});
 	}
-	if( req.user && req._parsedUrl.pathname === '/login' ){
+	else if( req.user && req._parsedUrl.pathname === '/login' ){
 		return res.redirect('/');
 	}
-	if(!req.user.isProfiled){
-		res.redirect('/user/profile/new');
+	else if(!req.user.isProfiled){
+		res.redirect('/');
 	}
-	next();
+	else if(!req.user.isVendor){
+		res.redirect('/');
+	}
+	else{
+		next();
+	}
 }
 
 //Create a Store
@@ -31,9 +36,13 @@ router.get('/store/create', checkLogin, (req, res)=>{
 });
 
 router.post('/store/create', checkLogin, (req, res)=>{
-	var store		=		req.body;
-	Store.create(store).then((nstore)=>{
+	Store.create(req.body).then((nstore)=>{
+											Vendor.findById(req.user.vendor_id, (err, fvendor)=>{
+																				fvendor.stores.push(nstore._id);
+																				fvendor.save();
+																				});
 										    nstore.vendor_id	=	req.user.vendor_id;
+											nstore.save();
 											res.redirect('/stores/view');
 										}).catch((err)=>{
 															console.log(err.message);
@@ -58,13 +67,15 @@ router.get('/store/search/:id/check', checkLogin, (req, res)=>{
 router.get('/stores/view', checkLogin, (req, res)=>{
 	var vendor,
 		stores;
-	Store.find({ vendor_id: req.user.vendor_id },'_id storename status requestdate',(err, fs)=>{
-		Vendor.findById(req.user.vendor_id, (err,fv)=>{
-														vendor = fv;
-														});
-		res.render('marketplace/store/dashboard', {stores: fs, title: vendor + 'Stores'});
+	Vendor.findById(req.user.vendor_id, (err, fv)=>{
+		if(fv){
+			vendor = fv;
+			console.log('vendor: ' + fv);
+				Store.find({ vendor_id: req.user.vendor_id },'_id storename status requestdate', (err, fs)=>{
+					res.render('marketplace/store/dashboard', {stores: fs, title: vendor.vendorname + ' Stores'});
+						});
+				}
+			});
 	});
-	
-});
 
 module.exports	=		router;

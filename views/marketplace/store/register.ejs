@@ -1,6 +1,6 @@
 <%- include('../../partials/header') %>
 <%- include('../../partials/vendordash_header.ejs') %>	
-<div class="container col-lg-6 d-flex flex-column justify-content-center my-auto" id="createstore">
+<div class="col-lg-6 d-flex flex-column justify-content-center my-auto" id="createstore">
 	<div class="container d-flex flex-row justify-content-center">
 		<div class="row mb-3 d-flex align-items-center">
 			<h2 class="text-capitalize" id="cstore-header">Create Store</h2>
@@ -19,7 +19,7 @@
 		<div class="d-flex flex-row justify-content-center my-auto p-auto">
 			<div class="form-row w-50">
 				<div class="form-group col-md-12 col-xs-12">
-				<textarea class="form-control" type="text" name="storedescr" id="storedescr" placeholder="Deescribe store" hidden></textarea>
+				<textarea class="form-control" type="text" name="description" id="storedescr" placeholder="Deescribe store" hidden></textarea>
 				</div>
 			</div>
 		</div>
@@ -28,10 +28,10 @@
 					<div class="form-row w-50">
 						<div class="form-group col-md-12 col-xs-12">
 							
-							<select class="form-control custom-select" name="storecat" id="storecat" hidden>
+							<select class="form-control custom-select" name="category" id="storecat" hidden>
 							  <option selected>Choose Category</option>
 							  <%cat.forEach((category)=>{ %>
-							  <option value="1"><%=category.name%></option>
+							  <option value="<%=category.name%>"><%=category.name%></option>
 							  <%})%>
 							</select>
 							

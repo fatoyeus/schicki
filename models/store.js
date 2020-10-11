@@ -3,10 +3,7 @@ var mongoose		=		require('mongoose');
 var storeSchema		=	new mongoose.Schema({
 	storename			:	{ 	type 	:	String, required : true, unique : true },
 	description			:	String,
-	category			: 	{
-							 	type 	:	mongoose.Schema.Types.ObjectId,
-							 	ref  	:	'storecat'
-							},
+	category			: 	{ 	type 	:	String, required : true },
 	vendor_id			:	{
 							 	type 	:	mongoose.Schema.Types.ObjectId,
 							 	ref  	:	'vendor'
@@ -24,9 +21,9 @@ var storeSchema		=	new mongoose.Schema({
 							 	ref  	: 	'admin'
 							},
 	blockedtimes		:	{	type 	: 	Number, default : 0 },
-	products			:	{
-								type 	:	mongoose.Schema.Types.Array,
-								ref		:	'products'
+	inventory			:	{
+								type 	:	mongoose.Schema.Types.ObjectId,
+								ref		:	'inventory'
 							}
 	});
 	

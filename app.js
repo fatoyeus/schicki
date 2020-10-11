@@ -4,6 +4,7 @@ let express  		    =  		require('express'),
 	  request			=  		require('request'),
       bodyParser 		=  		require('body-parser'),
 	  bcrypt			=		require('bcryptjs'),
+	  helmet			=		require('helmet'),
 	  Admin				=		require('./models/admin'),
 	  User				= 		require('./models/user'),
 	  adminRoutes		=		require('./routes/admins'),
@@ -26,6 +27,7 @@ app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.set('view engine', 'ejs');
+
 app.use(sessions({
 					cookieName	:	"schikiSession",
 					secret		:	"ug70&&%$hdh3$@1d",
@@ -37,13 +39,8 @@ app.use(sessions({
 app.use((req, res, next)=>{
 	var loggedIn;
 	if(req.schikiSession.userId||req.schikiSession.adminId){
-		console.log(req.schikiSession);
-		console.log(req.schikiSession.userId);
-		console.log(req.schikiSession.adminId);
-		
 		var loggedIn = (req.schikiSession.userId ? req.schikiSession.userId : req.schikiSession.adminId)
 		console.log(loggedIn);
-		console.log('schickisession is : '+ req.schikiSession);
 	}else{
 		var loggedIn = 'not loggedIn';
 	}
@@ -100,6 +97,8 @@ app.use((req, res, next)=>{
 	
 	
 }); 
+
+//app.disable('x-powered-by');
 
 /*app.use('/admin', (req, res, next)=>{
 					Admin.findById(req.schikiSession.adminId, '-password', (err, admin)=>{

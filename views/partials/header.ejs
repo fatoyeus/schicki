@@ -39,12 +39,12 @@
 									  	<%if(user){%>
 									  	<div class="dropdown-divider"></div>
 										<%if(user.isProfiled){%>
-										<a class="text-white dropdown-item" href="/user/<%=user._id%>/profile/show">Profile</a>
+										<a class="text-white dropdown-item" href="/user/profile/show">Profile</a>
 										<%}else{%>
 										<a class="text-white dropdown-item" href="/user/profile/new">Create Profile</a>
 										<%}%>
 										<%if(user.isVendor){%>
-										<a class="text-white dropdown-item" href="/vendor/<%=user._id%>/profile/show">Vendor Dashboard</a>
+										<a class="text-white dropdown-item" href="/vendor/dashboard">Vendor Dashboard</a>
 										<%}else{%>
 								      	<a class="text-white dropdown-item" href="/vendor/enroll">Register as vendor</a>
 										<%}%>
@@ -62,7 +62,7 @@
 							</div>
 						</li>
 						<% } %>
-							</ul>
+					</ul>
 				
 						
 		</nav>

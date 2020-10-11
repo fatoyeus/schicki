@@ -12,7 +12,7 @@ function l(b, c, f, g, h){
 			 r(f, g);
 			}
 		}
-	var d = `/admin/c10/store/${c}/${h}`;
+	var d = `/admin/c8/store/${c}/${h}`;
 	n.open('POST', d, true);
 	n.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	n.send();

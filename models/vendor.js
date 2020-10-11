@@ -1,5 +1,5 @@
 var mongoose 	=	require('mongoose');
-
+var level		= 	require('../templates/vendorlevel');
 
 var vendorSchema		=	new mongoose.Schema({
 	vendorname			:	{ 	type 	: 	String, required : true, unique : true },
@@ -7,6 +7,7 @@ var vendorSchema		=	new mongoose.Schema({
 							 	type 	: 	mongoose.Schema.Types.ObjectId,
 							 	ref  	: 	'user'
 							},
+	level				:	{	type	:	String, required : true, default : '0000x1000'},
 	status				:	{ 	type 	: 	String, default : 'Awaiting Approval'},
 	requestdate			:	{ 	type 	: 	Date, default : Date.now() },
 	approvedate			:	{ 	type 	: 	Date },

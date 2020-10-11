@@ -49,7 +49,6 @@ function prevAdminRelogin(req, res, next){
 	next();
 }
 function levelcheck(n){
-
 	return function(req, res, next){
 		if (!(req.admin.priviledge >= n)){
 		return res.render('forbidden', {title : 'Forbidden'})
@@ -98,14 +97,20 @@ router.post('/admin/login', (req, res)=>{
 router.post('/admin/c10/vendor/:id/approve',(req, res)=>{
 	Vendor.findByIdAndUpdate(req.params.id, {status: 'Active', approvedate: Date.now(), approvedby: req.admin._id},(err, vendor)=>{
 		if (err){
-			console.log(err);
-			res.send('Status: Awaiting Approval');
-			}else{
-			console.log(vendor);
-			res.send('Status: Active');
-			}
-	});
-});
+				console.log(err);
+				res.send('Status: Awaiting Approval');
+				}else{
+						User.findByIdAndUpdate(vendor.user_id, { isVendor : true }, (err)=>{
+							if(err){
+									console.log(err.message);
+									}	
+							   else{
+									res.send('Status: Active');
+									}
+								});
+							}
+						});
+					});
 //Block vendors
 router.post('/admin/c10/vendor/:id/block',(req, res)=>{
 	Vendor.findById(req.params.id, (f_err, fvendor)=>{
