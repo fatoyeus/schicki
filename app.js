@@ -27,7 +27,7 @@ app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.set('view engine', 'ejs');
-
+//app.use(helmet());
 app.use(sessions({
 					cookieName	:	"schikiSession",
 					secret		:	"ug70&&%$hdh3$@1d",
@@ -39,12 +39,10 @@ app.use(sessions({
 app.use((req, res, next)=>{
 	var loggedIn;
 	if(req.schikiSession.userId||req.schikiSession.adminId){
-		var loggedIn = (req.schikiSession.userId ? req.schikiSession.userId : req.schikiSession.adminId)
-		console.log(loggedIn);
+		var loggedIn = (req.schikiSession.userId ? req.schikiSession.userId : req.schikiSession.adminId);
 	}else{
 		var loggedIn = 'not loggedIn';
 	}
-	console.log(loggedIn);
 		switch(loggedIn){
 			case 	req.schikiSession.userId : 
 						console.log('using case of user');

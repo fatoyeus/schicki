@@ -9,6 +9,7 @@ let express			=		require('express'),
 	Vendor 			=		require('../models/vendor'),
 	Billing			=		require('../models/billinglocation'),
 	title			=		'schicki';
+	const{create}	=		require('xmlbuilder2');
 	
 
 function checkLogin(req, res, next){
@@ -121,11 +122,37 @@ router.get('/user/profile/show', checkLogin, (req, res)=>{
 															}
 														});
 													});
+
+//Search for vendor availability
+router.get('/user/vendorsearch/:id/check', checkLogin, (req, res)=>{
+	Vendor.find({ vendorname : {$regex : `^${req.params.id}`, $options : 'i'}}, 'vendorname', (err, fv)=>{
+		  const root = create().ele('vendors');
+				for(var i=0; i< fv.length; i++){
+					const fw = root.ele('name');
+	//				fw.att('data', fv[i].vendorname);	
+					fw.txt(fv[i].vendorname).up();
+					}
+		  const fx = root.end({format:'xml', prettyPrint:true});
+			console.log(fx);
+			res.set({'Content-Type' : 'text/xml'});
+			res.send(fx);
+		});
+	});
+
+//Associate 
+router.get('/user/vendor/associate', checkLogin, (req, res)=>{
+	res.render('forms/users/associatevendor', { title : 'Vendor Association'});
+});
+
+router.post('/user/vendor/associate', checkLogin,  (req, res)=>{
+	User.findByIdAndUpdate(req.user._id, {isVendorUser : true, vendorAssoc : req.body.vendorname}, (err, user)=>{
+		
+	});
+});
 //delete user account
 router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 	User.findById(req.params.id, (err, user)=>{
 		if(user.isVendor){
-			console.log('Delete vendor account first');
 			res.redirect('/user/:id/profile/show');
 		}else{
 			User.findByIdAndRemove(req.params.id, (u_err, foundUser)=>{

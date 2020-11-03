@@ -8,7 +8,6 @@ let s = document.querySelector('button#stcbutton');
 let j = document.querySelector('input#storecat');
 
 function sx (f, l){
-	console.log(l);
 	p = new XMLHttpRequest();
 	p.onreadystatechange	=	()=>{
 		if(p.readyState === XMLHttpRequest.DONE){

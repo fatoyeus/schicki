@@ -22,7 +22,6 @@ function checkLogin(req, res, next){
 	}
 	else if( !req.user.isVendor && req._parsedUrl.pathname !== '/vendor/enroll' ){
 		res.redirect('/vendor/enroll');
-		console.log('CAUHGT YOU REGISTER AS A VENDOR FIRST');
 	}else{
 		next();
 	}
@@ -188,6 +187,7 @@ router.delete('/vendor/profile/delete', checkLogin, (req, res)=>{
 			});
 	delete req.user.vendor_id;
 });
+
 
 router.get('/vendor/*', checkLogin, (req, res)=>{
 	var path;

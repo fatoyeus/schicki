@@ -1,7 +1,7 @@
-var a = document.querySelectorAll('div#dropMenu a');
+var ah = document.querySelectorAll('div#dropMenu a');
 
 
-a.forEach((a)=>{
+ah.forEach((a)=>{
 	a.addEventListener("mouseover", ()=>{
 		a.classList.add('bg-secondary');
 	});
@@ -10,14 +10,14 @@ a.forEach((a)=>{
 	});
 });
 
-var b = document.querySelector('#navalign');
-var c = document.querySelector('#brandmove');
+var bh = document.querySelector('#navalign');
+var ch = document.querySelector('#brandmove');
 
 
 
 if(!(document.title === 'schicki')){
 
-	b.classList.remove("justify-content-end");
-	c.removeAttribute('hidden');
+	bh.classList.remove("justify-content-end");
+	ch.removeAttribute('hidden');
 	
 }

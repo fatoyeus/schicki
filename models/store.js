@@ -1,6 +1,7 @@
 var mongoose		=		require('mongoose');
 
 var storeSchema		=	new mongoose.Schema({
+	storeimg			:	{	type	:	String,	unique	 : true },
 	storename			:	{ 	type 	:	String, required : true, unique : true },
 	description			:	String,
 	category			: 	{ 	type 	:	String, required : true },

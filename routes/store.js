@@ -25,7 +25,9 @@ function checkLogin(req, res, next){
 		next();
 	}
 }
-
+function checkstore(req, res, next){
+	
+}
 //Create a Store
 router.get('/store/create', checkLogin, (req, res)=>{
 	Storecat.find({status: 222}, (err, categories)=>{
@@ -70,12 +72,24 @@ router.get('/stores/view', checkLogin, (req, res)=>{
 	Vendor.findById(req.user.vendor_id, (err, fv)=>{
 		if(fv){
 			vendor = fv;
-			console.log('vendor: ' + fv);
 				Store.find({ vendor_id: req.user.vendor_id },'_id storename status requestdate', (err, fs)=>{
 					res.render('marketplace/store/dashboard', {stores: fs, title: vendor.vendorname + ' Stores'});
 						});
 				}
 			});
 	});
-
+router.get('/stores/view/:store_id/detail', checkLogin, (req, res)=>{
+	var store;
+	Store.findById(req.params.store_id, (err, fstore)=>{
+		if(err){
+			res.redirect('/stores/view');
+		}
+		else if(fstore.vendor_id.toString !== req.user.vendor_id.toString || fstore.status === 'Blocked'){
+			res.redirect('/stores/view');
+			
+		}else{
+			res.render('marketplace/store/managestore', {store: fstore, title: fstore.storename})
+		}
+	});
+});
 module.exports	=		router;

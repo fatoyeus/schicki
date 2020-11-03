@@ -36,6 +36,10 @@ var vendorSchema		=	new mongoose.Schema({
 	stores				:	{
 								type	:	mongoose.Schema.Types.Array,
 								ref		:	'store'
+							},
+	users				:	{
+								type	:	mongoose.Schema.Types.Array,
+								ref		:	'user'
 							}
 				});
 

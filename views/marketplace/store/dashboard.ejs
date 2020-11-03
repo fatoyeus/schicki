@@ -4,7 +4,7 @@
 	<div class="container mt-2">
 		<div class="container d-flex flex-column mb-3">
 			<div class="align-self-center">
-				<h2 class="text-capitalize">Stores</h2>
+				<h2 class="text-capitalize"><%=title%></h2>
 			</div>
 		</div>
 		
@@ -26,10 +26,12 @@
 					</div>
 					<div class="row col-lg-3">
 						<div class="container d-flex flex-column">
-						<div class="align-self-end my-auto">
-							<button class="btn btn-success btn-lg shadow" type="submit">Manage</button>
+							<div class="align-self-end my-auto">
+								<%if(store.status === 'Active'){%>
+								<a class="btn btn-success btn-lg shadow" href="/stores/view/<%=store._id%>/detail">Manage</a>
+								<%}%>
+							</div>
 						</div>
-					</div>
 					</div>
 					</div>	
 				</div>

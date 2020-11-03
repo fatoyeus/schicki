@@ -10,6 +10,8 @@ var userSchema	=	new mongoose.Schema({
 	username			:	{ type: String, required	: 	true, unique: true },
 	password			:	{ type: String, required	: 	true },
 	isVendor			:	{ type: Boolean, default	:   false},
+	isVendorUser		:	{ type: Boolean, default	:   false},
+	vendorAssoc			:	String,
 	vendor_id			:	{
 							 	type: mongoose.Schema.Types.ObjectId,
 								ref : 'vendor'
@@ -20,12 +22,12 @@ var userSchema	=	new mongoose.Schema({
 								ref  : 	'cart'
 							},
 	orders				:	[
-							 {
-							 order_id:	{
-											type :	mongoose.Schema.Types.ObjectId,
-											ref  :	'order'
-										}
-							 }
+								 {
+									order_id	:	{
+														type :	mongoose.Schema.Types.ObjectId,
+														ref  :	'order'
+													}
+								 }
 							],
 											
 	birthday_id			: 	{

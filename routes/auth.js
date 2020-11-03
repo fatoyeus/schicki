@@ -82,7 +82,7 @@ router.get('/login', prevRelogin, (req, res, next)=>{
 });
 
 router.post('/login', (req, res)=>{
-	User.findOne({username: req.body.username}, (err, user)=>{
+	User.findOne({ username : {$regex : `^${req.body.username}`, $options : 'i'}}, (err, user)=>{
 		if( !user || !bcrypt.compareSync(req.body.password, user.password)){
 			var error;
 			return res.render('forms/authentication/login', {
