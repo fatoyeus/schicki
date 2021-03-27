@@ -1,3 +1,5 @@
+(function(){
+
 let p1 	 = document.querySelector('#pw1');
 let p2 	 = document.querySelector('#pw2');
 
@@ -39,3 +41,4 @@ function c1 (event){
 								}
 							}
 						};
+}())

@@ -1,5 +1,5 @@
-var ah = document.querySelectorAll('div#dropMenu a');
-
+(function(){
+	var ah = document.querySelectorAll('div#dropMenu a');
 
 ah.forEach((a)=>{
 	a.addEventListener("mouseover", ()=>{
@@ -19,5 +19,5 @@ if(!(document.title === 'schicki')){
 
 	bh.classList.remove("justify-content-end");
 	ch.removeAttribute('hidden');
-	
-}
+	}
+}());

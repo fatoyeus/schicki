@@ -11,6 +11,8 @@ let express  		    =  		require('express'),
 	  authRoutes		=		require('./routes/auth'),
 	  productRoutes		=		require('./routes/products'),
 	  userRoutes		=		require('./routes/users'),
+	  emailRoutes		=		require('./routes/emails'),
+	  phoneRoutes		=		require('./routes/phones'),
 	  vendorRoutes		=		require('./routes/vendors'),
 	  methodOverride	= 		require("method-override"),
 	  indexRoutes		=		require('./routes/index'),
@@ -49,11 +51,17 @@ app.use((req, res, next)=>{
 						
 						User.findById(req.schikiSession.userId, '-password', (err, user)=>{
 						if(err){
+							res.locals.user = null;
+							req.schikiSession.userId = null;
+							return res.redirect('/');
 							return next (err);
 						}
-						if(!user)
+						if(!user){
+							req.schikiSession.userId = null;
+							res.locals.user = null;
+							return res.redirect('/');
 							return next ();
-
+						}
 
 						req.user		 = user;
 						res.locals.user  = user;
@@ -70,11 +78,17 @@ app.use((req, res, next)=>{
 					
 						Admin.findById(req.schikiSession.adminId, '-password', (err, admin)=>{
 						if(err){
+							res.locals.admin = null;
+							req.schikiSession.adminId = null;
+							return res.redirect('/admin/dashboard');
 							return next (err);
 						}
-						if(!admin)
+						if(!admin){
+							res.locals.admin = null;
+							req.schikiSession.adminId = null;
+							return res.redirect('/admin/dashboard');
 							return next ();
-
+						}
 						req.user		 = null;
 						res.locals.user  = null;
 						req.admin		 = admin;
@@ -159,6 +173,8 @@ mongoose.connect(url , {useNewUrlParser: true, useUnifiedTopology: true}).then((
 
 app.use(adminRoutes);
 app.use(authRoutes);
+app.use(emailRoutes);
+app.use(phoneRoutes);
 app.use(productRoutes);
 app.use(storeRoutes);
 app.use(userRoutes);

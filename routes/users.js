@@ -7,6 +7,7 @@ let express			=		require('express'),
 	Location 		=		require('../models/location'),
 	Contact 		= 		require('../models/contact'),
 	Vendor 			=		require('../models/vendor'),
+	Association		=		require('../models/association'),
 	Billing			=		require('../models/billinglocation'),
 	title			=		'schicki';
 	const{create}	=		require('xmlbuilder2');
@@ -27,9 +28,15 @@ function checkLogin(req, res, next){
 //user routes
 //create user profile
 router.get('/user/profile/new', checkLogin, (req, res)=>{
-	res.render('forms/users/newprofile', {title: 'create profile'});
+	User.findById(req.user._id, 'isProfiled', (err, user)=>{
+		console.log('isprofiled: '+ user);
+		if(user.isProfiled){
+			res.redirect('/user/profile/show');
+		}else{
+			res.render('forms/users/newprofile', {title: 'create profile'});
+		}
+	})
 });
-
 router.post('/user/profile/new', checkLogin, (req, res)=>{  
 	var email 		= 	req.body.email,
 		phone 		=	req.body.phone,
@@ -98,7 +105,7 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 	console.log('User profile updated successfully');
 	res.redirect('/');
 		
-});
+															});
 //user profile view
 router.get('/user/profile/show', checkLogin, (req, res)=>{
 	User.findById(req.user._id, '-password').populate(['contact_id','birthday_id']).exec((err, foundUser)=>{
@@ -121,39 +128,173 @@ router.get('/user/profile/show', checkLogin, (req, res)=>{
 	});
 															}
 														});
-													});
-
-//Search for vendor availability
+															});
+//Search for association availability
 router.get('/user/vendorsearch/:id/check', checkLogin, (req, res)=>{
-	Vendor.find({ vendorname : {$regex : `^${req.params.id}`, $options : 'i'}}, 'vendorname', (err, fv)=>{
+	if(req.user.vendorAssoc !== (100101 || 100102)){
+	Association.find({ vendorname : {$regex : `^${req.params.id}`, $options : 'i'}}, 'vendorname vendor_id', (err, fv)=>{ 
 		  const root = create().ele('vendors');
 				for(var i=0; i< fv.length; i++){
 					const fw = root.ele('name');
-	//				fw.att('data', fv[i].vendorname);	
+					fw.att('data', fv[i].vendor_id);	
 					fw.txt(fv[i].vendorname).up();
 					}
 		  const fx = root.end({format:'xml', prettyPrint:true});
 			console.log(fx);
 			res.set({'Content-Type' : 'text/xml'});
 			res.send(fx);
-		});
-	});
-
-//Associate 
+					});
+		}else{
+			//alert security
+			console.log('user is alread associated');
+		}
+																	});
+//Associate user to vendor 
 router.get('/user/vendor/associate', checkLogin, (req, res)=>{
-	res.render('forms/users/associatevendor', { title : 'Vendor Association'});
-});
+	var avendor,
+		asU,
+		vendorname,
+		asD;
+	User.findById(req.user._id, '-password', (fu_err, guser)=>{
+		if(guser.isVendor){
+							res.redirect('/user/profile/show')
+							}else if(guser.vendorAssoc !== 100100){
+									Association.findById(guser.assocVendor, (a_err, fassoc)=>{
+												if(fassoc){
+											fassoc.users.forEach((fu)=>{
+												if (guser._id.toString() === fu.id.toString()){
+																	asD 	=	fu;
+																	//update association status to user
+																	guser.vendorAssoc = fu.status;
+																	guser.save();
+																}
+															})
+							asU = {vendorname : fassoc.vendorname, user : asD };
+							res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: asU});
+								}else{
+								guser.vendorAssoc = 100100;
+								guser.assocVendor = null;
+								guser.assUser_ind = null;	
+								guser.save();
+								res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
+								} 
+							})
+			
+							}else{
+								res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
+								}
+							})
+																});
+//Request Association
+router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
+																	if(req.user.vendorAssoc === 100100){
+																				var user  = {
+																								id: req.user.id,
+																								username: req.user.username
+																							};
+																				Association.findOne({vendor_id: req.params.id}, (err, fassc)=>{
+																												if(fassc){
+																															fassc.users.push(user);
+																															User.findByIdAndUpdate(	req.user._id, 
+																																				   { 
+																																						vendorAssoc: 100101,
+																																						assocVendor: fassc._id,
+																																					}, 
+																															(err, auser)=>{
+																																			if(auser){
+																																						req.user.vendorAssoc = 100101;
+																																					}
+																																			var fyy = {
+																																			vendorname : fassc.vendorname,
+																																			rdate	   : new Date().toISOString(),
+																																			status	   : 'Requested'
+																																		 }
+																																var fy;
+																																let fz = res.render('forms/snippets/associate', {fy : fyy})
+																																res.send(fz);
 
-router.post('/user/vendor/associate', checkLogin,  (req, res)=>{
-	User.findByIdAndUpdate(req.user._id, {isVendorUser : true, vendorAssoc : req.body.vendorname}, (err, user)=>{
-		
+
+																																		});
+																														fassc.save();
+																														}else{
+																																//alert security
+																																res.sendStatus(404);
+																																}													
+																										});
+																										}else{
+																											//alert security
+																											res.redirect('/user/vendor/associate');
+																										}
+																	});
+//Accept granted association request
+router.post('/user/vendor/associationaccept', checkLogin, (req, res)=>{
+																		User.findById(req.user._id, '-password', (es_err, euser)=>{
+																																	if(euser.assocVendor){
+																																	Association.findById(euser.assocVendor, (ev_err, dfassoc)=>{
+																																	if(dfassoc){
+																																					dfassoc.users.forEach((fdu)=>{
+																																						if (euser._id.toString() === fdu.id.toString()){
+																																							//check if user request was granted
+																																							if(fdu.status === 100102){
+																																														fdu.status = 100103;
+																																														euser.vendorAssoc = 100103;
+																																														euser.save();
+																																														res.sendStatus(200);
+																																														}else{
+																																														fdu.status;
+																																														res.sendStatus(404);
+																																														//alert security
+																																														}
+																																						}
+																																					})
+																																				}else{
+																																					//Alert Security
+																																					res.sendStatus(404);
+																																				}
+																																				dfassoc.save();
+																																						});
+																																	}else{
+																																		//Alert Security
+																																		res.sendStatus(404);
+																																		res.redirect('/user/vendor/associate');
+																																	}
+																																	});
+																	});
+//Remove association request 
+router.post('/user/vendor/disassociate', checkLogin, (req, res)=>{
+	User.findById(req.user._id, '-password', (ds_err, duser)=>{
+		if(duser.assocVendor){
+			Association.findById(duser.assocVendor, (dv_err, dfassoc)=>{
+							if(dfassoc){
+	//									 dfassoc.users.splice(duser.assUser_ind, 1);
+											dfassoc.users.forEach((fdu)=>{
+												if (duser._id.toString() === fdu.id.toString()){
+													console.log('I tried to remove');
+													dfassoc.users.splice(dfassoc.users.indexOf(fdu), 1);
+												}
+											}) 
+										}else{
+											res.sendStatus(404);
+										}
+							dfassoc.save();
+									});
+			duser.assocVendor = null;
+			duser.vendorAssoc = 100100;
+			duser.save();
+			res.sendStatus(200);
+		}else{
+			//Alert Security
+			res.sendStatus(404);
+			console.log('You have no existing association');
+			res.redirect('/user/vendor/associate');
+		}
 	});
-});
+																	});
 //delete user account
 router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 	User.findById(req.params.id, (err, user)=>{
 		if(user.isVendor){
-			res.redirect('/user/:id/profile/show');
+			res.redirect('/user/profile/show');
 		}else{
 			User.findByIdAndRemove(req.params.id, (u_err, foundUser)=>{
 				if(foundUser){
@@ -161,13 +302,24 @@ router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 						Billing.findByIdAndRemove(foundUser.billingAddress_id,(b_err, foundBilling)=>{
 							console.log('successfully deleted billing address');
 						})
-					}
-				Contact.findByIdAndRemove(foundUser.contact_id, (c_err, foundContact)=>{
-						if(foundContact){
-							Location.findByIdAndRemove(foundContact.userLocation_id, (l_err,foundLocation)=>{
-								if(foundLocation){
-									res.redirect('/logout');
-									console.log('User account successfully deleted')
+													}
+					Contact.findByIdAndRemove(foundUser.contact_id, (c_err, delContact)=>{
+						if(delContact){
+							Location.findByIdAndRemove(delContact.userLocation_id, (l_err,delLocation)=>{
+								if(delLocation){
+									Email.findByIdAndRemove(delContact.userEmail_id, (e_err, delEmail)=>{
+										if(delEmail){
+											Phone.findByIdAndRemove(delContact.userPhone_id, (p_err, delPhone)=>{
+												if(delPhone){
+													res.redirect('/logout');
+												}else{
+													console.log('Phone not found');
+												}
+											})
+										}else{
+											console.log('Email not found');
+										}
+									})
 								}else{
 									console.log('User location not found');
 								}
@@ -175,20 +327,19 @@ router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 						}else{
 							console.log('User contact not found');
 						}
-																									})	
-																								}else{
-																									console.log('User not found')
-																								}
-		
-				});
-		}
-	})
-	
-});
-
+					})	
+				console.log('User account successfully deleted');
+				}else{
+				console.log('User not found')
+				}
+			});
+				}
+			})
+																	});
+//default route
 router.get('/user/*', checkLogin, (req, res)=>{
 	var path;
 	res.render('pnf', {title: 'page not found', path: req._parsedUrl.pathname });
-});
+												});
 
-module.exports	=		router;
+module.exports		=		router;

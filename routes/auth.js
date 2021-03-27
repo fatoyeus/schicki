@@ -13,7 +13,6 @@ var express			=		require('express'),
 
 function checkLogin(req, res, next){
 	var lastChecked;
-	console.log('aut cecked');
 	if(req.admin){
 				req.schikiSession.adminId = null; 
 	}

@@ -1,10 +1,9 @@
-
+(function(){
 var e = document.querySelectorAll('div#dropdowndiv');
 
 
 e.forEach((ee)=>{
 	let a = ee.querySelector('div#dashmod-bg');
-	console.log(a);
 	a.addEventListener("mouseover", ()=>{
 		a.classList.add('bg-secondary');
 		a.classList.add('mx-2');
@@ -34,7 +33,7 @@ e.forEach((ee)=>{
 
 });
 
-
+}());
 
 
 

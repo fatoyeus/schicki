@@ -54,12 +54,12 @@ router.post('/store/create', checkLogin, (req, res)=>{
 
 //Search store availability
 router.get('/store/search/:id/check', checkLogin, (req, res)=>{
-	Store.exists({storename: req.params.id}, (err, store)=>{
-		console.log('store is: '+ store);
-		if (store){
-			res.sendStatus(440);
+	Store.find({ storename : {$regex : `^${req.params.id}`, $options : 'i'}}, 'storename', (err, store)=>{
+		console.log('store is: '+ store.length);
+		if (store.length > 0){
+			res.send(false);
 		}else{
-			res.sendStatus(220);
+			res.send(true);
 		}
 	})
 });

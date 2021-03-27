@@ -1,4 +1,4 @@
-var mongoose 	=	require('mongoose');
+   var mongoose 	=	require('mongoose');
 
 
 var userSchema	=	new mongoose.Schema({
@@ -11,7 +11,12 @@ var userSchema	=	new mongoose.Schema({
 	password			:	{ type: String, required	: 	true },
 	isVendor			:	{ type: Boolean, default	:   false},
 	isVendorUser		:	{ type: Boolean, default	:   false},
-	vendorAssoc			:	String,
+	vendorAssoc			:	{ type: Number, default		:	100100}, //100100 not requested, 100101 requested, 100102 granted, 100103 accepted
+	assocVendor			:	{
+								type: mongoose.Schema.Types.ObjectId,
+								ref : 'vendor'
+							},
+	persona				:	{ type: String, default		:	'p10001001'},
 	vendor_id			:	{
 							 	type: mongoose.Schema.Types.ObjectId,
 								ref : 'vendor'

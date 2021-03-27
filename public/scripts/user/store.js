@@ -1,3 +1,4 @@
+(function(){
 var a = document.querySelector('#storename');
 var b = document.querySelector('span#storesearch');
 var d = document.querySelector('#storedescr');
@@ -11,14 +12,18 @@ function ab(){
 				e.removeAttribute('hidden');
 				f.removeAttribute('hidden');
 			}
+function ac(){
+				 d.setAttribute('hidden', '');
+				 e.setAttribute('hidden', '');
+				 f.setAttribute('hidden', '');
+}
 
-
-function xy (z){
+function xy (z, o){
 	
 	w = new XMLHttpRequest();
 	w.onreadystatechange	=	()=>{
 		if(w.readyState === XMLHttpRequest.DONE){
-			return w.responseText
+			bb( w.responseText, o);
 		}
 			
 	}
@@ -41,17 +46,27 @@ function qr (){
 	p.send(new FormData(g));
 }
 
- async function aa (event){
+ function aa (event){
 	let s = event.target.value;
 	b.innerHTML = 'Searching';
-	var u = await xy(event.target.value);
-	
-	 if( u === 440 || s.length === 0){
-		
-		b.innerHTML = (s.length === 0 ? 'Name cannot be empty': 'Already Taken');
+	if(s.length > 0){
+						var u =  xy(event.target.value, s);
+					}else{
+						bb(null, s);
+					}
+	}	
+function bb(v, u){
+		console.log('bb called');
+		console.log('v is: '+ v);
+		if( v === 'false' || u.length === 0){
+		b.innerHTML = (u.length === 0 ? 'Name cannot be empty': 'Already Taken');
 		b.classList.remove('text-success');
 		b.classList.add('text-danger');
 		b.removeAttribute('hidden');
+		setTimeout(() => {
+						 b.setAttribute('hidden', '');
+						 ac();
+						}, 250);
 		f.onsubmit = (fp)=>{
 			fp.preventDefault();
 		}
@@ -70,9 +85,9 @@ function qr (){
 								qr();
 					}
 			}
-	}	
+}
 
 	a.oninput 		= aa;
 	
-
+}())
 

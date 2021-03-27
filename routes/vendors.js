@@ -1,13 +1,19 @@
-var express			=		require('express');
-var router			=		express.Router();
+var 	express			=		require('express'),
+	 	router			=		express.Router(),
+		User			= 		require('../models/user'),
+		Vendor 			=		require('../models/vendor'),
+		VendorContact	=		require('../models/vendorcontact'),
+		sha256			=		require('crypto-js/sha256'),
+		VendorEmail   	=		require('../models/vendoremail'),
+		VendorPhone		=		require('../models/vendorphone'),
+		VendorLocation	=		require('../models/vendorlocation'),
+		Association		=		require('../models/association'),
+		Store			=		require('../models/store'),
+		title			=		'schicki';
+const 	vlevel			=  		require('../templates/vendorlevel');
+	
 
-var	User			= 		require('../models/user'),
-	Vendor 			=		require('../models/vendor'),
-	VendorContact	=		require('../models/vendorcontact'),
-	VendorEmail   	=		require('../models/vendoremail'),
-	VendorPhone		=		require('../models/vendorphone'),
-	VendorLocation	=		require('../models/vendorlocation'),
-	title			=		'schicki';
+
 
 function checkLogin(req, res, next){
 	var lastChecked;
@@ -26,13 +32,110 @@ function checkLogin(req, res, next){
 		next();
 	}
 }
-
+//check resource limits for vendors
+function checklimits(g,h,i){
+							vlevel.forEach((r)=>{ 
+													if (sha256(r.id + h) === i ){
+													 								return r.g;
+																				}
+												})
+																
+							}
+function checkMaxlimits(j,k){
+							 var package
+							 vlevel.forEach((r)=>{   
+												 	if (sha256(r.id + j).toString() === k ){
+																								package = r;
+																							}
+												})
+								return package;								
+							}
 //vendor routes
+//enable vendor association
+router.post('/vendor/association', checkLogin, (req, res)=>{
+								console.log('association ongoing')
+								var vendorname;
+									Vendor.findById(req.user.vendor_id, 'vendorname', (err, vendor)=>{
+										vendorname 			= 	vendor.vendorname;
+										var vendor_id 		= 	req.user.vendor_id;
+										var associatedV		=	{vendorname, vendor_id};	
+											Association.create(associatedV).then((aV)=>{
+												Vendor.findByIdAndUpdate(req.user.vendor_id, {associate : true, association_id : aV._id},  (err, UV)=>{
+														
+													})										
+																								}).catch((err)=>{
+																										if(!err){
+																											res.send('done');
+																										}else{
+																											console.log(err);
+																										}
+																						})
+																		})
+															})
+//read association requests
+router.get('/vendor/associationrequests', checkLogin, (req, res)=>{
+			Vendor.findById(req.user.vendor_id, 'association_id', (ar_err, fasv)=>{
+				Association.findById(fasv.association_id, (fs_err, fvass)=>{
+					if(fs_err){
+						console.log(fs_err);
+						res.redirect('/vendor/dashboard');
+					}else if(fvass){
+						var asusers;
+						res.render('marketplace/vendor/associationrequests', {title:'Association Requests' ,asusers: fvass.users})
+					}else{
+						res.redirect('/vendor/dashboard');
+						
+					}
+				})
+			})		
+				
+});
+//approve association associationrequests
+router.post('/vendor/user/:id/association/accept', checkLogin, (req, res)=>{
+	Vendor.findById(req.user.vendor_id, (err, gvendor)=>{
+		if(err){
+			console.log('vendor not found');
+			//alert security
+		}else{
+		Association.findById(gvendor.association_id, (a_err, gasso)=>{
+			gasso.users.forEach((l)=>{
+				if(req.params.id.toString() === l.id.toString()){
+					l.status = 100102;                                                       
+				}
+			})
+			gasso.save();
+		});
+		var user,
+		bs = res.render('forms/snippets/disassociatebtn', { user : req.params.id })
+		res.send(bs);
+		}
+	})
+	
+});
+//disable vendor association
+router.post('/vendor/disassociation', checkLogin, (req, res)=>{
+								var vendorname;
+									Vendor.findById(req.user.vendor_id, 'association_id', (err, vendor)=>{
+										Association.findByIdAndRemove(vendor.association_id, (asso_err, AS)=>{
+											if(AS){
+													vendor.associate 				=	false;
+													vendor.association_id 			= 	null;
+													/*Vendor.findByIdAndUpdate(req.user.vendor_id, {associate : false, association_id : null}, (err_UV, UV)=>{
+																		
+																		if(!err){
+																			res.send('done');
+																		}
+																	})  */
+																}
+															})
+										vendor.save();
+														})
+													})
 //vendor dashboard
 router.get('/vendor/dashboard', checkLogin, (req, res)=>{
-	Vendor.findById(req.user.vendor_id, (err, fvendor)=>{
-		let vendor
-		res.render('marketplace/vendor/dashboard', {title: 'vendor dashboard', vendor: fvendor })	
+	Vendor.findById(req.user.vendor_id, 'users stores malls associate level status', (err, vendor)=>{
+		let vendorLevel = checkMaxlimits(req.user._id, vendor.level);
+		res.render('marketplace/vendor/dashboard', {title: 'vendor dashboard', vendor, vendorLevel})	
 	})
 	
 })
@@ -61,19 +164,18 @@ router.post('/vendor/enroll', checkLogin, (req, res)=>{
 	var city				=	req.body.city;
 	var state				=	req.body.state;
 	var zipcode				= 	req.body.zipcode;
-	
-	
-	
+	const 	level			=	sha256(vlevel[0].id + req.user._id);
+		
 	var vendorEmail			=	{email};
 	var vendorPhone			=   {phone};
 	var vendorLocation		=	{country, address, city, state, zipcode};
 	var contact				=	{email, phone, vendorLocation};
-	var vendor				=	{vendorname, user_id};
+	var vendor				=	{vendorname, user_id, level};
 	
 	
 	
 	Vendor.create(vendor).then((nvendor)=>{
-		VendorContact.create(contact).then((vendorcontact)=>{
+			VendorContact.create(contact).then((vendorcontact)=>{
 																	vendorcontact.vendor_id = nvendor._id;
 																	
 			VendorEmail.create(vendorEmail).then((nvendoremail)=>{															
@@ -127,6 +229,9 @@ router.get('/vendor/profile/show', checkLogin, (req, res)=>{
 									{path:'contact_id.phone_id', model:'vendorphone'},
 									{path:'contact_id.vendorlocation_id', model:'vendorlocation'}
 									]
+		foundVendor.stores.forEach((x)=>{
+						console.log(x);
+		});
 		Vendor.populate(foundVendor, opts,(err,exfoundVendor)=>{
 									var vprofile;
 									if(err){
@@ -143,6 +248,16 @@ router.get('/vendor/profile/show', checkLogin, (req, res)=>{
 //Delete vendor account
 router.delete('/vendor/profile/delete', checkLogin, (req, res)=>{
 				Vendor.findByIdAndRemove(req.user.vendor_id, (v_err, delVendor)=>{
+					if(delVendor.stores.length > 0){
+					delVendor.stores.forEach((x)=>{
+													Store.findByIdAndRemove(x, (s_err, delStore)=>{
+														console.log('deleted: ', delStore);
+																	if(s_err){
+																							console.log(s_err);
+																						}
+																					})
+																						});
+					}
 					VendorContact.findByIdAndRemove(delVendor.contact_id, (contact_err, delContact)=>{
 						if(delContact){
 						VendorEmail.findByIdAndRemove(delContact.email_id, (email_err, delemail)=>{
@@ -151,9 +266,15 @@ router.delete('/vendor/profile/delete', checkLogin, (req, res)=>{
 									if(delphone){
 										VendorLocation.findByIdAndRemove(delContact.vendorlocation_id, (location_err, dellocation)=>{
 											if(dellocation){
-												
+												Association.findByIdAndRemove(req.user.vendor_id, (association_err, delassociation)=>{
+													if(delassociation){
+														
+													}else{
+														console.log('association not found');
+													}
+												})
 											}else{
-												console.log('vendor location not found')
+												console.log('vendor location not found');
 											}
 										});
 									}else{

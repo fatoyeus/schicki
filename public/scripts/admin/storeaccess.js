@@ -1,7 +1,8 @@
-var a 	=	document.querySelector('div#allvendors');
-let e	=	document.querySelector('div#approvedvendors');
-let i	=	document.querySelector('div#unapprovedvendors');
-let o	=	document.querySelector('div#suspendedvendors');
+(function(){
+var a 	=	document.querySelector('div#allstores');
+let e	=	document.querySelector('div#approvedstores');
+let i	=	document.querySelector('div#unapprovedstores');
+let o	=	document.querySelector('div#suspendedstores');
 let u	=	document.querySelectorAll('div#form-id');
 
 function l(b, c, f, g, h){
@@ -12,21 +13,21 @@ function l(b, c, f, g, h){
 			 r(f, g);
 			}
 		}
-	var d = `/admin/c10/vendor/${c}/${h}`;
+	var d = `/admin/c8/store/${c}/${h}`;
 	n.open('POST', d, true);
 	n.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	n.send();
 						} 
 function r(v, y){
-	let w  = v.querySelector('data#vendor-header').innerHTML;
+	let w  = v.querySelector('data#store-header').innerHTML;
 	let s  = v.querySelector('button').innerHTML;
-	let g  = v.querySelector('p#vendor-status').innerHTML;
+	let g  = v.querySelector('p#store-status').innerHTML;
 	
 	y.forEach((k)=>{
-		let j  = k.querySelector('data#vendor-header').innerHTML;
+		let j  = k.querySelector('data#store-header').innerHTML;
 		if(w === j && !v.isEqualNode(k)){
 			k.querySelector('button').innerHTML = s;
-			k.querySelector('p#vendor-status').innerHTML = g;
+			k.querySelector('p#store-status').innerHTML = g;
 					  if(s==='Block'){
 							if(v.parentNode === a){
 								e.appendChild(k);
@@ -47,8 +48,8 @@ function r(v, y){
 				}
 u.forEach((p)=>{
 	var w 	=	p.querySelector('button');
-	var f 	=	p.querySelector('p#vendor-status');
-	var z	=	p.querySelector('data#vendor-header').getAttribute('value');
+	var f 	=	p.querySelector('p#store-status');
+	var z	=	p.querySelector('data#store-header').getAttribute('value');
 	w.onclick = function(){
 								  if(w.innerHTML === 'Approve'){
 									 w.innerHTML = 'Block';
@@ -65,3 +66,4 @@ u.forEach((p)=>{
 							}
 						}
 				});
+}())

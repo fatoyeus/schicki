@@ -1,3 +1,4 @@
+(function(){
 let l = document.querySelector('button#addbutton');
 let r = document.querySelector('button#removebutton');
 
@@ -110,3 +111,4 @@ r.onclick	=	rr;
 e.onclick	=	ee;
 i.onclick	=	ii;	
 
+}())

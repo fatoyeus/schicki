@@ -1,5 +1,5 @@
 var mongoose 	=	require('mongoose');
-var level		= 	require('../templates/vendorlevel');
+
 
 var vendorSchema		=	new mongoose.Schema({
 	vendorname			:	{ 	type 	: 	String, required : true, unique : true },
@@ -7,8 +7,9 @@ var vendorSchema		=	new mongoose.Schema({
 							 	type 	: 	mongoose.Schema.Types.ObjectId,
 							 	ref  	: 	'user'
 							},
-	level				:	{	type	:	String, required : true, default : '0000x1000'},
+	level				:	{	type	:	String, required : true, unique : true },
 	status				:	{ 	type 	: 	String, default : 'Awaiting Approval'},
+	associate			:	{	type	:	Boolean, default: false},
 	requestdate			:	{ 	type 	: 	Date, default : Date.now() },
 	approvedate			:	{ 	type 	: 	Date },
 	blockeddate			:	{ 	type 	: 	Date },
@@ -33,13 +34,27 @@ var vendorSchema		=	new mongoose.Schema({
 							 	type 	:	mongoose.Schema.Types.ObjectId,
 							 	ref  	: 	'billinglocation'
 							},
-	stores				:	{
-								type	:	mongoose.Schema.Types.Array,
+	stores				:	[
+								{
+								type	:	mongoose.Schema.Types.ObjectId,
 								ref		:	'store'
-							},
-	users				:	{
-								type	:	mongoose.Schema.Types.Array,
+								}
+							],
+	users				:	[
+								{
+								type	:	mongoose.Schema.Types.ObjectId,
 								ref		:	'user'
+								}
+							],
+	malls				:	[
+								{
+								type	:	mongoose.Schema.Types.ObjectId,
+								ref		:	'mall'
+								}
+							],
+	association_id		:	{
+							 	type 	: 	mongoose.Schema.Types.ObjectId,
+							 	ref  	: 	'association'
 							}
 				});
 

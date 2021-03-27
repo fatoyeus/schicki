@@ -1,32 +1,77 @@
 <%- include('../../partials/header') %>
 <%- include('../../partials/userdash_header.ejs') %>
 <div class="container col-md-8 col-xl-6 mt-5">
-<div class="flex-column justify-content-center my-auto">
-	<div class="container d-flex flex-row justify-content-center">
-		<div class="row mb-3 d-flex align-items-center">
-			<h2 class="text-capitalize" id="assoc-header">Associate With Vendor</h2>
-		</div>
-	</div>	
-	<form action="/store/create" method="post" id="vendorassoc">
-		<div class="container d-flex flex-row justify-content-center">
-				
-					<div class="form-row w-50">
-							<div class="form-group col-md-9 col-xs-9">
-								<input class="form-control" type="search" name="vendorname" id="vendorname" placeholder="Search Vendor" autocomplete="off"><span class="mx-3 mb-auto" style="position: absolute; z-index: 1030" id="vendorsearch" hidden></span>
-							</div>
-							<div class="form-group col-md-3 col-xs-3">
-								<button class="btn btn-success" id="assocbtn" disabled>Associate</button>
-							</div>
-							<div class="nav flex-column bg-dark shadow mt-2 p-0 mx-2" style="position: relative; z-index: 1000" id="parsedvendors" hidden>
-								
-							</div>
+	<div class="flex-column justify-content-center my-auto">
+		<div class="container d-flex flex-row justify-content-center mb-5">
+			<div class="row mb-3 d-flex align-items-center">
+				<h2 class="text-capitalize" id="assoc-header">Vendor Association</h2>
+			</div>
+		</div>	
+		<div class="container d-flex" id="vendorassoc">
+			<div class="container d-flex flex-row justify-content-center mb-5">
+				<div class="form-row w-50">
+					<div class="form-group col-md-9 col-xs-9">
+						<%if(avendor){%>
+						<input class="form-control" type="search" name="vendorname" id="vendorname" placeholder="Search Vendor" autocomplete="off" disabled><span class="mx-3 mb-auto" style="position: absolute; z-index: 1030" id="vendorsearch" hidden></span>
+						<%}else{%>
+						<input class="form-control" type="search" name="vendorname" id="vendorname" placeholder="Search Vendor" autocomplete="off"><span class="mx-3 mb-auto" style="position: absolute; z-index: 1030" id="vendorsearch" hidden></span>
+						<%}%>
 					</div>
-				
+					<div class="form-group col-md-3 col-xs-3">
+									<button class="btn btn-success" id="assocbtn" type="submit" disabled>Associate</button>
+					</div>
+					<div class="flex-column bg-dark shadow mt-5 p-0 mx-2 rounded" style="position: absolute; z-index: 1000" id="parsedvendors" hidden>
+					</div>
+				</div>
+			</div>
 		</div>
-	</form>
-</div>
+		<div class="container d-flex flex-column" id="associatedvendor-tab">
+			<%if(avendor){%>
+			<div class="container d-flex flex-row" id="associatedvendorfixed" aria-labelledby="associatedvendor-tab">
+				<div class="container d-flex flex-row border border-secondary rounded" id="associationsnip">
+					<div class="d-flex flex-row  align-self-center col-lg-8">
+						<div class="container d-flex flex-column">
+							<div clas="align-self-start">
+								<h5 class="text-capitalize text-light mt-2 mb-0" id="assoc-vendor"><%=avendor.vendorname%></h5>
+							</div>
+							<div clas="align-self-end">
+								<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="assoc-rdate">Request: <%=avendor.user.daterequested.toISOString()%></p>
+								<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="assn-status">Status: <%if(avendor.user.status === 100101){%>
+	Requested
+<%}if(avendor.user.status === 100102){%>
+	Granted	
+<%}if(avendor.user.status === 100103){%>
+	Accepted								
+<%}%>									
+								</p>
+							</div>
+						</div>
+					</div>	
+					<div class="d-flex flex-row align-self-center col-lg-4">
+						<%if(avendor.user.status === 100101){%>
+							<div class="container d-flex flex-row justify-content-end p-2">
+								<button class="btn btn-danger btn-md shadow" id="assocancel">Cancel Request</button>
+							</div>
+						<%}if(avendor.user.status === 100102){%>
+							<div class="container d-flex flex-row justify-content-end p-2">
+								<button class="btn btn-success btn-md shadow" id="assoaccept">Accept Association</button>
+							</div>	
+						<%}if(avendor.user.status === 100103){%>
+							<div class="container d-flex flex-row justify-content-end p-2">
+								<button class="btn btn-success btn-md shadow" id="assoaccept" disabled>Accept Association</button>
+							</div>	
+						<%}%>
+							
+					</div>
+				</div>
+			</div>
+			<%}%>
+			<div class="container d-flex flex-row" id="associatedvendor" aria-labelledby="associatedvendor-tab">
+			</div>
+		</div>
+	</div>
 </div>
 <%- include('../../partials/userdash_footer.ejs') %>
-<script src="/sc_static/scripts/associate.js" type="text/javascript"></script>
+<script src="/sc_static/scripts/user/associate.js" type="text/javascript"></script>
 
 <%- include('../../partials/footer') %> 

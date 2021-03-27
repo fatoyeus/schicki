@@ -1,6 +1,5 @@
 let   express  		    =  		require('express'),
-      router			=		express.Router(),
-	  bcrypt			=		require('bcryptjs');
+      router			=		express.Router();
 
 
 	
