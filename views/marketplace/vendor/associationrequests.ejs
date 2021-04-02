@@ -34,14 +34,25 @@
 <%if(user.status === 100101){%>
 							<button class="btn btn-success btn-md shadow" id="assoaccept"><data id="user_accept_id" value = "<%=user.id%>">Accept</data></button>
 							<button class="btn btn-danger btn-md shadow" id="assocancel"><data id="user_reject_id" value = "<%=user.id%>">Reject</data></button>
-<%}if(user.status === 100102){%>
-							<button class="btn btn-danger btn-md shadow" id="assodis"><data id="user_assoc_id" value = "<%=user.id%>">Disassociate</data></button>	
+<%}else if(user.status === 100102){%>
+							<button class="btn btn-danger btn-md shadow" id="assodis"><data id="user_dissoc_id" value = "<%=user.id%>">Disassociate</data></button>
+<%}else if(user.status === 100103){%>
+							<button class="btn btn-success btn-md shadow" id="assoadm"><data id="user_admit_id" value = "<%=user.id%>">Admit</data></button>
 <%}%>		
 							
 						</div>
 					</div>
 				</div>
 				<%})%>
+				<%if(asusers.length === 0){%>
+				<div class="container d-flex flex-row border border-secondary rounded" id="noassociateduser">
+					<div class="d-flex flex-row justify-content-center p-3 col-lg-12">
+						<div clas="d-flex p-2">
+							<h5 class="text-capitalize text-light" id="assoc-vendor">You Have No Association Requests</h5>
+						</div>
+					</div>	
+				</div>
+				<%}%>
 			</div>
 			
 		</div>

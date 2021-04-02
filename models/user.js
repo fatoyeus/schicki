@@ -11,7 +11,7 @@ var userSchema	=	new mongoose.Schema({
 	password			:	{ type: String, required	: 	true },
 	isVendor			:	{ type: Boolean, default	:   false},
 	isVendorUser		:	{ type: Boolean, default	:   false},
-	vendorAssoc			:	{ type: Number, default		:	100100}, //100100 not requested, 100101 requested, 100102 granted, 100103 accepted
+	vendorAssoc			:	{ type: Number, default		:	100100}, //100100 not requested, 100101 requested, 100102 granted, 100103 accepted, 100104 admitted
 	assocVendor			:	{
 								type: mongoose.Schema.Types.ObjectId,
 								ref : 'vendor'

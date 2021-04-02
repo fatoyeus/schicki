@@ -107,7 +107,8 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 		
 															});
 //user profile view
-router.get('/user/profile/show', checkLogin, (req, res)=>{
+router.get('/user/profile/show', checkLogin, (req, res)=>{ 
+	console.log(res);
 	User.findById(req.user._id, '-password').populate(['contact_id','birthday_id']).exec((err, foundUser)=>{
 																			if (err){
 																			    						 																										console.log(err.message);
@@ -131,7 +132,7 @@ router.get('/user/profile/show', checkLogin, (req, res)=>{
 															});
 //Search for association availability
 router.get('/user/vendorsearch/:id/check', checkLogin, (req, res)=>{
-	if(req.user.vendorAssoc !== (100101 || 100102)){
+	if(req.user.vendorAssoc === (100100)){
 	Association.find({ vendorname : {$regex : `^${req.params.id}`, $options : 'i'}}, 'vendorname vendor_id', (err, fv)=>{ 
 		  const root = create().ele('vendors');
 				for(var i=0; i< fv.length; i++){
@@ -146,6 +147,7 @@ router.get('/user/vendorsearch/:id/check', checkLogin, (req, res)=>{
 					});
 		}else{
 			//alert security
+			res.sendStatus(404);
 			console.log('user is alread associated');
 		}
 																	});
@@ -156,34 +158,49 @@ router.get('/user/vendor/associate', checkLogin, (req, res)=>{
 		vendorname,
 		asD;
 	User.findById(req.user._id, '-password', (fu_err, guser)=>{
-		if(guser.isVendor){
-							res.redirect('/user/profile/show')
+		if( guser.isVendor || guser.isVendorUser ){
+							console.log('came here via e');
+							res.redirect('/user/profile/show');
 							}else if(guser.vendorAssoc !== 100100){
-									Association.findById(guser.assocVendor, (a_err, fassoc)=>{
+							Association.findById(guser.assocVendor, (a_err, fassoc)=>{
+												var userassoc = false;
 												if(fassoc){
-											fassoc.users.forEach((fu)=>{
-												if (guser._id.toString() === fu.id.toString()){
-																	asD 	=	fu;
-																	//update association status to user
-																	guser.vendorAssoc = fu.status;
-																	guser.save();
+													console.log('found vendor: '+ fassoc._id);
+												fassoc.users.forEach((fu)=>{
+																		if (guser._id.toString() === fu.id.toString()){
+																							asD 	=	fu;
+																							//update association status to user
+																							guser.vendorAssoc = fu.status;
+																							guser.save();
+																							userassoc = true;
+																							asU = {vendorname : fassoc.vendorname, user : asD };
+																							console.log('I came via a');
+																							res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: asU});
+																		}
+																});
+												if(!userassoc){
+																guser.vendorAssoc = 100100;
+																guser.assocVendor = null;
+																guser.save();
+																console.log('I came via b');
+																res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
 																}
-															})
-							asU = {vendorname : fassoc.vendorname, user : asD };
-							res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: asU});
-								}else{
-								guser.vendorAssoc = 100100;
-								guser.assocVendor = null;
-								guser.assUser_ind = null;	
-								guser.save();
-								res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
-								} 
-							})
-			
+												}else{
+														guser.vendorAssoc = 100100;
+														guser.assocVendor = null;
+														guser.assUser_ind = null;
+														guser.save();
+														console.log('i came via here c');
+														res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
+													} 
+																					})
+								
 							}else{
+								console.log('i came via here d');
 								res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
 								}
-							})
+														
+														})
 																});
 //Request Association
 router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
@@ -195,15 +212,16 @@ router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
 																				Association.findOne({vendor_id: req.params.id}, (err, fassc)=>{
 																												if(fassc){
 																															fassc.users.push(user);
+																															fassc.save();
 																															User.findByIdAndUpdate(	req.user._id, 
 																																				   { 
 																																						vendorAssoc: 100101,
 																																						assocVendor: fassc._id,
 																																					}, 
 																															(err, auser)=>{
-																																			if(auser){
+																																		/*	if(auser){
 																																						req.user.vendorAssoc = 100101;
-																																					}
+																																					} */
 																																			var fyy = {
 																																			vendorname : fassc.vendorname,
 																																			rdate	   : new Date().toISOString(),
@@ -215,7 +233,7 @@ router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
 
 
 																																		});
-																														fassc.save();
+																														
 																														}else{
 																																//alert security
 																																res.sendStatus(404);

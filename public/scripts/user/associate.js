@@ -139,7 +139,7 @@ function ff(){
 				var pf = new XMLHttpRequest();
 				pf.onreadystatechange	=	()=>{
 					if(pf.readyState === XMLHttpRequest.DONE && pf.status === 200){											
-									  l.append(stringToHTML( pf.responseText).querySelector('div#associationsnip'));
+									  				l.append( pf.responseXML.querySelector('div#associationsnip'));
 									  									m = document.querySelector('a#assocancel');
 																		m.onclick 	=	mm;	
 																		f.setAttribute('disabled', '');
@@ -149,6 +149,7 @@ function ff(){
 				var o = `/user/vendor/${c}/associate`;
 				pf.open('POST', o, true);
 				pf.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				pf.responseType = "document";
 				pf.send();
 				a.value = null;
 				}
