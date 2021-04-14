@@ -25,7 +25,13 @@ var storeSchema		=	new mongoose.Schema({
 	inventory			:	{
 								type 	:	mongoose.Schema.Types.ObjectId,
 								ref		:	'inventory'
-							}
+							},
+	users				: 	[
+								{
+									type	:	mongoose.Schema.Types.ObjectId,
+									ref		: 	'user'
+								}
+							]
 	});
 	
 

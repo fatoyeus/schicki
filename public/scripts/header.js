@@ -3,8 +3,8 @@
 		bh 	= document.querySelector('#navalign'),
 		ch 	= document.querySelector('#brandmove'),
 		ai 	= document.querySelector('div#pbar'),
-		prg = document.getElementById('spl'),
-		c 	= document.querySelectorAll('a');
+		prg = document.getElementById('spl');
+		
 
 ah.forEach((a)=>{
 	a.addEventListener("mouseover", ()=>{
@@ -15,12 +15,8 @@ ah.forEach((a)=>{
 	});
 });
 function progressBar(o){
-	console.log('I was called');
 		var f = new XMLHttpRequest();
 		f.onloadstart = function (ode){
-										console.log(ww.location.href);
-										ai.removeAttribute('hidden');
-										ai.classList.remove('w-*');
 										ai.classList.add( 'w-25');
 										//	ai.classList.add( `w-${(cde.loaded/cde.total) * 100}`);
 										}
@@ -43,22 +39,16 @@ function progressBar(o){
 		f.send();
 		}
 
- /*
-	c.forEach((x)=>{
-	
-			x.addEventListener('click', ()=>{
-				progressBar(x.href);
-			})
-		
-	}) 
-	
-*/		
 
 ww.addEventListener('load', ()=>{
 	progressBar(ww.location.pathname);
 })
 
-	
+ww.addEventListener('unload', ()=>{
+	ai.removeAttribute('hidden');
+	ai.classList.remove('w-*');
+	ai.classList.add( 'w-25');
+})
 
 
 

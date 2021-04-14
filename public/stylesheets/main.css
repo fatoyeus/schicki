@@ -1,9 +1,11 @@
 .searchglass{
-	color: #9aa0a6;	
-	margin:auto;
-	
-}
+				color: #9aa0a6;	
+				margin:auto;
+			}
 
+.searchbox :focus{
+					outline : none;
+				}
 
 .dsfi{background:#fff;
 	border-radius: 24px;
@@ -27,3 +29,4 @@
 .body{
 	font:Times Roman;
 }
+

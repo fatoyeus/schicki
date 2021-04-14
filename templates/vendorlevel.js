@@ -1,12 +1,21 @@
 const vendorlevel	=	[
 													{
+																			id			:	"e0000ee10",	
+																			level		:	'level0',
+																			name		:	'free',
+																			maxStores	:	1,
+																			maxUsers	:	0,
+																			mallAccess	:	0,
+																			maxSKUps	:	10
+													},
+													{
 																			id			:	"e00001110",	
 																			level		:	'level1',
 																			name		:	'basic',
 																			maxStores	:	1,
 																			maxUsers	:	1,
 																			mallAccess	:	0,
-																			maxSKUps	:	10
+																			maxSKUps	:	30
 													},
 													{
 																			id			:	"e00002552",

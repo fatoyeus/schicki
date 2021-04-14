@@ -60,14 +60,12 @@ async function ss(event){
 	if(j.value.length <= 2){
 			event.preventDefault();
 		}else{
-			
-			
-			var textN = document.createTextNode(j.value);
-			let optN = document.createElement("option");
-		    optN.appendChild(textN);
-			i.appendChild(optN);
-			sx(j.value, optN);
-			j.value = null;
+				var textN = document.createTextNode(j.value);
+				let optN = document.createElement("option");
+				optN.appendChild(textN);
+				i.appendChild(optN);
+				sx(j.value, optN);
+				j.value = null;
 			}	
 	}		
 function ll(event){

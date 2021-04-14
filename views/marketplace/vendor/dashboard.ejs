@@ -3,8 +3,9 @@
 <div class="col-lg-6 d-none d-lg-block my-5">
 	<div  class="container">
 		<div class="row mb-3">
-			<div class="col-lg-6">
-				<div class="container border border-secondary rounded p-3">
+			<div class="shadow p-2 row col-lg-12">
+				<div class="col-lg-6">
+				<div class="container border border-secondary rounded p-3" style="height: 200px">
 					<ul class="nav flex-column">
 						<li class="nav-item">
 							<p class="nav-link active text-light my-0">Users:<span><a href="#"> 1</a></span></p>
@@ -26,63 +27,97 @@
 						</li>
 					</ul>
 				</div>
-			</div>
-			<div class="col-lg-6">
-				<div class="container border border-secondary rounded p-3">
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<p class="nav-link active text-light my-0">Max Users: <span><a href="#"><%=vendorLevel.maxUsers%></a></span></p>
-						</li>
-						<li class="nav-item">
-							<p class="nav-link text-light my-0">Max Stores: <span><a href="#"> <%=vendorLevel.maxStores%> </a></span></p>
-						</li>
-						<li class="nav-item">
-							<p class="nav-link text-light my-0">Max Malls: <span><a href="#"> <%=vendorLevel.mallAccess%> </a></span></p>
-						</li>
-						<li class="nav-item">
-							<p class="nav-link text-light my-0">Package: <span><a href="#"> <%=vendorLevel.name%> </a></span></p>
-						</li>
-					</ul>
+				</div>
+				<div class="col-lg-6">
+					<div class="container border border-secondary rounded p-3" style="height: 200px">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<p class="nav-link active text-light my-0">Max Users: <span><a href="#"><%=vendorLevel.maxUsers%></a></span></p>
+							</li>
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Max Stores: <span><a href="#"> <%=vendorLevel.maxStores%> </a></span></p>
+							</li>
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Max Malls: <span><a href="#"> <%=vendorLevel.mallAccess%> </a></span></p>
+							</li>
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Package: <span><a href="#"> <%=vendorLevel.name%> </a></span></p>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row mb-3">
-			<div class="col-lg-6">
-				<form>
-					<div class="container border border-secondary rounded p-3">
+			<div class="shadow p-2 row col-lg-12">
+				<div class="col-lg-6">
+					<form>
+						<div class="container border border-secondary rounded p-3" style="height: 160px">
+							<ul class="nav flex-column">
+								<li class="nav-item">
+									<p class="nav-link text-light my-0">Enable Vendor Association</p>
+								</li>
+								<%if(vendor.associate){%>
+								<li class="nav-item p-3">
+									<button type="button" class="btn btn-success" id="assocbutton">Disable</button>
+								</li>
+								<%}else{%>
+								<li class="nav-item p-3">
+									<button type="button" class="btn btn-danger" id="assocbutton">Enable</button>
+								</li>
+								<%}%>
+							</ul>
+						</div>
+					</form>
+				</div>
+				<div class="col-lg-6">
+					<div class="container border border-secondary rounded p-3" style="height: 160px">
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<p class="nav-link text-light my-0">Enable Vendor Association</p>
+								<p class="nav-link text-light my-0">Association Requests</p>
 							</li>
-							<%if(vendor.associate){%>
-							<li class="nav-item p-3">
-								<button type="button" class="btn btn-success" id="assocbutton">Disable</button>
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Requests: <span><a href="/vendor/associationrequests">Manage Requests </a></span></p>
 							</li>
-							<%}else{%>
-							<li class="nav-item p-3">
-								<button type="button" class="btn btn-danger" id="assocbutton">Enable</button>
-							</li>
-							<%}%>
+							
 						</ul>
 					</div>
-				</form>
+				</div>
 			</div>
-			<div class="col-lg-6">
-				<div class="container border border-secondary rounded p-3">
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<p class="nav-link text-light my-0">Association Requests</p>
-						</li>
-						<li class="nav-item">
-							<p class="nav-link text-light my-0">Requests: <span><a href="/vendor/associationrequests">Manage Requests </a></span></p>
-						</li>
-						<li class="nav-item">
-							<p class="nav-link text-light my-0">Approved: <span><a href="#"> <%=vendor.users.length%> </a></span></p>
-						</li>
-						<li class="nav-item">
-							
-						</li>
-					</ul>
+		</div>
+		<div class="row mb-3">
+			<div class="shadow p-2 row col-lg-12" >
+				<div class="col-lg-6">
+					<form>
+						<div class="container border border-secondary rounded p-3" style="height: 160px">
+							<ul class="nav flex-column">
+								<li class="nav-item">
+									<p class="nav-link text-light my-0">User Management</p>
+								</li>
+								<li class="nav-item">
+									<p class="nav-link text-light my-0">Users: <span><a href="#"> <%=vendor.users.length%> </a></span></p>
+								</li>
+							</ul>
+						</div>
+					</form>
+				</div>
+				<div class="col-lg-6">
+					<div class="container border border-secondary rounded p-3" style="height: 160px">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Subscription</p>
+							</li>
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Package: <span><a href="/vendor/associationrequests"><%=vendorLevel.name%> </a></span></p>
+							</li>
+							<li class="nav-item">
+								<p class="nav-link text-light my-0">Expiration: <span><a href="#"> <%=vendor.users.length%> </a></span></p>
+							</li>
+							<li class="nav-item">
+
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
