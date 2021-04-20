@@ -26,6 +26,10 @@ var storeSchema		=	new mongoose.Schema({
 								type 	:	mongoose.Schema.Types.ObjectId,
 								ref		:	'inventory'
 							},
+	owner				:	{
+								type	:	mongoose.Schema.Types.ObjectId,
+								ref		:	'user'
+							},
 	users				: 	[
 								{
 									type	:	mongoose.Schema.Types.ObjectId,

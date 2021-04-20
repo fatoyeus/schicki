@@ -108,7 +108,7 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 															});
 //user profile view
 router.get('/user/profile/show', checkLogin, (req, res)=>{ 
-	console.log(res);
+	console.log(req.user);
 	User.findById(req.user._id, '-password').populate(['contact_id','birthday_id']).exec((err, foundUser)=>{
 																			if (err){
 																			    						 																										console.log(err.message);

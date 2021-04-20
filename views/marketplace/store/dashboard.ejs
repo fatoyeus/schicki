@@ -9,27 +9,30 @@
 		</div>
 		
 		<div class="tab-pane fade show active" id="allstores" role="tabpanel" aria-labelledby="allstores-tab">
+				<%if(stores.length > 0){%>
 				<% stores.forEach((store)=>{ %>
 				<%if(store.status){%>
 				<div id="form-id">
 					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 my-1">
-					<div class="row col-lg-9">
-						<div class="container d-flex flex-column">
-						<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="store-header" value="<%=store._id%>"><%=store.storename%></data></h4>
+					<div class="container d-flex flex-row">
+						<div class="row col-lg-9">
+							<div class="container d-flex flex-column">
+							<div clas="align-self-start"><h4 class="text-capitalize mt-2 mb-0" ><data id="store-header" value="<%=store._id%>"><%=store.storename%></data></h4>
+							</div>
+							<div clas="align-self-end">
+							<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="store-rdate">Date Requested: <%=store.requestdate.toUTCString()%></p>
+							<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="store-status"> Status: <%=store.status%></p>
+							</div>
+							<div id="store-id" hidden><%store._id%></div>
 						</div>
-						<div clas="align-self-end">
-						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-0" id="store-rdate">Date Requested: <%=store.requestdate.toUTCString()%></p>
-						<p class="font-italic font-weigt-lighter text-secondary mt-0 mb-2" id="store-status"> Status: <%=store.status%></p>
 						</div>
-						<div id="store-id" hidden><%store._id%></div>
-					</div>
-					</div>
-					<div class="row col-lg-3">
-						<div class="container d-flex flex-column">
-							<div class="align-self-end my-auto">
-								<%if(store.status === 'Active'){%>
-								<a class="btn btn-success btn-lg shadow" href="/stores/view/<%=store._id%>/detail">Manage</a>
-								<%}%>
+						<div class="row col-lg-3">
+							<div class="container d-flex flex-column">
+								<div class="align-self-end my-auto">
+									<%if(store.status === 'Active'){%>
+									<a class="btn btn-success btn-lg shadow" href="/stores/view/<%=store._id%>/detail">Manage</a>
+									<%}%>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -37,6 +40,16 @@
 				</div>
 				<%}%>	
 				<% })%>
+				<%}else{%>
+					<div class="container d-flex flex-row border border-secondary rounded" id="noassociateduser">
+					<div class="d-flex flex-row justify-content-center p-3 col-lg-12">
+						<div clas="d-flex p-2">
+							<h5 class="text-capitalize text-light" id="assoc-vendor">You Have No Stores</h5>
+						</div>
+					</div>	
+				</div>
+				<%}%>
+				
 		</div>
 	</div>
 </div>

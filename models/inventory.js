@@ -5,10 +5,12 @@ var inventorySchema		=		new mongoose.Schema({
 																			ref			:	'store',
 																			required	:	true 
 																		},
-													Stocklist	:		{
-																			type		:	mongoose.Schema.Types.Array,
-																			ref			:	'product'
-																		}
+													Stocklist	:		[
+																			{
+																				type		:	mongoose.Schema.Types.Array,
+																				ref			:	'product'
+																			}
+																		]
 													});	
 
 module.exports 			=		mongoose.model('inventory', inventorySchema);

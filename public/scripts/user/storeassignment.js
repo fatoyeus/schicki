@@ -65,7 +65,11 @@
 	p.send();
 	v.preventDefault();
 }
+	if(cx){
+		cx.onsubmit = by;
+	}
+	if(jq){
+		jq.onsubmit = kp;
+	}
 	
-	cx.onsubmit = by;
-	jq.onsubmit = kp;
 }())

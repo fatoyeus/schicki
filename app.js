@@ -14,6 +14,7 @@ let express  		    =  		require('express'),
 	  emailRoutes		=		require('./routes/emails'),
 	  phoneRoutes		=		require('./routes/phones'),
 	  vendorRoutes		=		require('./routes/vendors'),
+	  inventoryRoutes	=		require('./routes/inventory'),
 	  methodOverride	= 		require("method-override"),
 	  indexRoutes		=		require('./routes/index'),
 	  storeRoutes		=		require('./routes/store'),
@@ -49,7 +50,7 @@ app.use((req, res, next)=>{
 			case 	req.schikiSession.userId : 
 						console.log('using case of user');
 						
-						User.findById(req.schikiSession.userId, '-password', (err, user)=>{
+						User.findById(req.schikiSession.userId, '-password -orders -birthday_id -contact_id ', (err, user)=>{
 						if(err){
 							res.locals.user = null;
 							req.schikiSession.userId = null;

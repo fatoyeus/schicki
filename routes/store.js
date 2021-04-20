@@ -5,6 +5,7 @@ var	User			= 		require('../models/user'),
 	Vendor 			=		require('../models/vendor'),
 	Store			=		require('../models/store'),
 	Storecat		=		require('../models/storecat'),
+	Inventory 		=		require('../models/inventory'),
 	snippets		=		require('../public/lib/snippets.js'),
 	title			=		'schicki';
 
@@ -19,21 +20,35 @@ function checkLogin(req, res, next){
 	else if(!req.user.isProfiled){
 		res.redirect('/');
 	}
-	else if(!req.user.isVendor){
+	else if(!(req.user.isVendor||req.user.isVendorUser)){
 		res.redirect('/');
+	}
+	else if(req.user.isVendorUser && !req._parsedUrl.pathname.startsWith('/stores/view')){
+		res.redirect('/stores/view');
 	}
 	else{
 		next();
 	}
 }
-function checkstore(req, res, next){
-	
+function checkStoreOwner(req, res, next){
+	Vendor.findById(req.user.vendor_id, (err, gvendor)=>{
+			if(gvendor.stores.includes(req.params.store_id) && req.user.isVendor){
+				next();
+			}else{
+				res.redirect('/stores/view');
+			}
+	})
+}
+function checkVendor(req, res,next){
+	if(!req.user.isVendor){
+		res.redirect('/stores/view');
+	}else{
+		next();
+	}
 }
 //assign user to store 
-router.post('/store/:store_id/assignuser/:assigneduser', checkLogin, (req, res)=>{
-	Vendor.findById(req.user.vendor_id, (w_err, gvendor)=>{
-		if(gvendor.stores.includes(req.params.store_id)){
-															Store.findById(req.params.store_id, (au_err, gstore)=>{
+router.post('/store/:store_id/assignuser/:assigneduser', checkLogin, checkStoreOwner, (req, res)=>{
+	Store.findById(req.params.store_id, (au_err, gstore)=>{
 																if(!gstore.users.includes(req.params.assigneduser)){
 																									gstore.users.push(req.params.assigneduser);
 																									gstore.save();
@@ -49,24 +64,23 @@ router.post('/store/:store_id/assignuser/:assigneduser', checkLogin, (req, res)=
 																		res.sendStatus(403);
 																	}
 															});
-		}else{
-				console.log('store does not exist');
-				res.redirect('/stores/view');
-		}
+	});
+router.post('/store/:store_id/createInventory', checkLogin, checkStoreOwner, (req, res)=>{
+	Store.findById(req.params.store_id, (k_err, kstore)=>{
+		if(kstore.users.includes(req.user._id)){
+												Inventory.create({storeId : req.params.store_id}).then((inventory)=>{
+																														kstore.inventory = inventory._id
+																														kstore.save();
+																													   	res.redirect(`inventory/${inventory._id}/management`);
+																													})
+												}
 	})
-	
 });
 //remove user from store
-router.post('/store/:store_id/removeuser/:removeduser', checkLogin, (req, res)=>{
-	Vendor.findById(req.user.vendor_id, (w_err, gvendor)=>{
-		if(gvendor.stores.includes(req.params.store_id)){
-															Store.findById(req.params.store_id, (bu_err, istore)=>{
+router.post('/store/:store_id/removeuser/:removeduser', checkLogin, checkStoreOwner, (req, res)=>{
+																Store.findById(req.params.store_id, (bu_err, istore)=>{
 																if(istore.users.includes(req.params.removeduser)){
-																	istore.users.forEach((l,m,n)=>{
-																						if(req.params.removeduser.toString() === l.toString()){
-																																				n.splice(m, 1);
-																																			}
-																										})
+																				istore.users.pull(req.params.removeduser);
 																				istore.save();
 																				let opt = {path: "users", select: ['fname', 'lname', 'username'], model: "user"};
 																									User.populate(istore, opt, (cu_err, jstore)=>{
@@ -82,28 +96,27 @@ router.post('/store/:store_id/removeuser/:removeduser', checkLogin, (req, res)=>
 																		
 														});
 			
-		}else{
-			res.sendStatus(403);
-			res.redirect('/stores/view');
-		}
-	})
+		
+	
 	
 });
 //Create a Store
-router.get('/store/create', checkLogin, (req, res)=>{
+router.get('/store/create', checkLogin, checkVendor, (req, res)=>{
 	Storecat.find({status: 222}, (err, categories)=>{
 		var cat;
 		res.render('marketplace/store/register', {title:'Create Store', cat: categories});
 	});
 });
 
-router.post('/store/create', checkLogin, (req, res)=>{
+router.post('/store/create', checkLogin, checkVendor, (req, res)=>{
 	Store.create(req.body).then((nstore)=>{
 											Vendor.findById(req.user.vendor_id, (err, fvendor)=>{
 																				fvendor.stores.push(nstore._id);
 																				fvendor.save();
 																				});
 										    nstore.vendor_id	=	req.user.vendor_id;
+											nstore.users.push(req.user._id);
+											nstore.owner = req.user._id;
 											nstore.save();
 											res.redirect('/stores/view');
 										}).catch((err)=>{
@@ -113,7 +126,7 @@ router.post('/store/create', checkLogin, (req, res)=>{
 							});
 
 //Search store availability
-router.get('/store/search/:id/check', checkLogin, (req, res)=>{
+router.get('/store/search/:id/check', checkLogin, checkVendor, (req, res)=>{
 	Store.find({ storename : {$regex : `^${req.params.id}`, $options : 'i'}}, 'storename', (err, store)=>{
 		console.log('store is: '+ store.length);
 		if (store.length > 0){
@@ -127,14 +140,15 @@ router.get('/store/search/:id/check', checkLogin, (req, res)=>{
 //show stores
 
 router.get('/stores/view', checkLogin, (req, res)=>{
-	var vendor,
-		stores;
 	Vendor.findById(req.user.vendor_id, (err, fv)=>{
 		if(fv){
-			vendor = fv;
-				Store.find({ vendor_id: req.user.vendor_id },'_id storename status requestdate', (err, fs)=>{
-					res.render('marketplace/store/dashboard', {stores: fs, title: vendor.vendorname + ' Stores'});
-						});
+				Store.find({ vendor_id: req.user.vendor_id }).
+						select('_id storename status requestdate users').
+						elemMatch('users', {$eq: req.user._id}).
+						exec((err, fs)=>{
+											console.log(fs);
+											res.render('marketplace/store/dashboard', {stores: fs, title: `${fv.vendorname} Stores`})
+										})
 				}
 			});
 	});
@@ -148,6 +162,7 @@ router.get('/stores/view/:store_id/detail', checkLogin, (req, res)=>{
 			User.populate(gv, opt, (p_err, pusers)=>{
 				console.log(req.user);
 				Store.findById(req.params.store_id, (err, fstore)=>{
+														if(req.user.isVendor || (req.user.isVendorUser && fstore.users.includes(req.user._id))){
 															User.populate(fstore, opt, (s_err, suser)=>{
 															if(err){ 
 																res.redirect('/stores/view');
@@ -155,10 +170,16 @@ router.get('/stores/view/:store_id/detail', checkLogin, (req, res)=>{
 															else if(fstore.vendor_id.toString !== req.user.vendor_id.toString || fstore.status === 'Blocked'){
 																res.redirect('/stores/view');
 
+															}else if(req.user.isVendorUser){
+																res.render('marketplace/store/managestore', {store: suser, title: fstore.storename, users: null })
+															
 															}else{
 																res.render('marketplace/store/managestore', {store: suser, title: fstore.storename, users: pusers.users })
 															}
 															})
+														}else{
+															res.redirect('/stores/view');
+														}
 														});
 			})
 			
@@ -169,4 +190,41 @@ router.get('/stores/view/:store_id/detail', checkLogin, (req, res)=>{
 	});
 	
 });
+//delete store
+router.delete('/store/:store_id', checkLogin, checkStoreOwner, (req, res)=>{
+			Store.findById(req.params.store_id).
+					 select('_id status users').
+					 exec((d_err, dstore )=>{
+											if (dstore.users.length > 0){
+												console.log('remove assigned user first');
+												res.redirect(`/stores/view/${req.params.store_id}/detail`);
+											}else if(dstore.inventory){
+												console.log('delete inventory before deleting store');
+												res.redirect(`/stores/view/${req.params.store_id}/detail`);
+											}else if(dstore.owner !== req.user._id){
+												console.log('Store can only be deleted by owner');
+												res.redirect(`/stores/view/${req.params.store_id}/detail`);
+											}else{
+												Store.findByIdAndRemove(req.params.store_id, (e_err, estore)=>{
+													if(estore){
+														Vendor.findById(estore.vendor_id, (f_err, fvendor)=>{
+															fvendor.stores.pull(estore._id);
+															fvendor.save((g_err, savedVendor)=>{
+															console.log(savedVendor);
+															res.redirect('/stores/view');
+															})
+														})
+													}else{
+														console.log('unable to delete store')
+														res.redirect(`/stores/view/${req.params.store_id}/detail`);
+													}
+												})
+													 }
+			});
+})
+//default route
+router.get('/store/*', checkLogin, (req, res)=>{
+	var path;
+	res.render('pnf', {title: 'page not found', path: req._parsedUrl.pathname });
+});	
 module.exports	=		router;

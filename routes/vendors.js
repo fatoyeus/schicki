@@ -27,8 +27,13 @@ function checkLogin(req, res, next){
 	else if(!req.user.isProfiled){
 		res.redirect('/user/profile/new');
 	}
-	else if( (!req.user.isVendor || !req.user.isVendorUser) && req._parsedUrl.pathname !== '/vendor/enroll' ){
-		res.redirect('/vendor/enroll');
+	else if(!req.user.isVendor && req._parsedUrl.pathname !== '/vendor/enroll' ){
+		if(req.user.isVendorUser){
+			console.log('I got here');
+				res.redirect('/stores/view');
+		}else{
+				res.redirect('/vendor/enroll');
+		}
 	}else{
 		next();
 	}
@@ -226,10 +231,10 @@ router.delete('/vendor/profile/delete', checkLogin, (req, res)=>{
 					}
 					else{
 							Vendor.findByIdAndRemove(req.user.vendor_id, (v_err, delVendor)=>{
-					VendorContact.findByIdAndRemove(delVendor.contact_id, (contact_err, delContact)=>{
-						if(delContact){
-						VendorEmail.findByIdAndRemove(delContact.email_id, (email_err, delemail)=>{
-							if(delemail){
+							VendorContact.findByIdAndRemove(delVendor.contact_id, (contact_err, delContact)=>{
+							if(delContact){
+							VendorEmail.findByIdAndRemove(delContact.email_id, (email_err, delemail)=>{
+								if(delemail){
 								VendorPhone.findByIdAndRemove(delContact.phone_id, (phone_err, delphone)=>{
 									if(delphone){
 										VendorLocation.findByIdAndRemove(delContact.vendorlocation_id, (location_err, dellocation)=>{
@@ -325,11 +330,7 @@ router.post('/vendor/user/:id/association/admit', checkLogin, (req, res)=>{
 																				ivendor.users.push(u_user._id);
 																				ivendor.save();
 																				Association.findById(ivendor.association_id, (j_err, iasso)=>{
-																																		iasso.users.forEach((l,m,n)=>{
-																																			if(req.params.id.toString() === l.id.toString()){
-																																				n.splice(m, 1);
-																																			}
-																																		})
+																																		iasso.users.pull(req.params.id);
 																																		iasso.save();
 																																		res.sendStatus(200);
 																																			});
@@ -347,11 +348,12 @@ router.post('/vendor/user/:id/association/reject', checkLogin, (req, res)=>{
 			//alert security
 		}else{
 		Association.findById(hvendor.association_id, (a_err, hasso)=>{
-																		hasso.users.forEach((l,m,n)=>{
+																		/*hasso.users.forEach((l,m,n)=>{
 																			if(req.params.id.toString() === l.id.toString()){
 																				n.splice(m, 1);
 																			}
-																		})
+																		})*/
+																		hasso.users.pull(req.params.id);
 																		hasso.save();
 																		res.sendStatus(200);
 																		});
