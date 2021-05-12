@@ -71,7 +71,7 @@ router.post('/store/:store_id/createInventory', checkLogin, checkStoreOwner, (re
 												Inventory.create({storeId : req.params.store_id}).then((inventory)=>{
 																														kstore.inventory = inventory._id
 																														kstore.save();
-																													   	res.redirect(`inventory/${inventory._id}/management`);
+																													   	res.redirect(`/inventory/${inventory._id}/management`);
 																													})
 												}
 	})

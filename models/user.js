@@ -47,6 +47,10 @@ var userSchema	=	new mongoose.Schema({
 							type :	mongoose.Schema.Types.ObjectId,
 							ref  :  'contact'
 							},
+	notification_id		:	{ 
+							type :	mongoose.Schema.Types.ObjectId,
+							ref	 :	'notification'
+							},
 	billingAddress_id	: 	{
 							type : mongoose.Schema.Types.ObjectId,
 							ref  : 'billinglocation'

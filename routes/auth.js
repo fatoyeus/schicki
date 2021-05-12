@@ -2,6 +2,7 @@ var express			=		require('express'),
 	router			=		express.Router(),
 	bcrypt			=		require('bcryptjs'),
 	User			= 		require('../models/user'),
+	Notification	= 		require('../models/notification'),
 	Admin			=		require('../models/admin'),
 	AdminEmail		=		require('../models/adminemail'),
 	title			=		'schicki',
@@ -50,30 +51,32 @@ router.get('/register', prevResignup, (req, res)=>{
 });
 router.post('/register', (req, res)=>{
 	
-	let hash = bcrypt.hashSync(req.body.password, 14);
-	req.body.password = hash;
-	req.body.cpassword = undefined;
-	
-//create new user	
-	let user = new User(req.body);
-//save user to the database
-	user.save((err)=>{
-		if (err){
-			let error = 'something went wrong';
-			
-			if(err.code === 11000) {
-				error =  'email is already taken, please try another';
-			}
-			return res.render('forms/authentication/register', {error: error, title:'register'});
-		}else{
-			
-			res.redirect('/login');
-		}
-		
-	}); 
-	
-	
-	});
+										let hash = bcrypt.hashSync(req.body.password, 14);
+										req.body.password = hash;
+										req.body.cpassword = undefined;
+
+									//create new user	
+										let user = new User(req.body);
+										Notification.create({userId	:	user._id}).then((userN)=>{
+																									user.notification_id = userN._id;
+																									userN.save();
+																									//save user to the database
+																									user.save((err)=>{
+																									if (err){
+																										let error = 'something went wrong';
+
+																										if(err.code === 11000) {
+																											error =  'username is already taken, please try another';
+																										}
+																										return res.render('forms/authentication/register', {error: error, title:'register'});
+																									}else{
+
+																										res.redirect('/login');
+																									}
+
+																														}); 
+																								})
+});
 
 //login
 router.get('/login', prevRelogin, (req, res, next)=>{
@@ -87,15 +90,23 @@ router.post('/login', (req, res)=>{
 			return res.render('forms/authentication/login', {
 				error : 'Incorrect email / password.', lastChecked: null, action:'/login', title:'login'
 			});
-		}
-		req.schikiSession.userId  = user._id;
-		req.schikiSession.adminId = null;
-		if(!req.body.lastChecked){
-			res.redirect('/');
-		}else{
-			res.redirect(req.body.lastChecked);
-		};
-		
+		}else{	
+				//polyfill for users without notification schema;
+				if(!user.notification_id){
+					Notification.create({userId	:	user._id}).then((userN)=>{
+																				user.notification_id = userN._id;
+																									userN.save();
+																									user.save();
+					})
+				}
+				req.schikiSession.userId  = user._id;
+				req.schikiSession.adminId = null;
+				if(!req.body.lastChecked){
+					res.redirect('/');
+				}else{
+						res.redirect(req.body.lastChecked);
+						};
+				}
 	});
 });
 
@@ -104,10 +115,12 @@ router.post('/login', (req, res)=>{
 router.get('/logout', (req, res)=>{
 	if(req.schikiSession.userId){
 		req.schikiSession.userId  = null;
-	} if(req.schikiSession.adminId){
+		res.redirect('/');
+	}else if(req.schikiSession.adminId){
 		req.schikiSession.adminId = null;
+		res.redirect('/admin/dashboard');
 	}
-	res.redirect('/');
+	
 });
 
 

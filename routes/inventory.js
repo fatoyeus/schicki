@@ -46,5 +46,11 @@ function checkVendor(req, res,next){
 		next();
 	}
 }
-
+router.get('/inventory/:inventory_id/management',checkLogin, (req, res)=>{
+			Inventory.findById(req.params.inventory_id, (err, invn)=>{
+				Store.findById(invn.storeId, 'storename', (serr, lstore)=>{
+					res.render('marketplace/store/updateinventory', {title : `${lstore.storename} Inventory`, store: lstore});
+				})
+			});
+});
 module.exports	=		router;
