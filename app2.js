@@ -30,7 +30,7 @@ let express  		    =  		require('express'),
 	 							 };
 	  
 
-const url 				= 		process.env.DB_URL || "mongodb+srv://schickiapp:WUkPjp0TYfhswzoc@schickicluster.dfkft.mongodb.net/schickidb?retryWrites=true&w=majority",
+const url 				= 		process.env.DB_URL || "mongodb://localhost/schickidb",
 	  sessions			=		require('client-sessions'),
 	  csrf				=		require('csurf');
 
