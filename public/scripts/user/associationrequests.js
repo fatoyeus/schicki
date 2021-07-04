@@ -26,9 +26,9 @@
 		var p = this.parentNode.parentNode.parentNode;
 		var v = new XMLHttpRequest();
 				v.onreadystatechange	=	()=>{
-												if(v.readyState === XMLHttpRequest.DONE && v.status === 200){												
-																											p.remove();
-																											}
+													if(v.readyState === XMLHttpRequest.DONE && v.status === 200){												
+																													p.remove();
+																												}
 													}
 																	var o = `/vendor/user/${this.firstChild.value}/association/reject`;
 																	v.open('POST', o, true);

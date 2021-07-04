@@ -70,11 +70,12 @@ router.post('/register', (req, res)=>{
 																										}
 																										return res.render('forms/authentication/register', {error: error, title:'register'});
 																									}else{
-
-																										res.redirect('/login');
-																									}
+																										req.notify(1001, userN._id);
+																										req.notify(1002, userN._id);
+																										}
 
 																														}); 
+																									res.redirect('/login');
 																								})
 });
 
@@ -100,7 +101,8 @@ router.post('/login', (req, res)=>{
 					})
 				}
 				req.schikiSession.userId  = user._id;
-				req.schikiSession.adminId = null;
+				req.schikiSession.adminId = null;	
+				
 				if(!req.body.lastChecked){
 					res.redirect('/');
 				}else{

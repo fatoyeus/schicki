@@ -8,7 +8,6 @@ let express			=		require('express'),
 	Contact 		= 		require('../models/contact'),
 	Vendor 			=		require('../models/vendor'),
 	Association		=		require('../models/association'),
-	Notification	=		require('../models/notification'),
 	Billing			=		require('../models/billinglocation'),
 	title			=		'schicki';
 	const{create}	=		require('xmlbuilder2');
@@ -55,56 +54,48 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 		contact			=	{userEmail, userPhone, userLocation};
 	
 	Birthday.create(userBirthday).then((nUserBirthday)=>{
-																
-			User.findByIdAndUpdate(req.user._id, {birthday_id : nUserBirthday._id}, (b_err, foundUser)=>{
-																					if(b_err||!foundUser){
-																						console.log('Unable to create profile');
-																						res.redirect('/');
-																						}else{
-				Contact.create(contact).then((usercontact)=>{
-		
-					Email.create(userEmail).then((nUserEmail)=>{
-														usercontact.userEmail_id = nUserEmail._id;
-														console.log('email created');
-		    			Phone.create(userPhone).then((nUserPhone)=>{
-														usercontact.userPhone_id = nUserPhone._id;
-														console.log('phone created');
-							Location.create(userLocation).then((nUserLocation)=>{
-																usercontact.userLocation_id = nUserLocation._id;
-																usercontact.save();
-																console.log('location created and contact saved');
-															}).catch((err)=>{
-																console.log(err);
-															});	
-													}).catch((err)=>{
-														console.log(err);
-													});
-										}).catch((err)=>{
-											console.log(err);
-										});
-						
-			
-			
-			
-			
-			User.findByIdAndUpdate(req.user._id, {isProfiled : true, contact_id : usercontact._id}, (err, foundUser)=>{
-				if(err||!foundUser){
-					console.log(err.message);
-					res.redirect('/');
-				}
-		})
-															}).catch((err)=>{
-																	console.log(err.message);
-															});
-														}
-													});														
+		User.findByIdAndUpdate(req.user._id, {birthday_id : nUserBirthday._id}, (b_err, foundUser)=>{
+																										if(b_err||!foundUser){
+																											console.log('Unable to create profile');
+																											res.redirect('/');
+																											}else{
+									Contact.create(contact).then((usercontact)=>{
+										Email.create(userEmail).then((nUserEmail)=>{
+																			usercontact.userEmail_id = nUserEmail._id;
+																			console.log('email created');
+											Phone.create(userPhone).then((nUserPhone)=>{
+																			usercontact.userPhone_id = nUserPhone._id;
+																			console.log('phone created');
+												Location.create(userLocation).then((nUserLocation)=>{
+																					usercontact.userLocation_id = nUserLocation._id;
+																					console.log('location created and contact saved');
+																				}).catch((err)=>{
+																					console.log(err);
+																				});	
+																		}).catch((err)=>{
+																			console.log(err);
+																		});
+																					}).catch((err)=>{
+																										console.log(err);
+																									});
+											usercontact.save();
+											User.findByIdAndUpdate(req.user._id, {isProfiled : true, contact_id : usercontact._id}, (err, foundUser)=>{
+									if(err||!foundUser){
+										console.log(err.message);
+										res.redirect('/');
+									}
+																																						})
+																				}).catch((err)=>{
+																						console.log(err.message);
+																				});
+																													}
+																											});														
 												}).catch((err)=>{
 													console.log(err);
 											});
 	
 	
 	console.log('User profile updated successfully');
-	req.notify(2001, req.user.notification_id);
 	res.redirect('/');
 		
 															});
@@ -320,18 +311,9 @@ router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 				if(foundUser){
 					if(foundUser.billingAddress_id){
 						Billing.findByIdAndRemove(foundUser.billingAddress_id,(b_err, foundBilling)=>{
-							if(foundBilling){
-												
-											}
+							console.log('successfully deleted billing address');
 						})
 													}
-					if(foundUser.notification_id){
-						Notification.findByIdAndRemove(foundUser.notification_id,(q_err, delnotif)=>{
-							if(delnotif){
-														
-										}
-																	})
-					}
 					Contact.findByIdAndRemove(foundUser.contact_id, (c_err, delContact)=>{
 						if(delContact){
 							Location.findByIdAndRemove(delContact.userLocation_id, (l_err,delLocation)=>{

@@ -9,10 +9,13 @@ var notificationSchema	=	new mongoose.Schema({
 													notifications	:	[
 																			{
 																				notif_id	:	String,
-																				readStatus	:	{ type	: Boolean, default : false }
+																				link		:	String,
+																				readStatus	:	{ type	: Boolean, default : false },
+																				timestamp	:	{ type	: Date }
 																			}
 																		],
-													maxlength		:	{ type	: Number, default: 50 }
+													maxlength		:	{ 	type	: 	Number, default: 50 },
+													unreadNot		:	{	type	:	Number, default: 0	}
 												});
 
 module.exports	=	mongoose.model('notification', notificationSchema );

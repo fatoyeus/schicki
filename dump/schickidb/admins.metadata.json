@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"schickidb.admins"},{"v":2,"unique":true,"key":{"username":1},"name":"username_1","ns":"schickidb.admins","background":true}],"uuid":"006b6d2daa2d493e8bd9b46aebba4dd9"}

@@ -3,17 +3,16 @@
 		bh 	= document.querySelector('#navalign'),
 		ch 	= document.querySelector('#brandmove'),
 		ai 	= document.querySelector('div#pbar'),
+		dh	= document.querySelectorAll('div#NotDropMenu a'),
+		ej  = document.querySelector('div#notificationdiv'),
 		prg = document.getElementById('spl');
-		
 
-ah.forEach((a)=>{
-	a.addEventListener("mouseover", ()=>{
-		a.classList.add('bg-secondary');
-	});
-	a.addEventListener("mouseout", ()=>{
-		a.classList.remove('bg-secondary');
-	});
+const notEvts = new EventSource("/notify/notStream.js");
+	
+	notEvts.addEventListener("usermessage", function(event) {
+  console.log('event received');
 });
+	
 function progressBar(o){
 		var f = new XMLHttpRequest();
 		f.onloadstart = function (ode){
@@ -37,7 +36,27 @@ function progressBar(o){
 		f.open('GET', o, true);
 		f.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		f.send();
-		}
+						}
+
+ah.forEach((a)=>{
+	a.addEventListener("mouseover", ()=>{
+		a.classList.add('bg-secondary');
+	});
+	a.addEventListener("mouseout", ()=>{
+		a.classList.remove('bg-secondary');
+	});
+});
+dh.forEach((a)=>{
+	a.addEventListener("mouseover", ()=>{
+		a.classList.remove('bg-dark')
+		a.classList.add('bg-secondary');
+	});
+	a.addEventListener("mouseout", ()=>{
+		a.classList.add('bg-dark');
+		a.classList.remove('bg-secondary');
+	});
+});
+
 
 
 ww.addEventListener('load', ()=>{
@@ -49,8 +68,12 @@ ww.addEventListener('unload', ()=>{
 	ai.classList.remove('w-*');
 	ai.classList.add( 'w-25');
 })
-
-
+	
+if(ej){
+		document.querySelector('a#notificationdropdown').addEventListener('click', ()=>{
+			ej.setAttribute('hidden', '');
+		})
+	}
 
 
 if(!(document.title === 'schicki')){

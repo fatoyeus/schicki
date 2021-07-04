@@ -188,7 +188,7 @@ router.post('/vendor/enroll', checkLogin, (req, res)=>{
 	}).catch((err)=>{
 		console.log(err);
 	});
-	
+	req.notify(2002);
 	res.redirect('/');
 });
 //show vendor profile

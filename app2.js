@@ -5,6 +5,7 @@ let express  		    =  		require('express'),
       bodyParser 		=  		require('body-parser'),
 	  bcrypt			=		require('bcryptjs'),
 	  helmet			=		require('helmet'),
+	  methodOverride	= 		require('method-override'),
 	  Admin				=		require('./models/admin'),
 	  User				= 		require('./models/user'),
 	  adminRoutes		=		require('./routes/admins'),
@@ -15,10 +16,18 @@ let express  		    =  		require('express'),
 	  phoneRoutes		=		require('./routes/phones'),
 	  vendorRoutes		=		require('./routes/vendors'),
 	  inventoryRoutes	=		require('./routes/inventory'),
-	  methodOverride	= 		require("method-override"),
 	  indexRoutes		=		require('./routes/index'),
 	  storeRoutes		=		require('./routes/store'),
-	  port 				= 		process.env.PORT || 3000;
+	  notify			= 		require('./public/lib/notifications'),
+	  port 				= 		process.env.PORT || 3000,
+	  not_options		=		{
+		  							setHeaders	:	(res, path, stat)=>{
+										res.set({
+													'Content-Type'	:	'text/event-stream',
+													'Cache-Control'	:	'no-cache'
+												});
+									}
+	 							 };
 	  
 
 const url 				= 		"mongodb://localhost/schickidb",
@@ -30,6 +39,7 @@ app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.set('view engine', 'ejs');
+app.use('/notify', express.static('notifications', not_options));
 //app.use(helmet());
 app.use(sessions({
 					cookieName	:	"schikiSession",
@@ -63,8 +73,7 @@ app.use((req, res, next)=>{
 							return res.redirect('/');
 							return next ();
 						}
-						
-						User.populate(user,[{path:'notification_id', model:'notification', select:'notifications maxlength'}], (n_err, nuser)=>{
+						User.populate(user,[{path:'notification_id', model:'notification'}], (n_err, nuser)=>{
 									console.log(user);
 									req.user		 = user;
 									res.locals.user  = user;
@@ -113,6 +122,9 @@ app.use((req, res, next)=>{
 	
 	
 }); 
+//middleware for notifications
+app.use(notify);
+//middleware for server-events
 
 //app.disable('x-powered-by');
 
