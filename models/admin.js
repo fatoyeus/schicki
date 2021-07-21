@@ -8,11 +8,15 @@ var adminSchema	=	new mongoose.Schema({
 											username			:	{ type: String, required	: 	true, unique: true },
 											password			:	{ type: String, required	: 	true },
 											email_id			:	{
-																	 type :	mongoose.Schema.Types.ObjectId,
-																	 ref  : 'adminemail'
+																	 	type :	mongoose.Schema.Types.ObjectId,
+																	 	ref  : 'adminemail'
 																	},
 											status				:	{ type:	Number, min: 0, max: 5, required :	true, default: 0},
-											created				:   { type: Date,	default: Date.now() }
+											created				:   { type: Date,	default: Date.now() },
+											notification_id		:	{ 
+																		type :	mongoose.Schema.Types.ObjectId,
+																		ref	 :	'notification'
+																	},
 											
 										});
 

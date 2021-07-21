@@ -102,12 +102,17 @@ app.use((req, res, next)=>{
 							return res.redirect('/admin/dashboard');
 							return next ();
 						}
-						req.user		 = null;
-						res.locals.user  = null;
-						req.admin		 = admin;
-						res.locals.admin = admin;
+						Admin.populate(admin,[{path:'notification_id', model:'notification'}], (n_err, na)=>{
+									console.log(admin);
 							
-						next();
+									req.user		 = null;
+									res.locals.user  = null;
+									req.admin		 = admin;
+									res.locals.admin = admin;
+
+									next();
+								})
+						
 
 						});
 					

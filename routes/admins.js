@@ -16,6 +16,7 @@ let   express  		    =  		require('express'),
 	  VendorLocation	=		require('../models/vendorlocation'),
 	  Store				= 		require('../models/store'),
 	  Storecat			=		require('../models/storecat'),
+	  Notification		= 		require('../models/notification'),
 	  createStore		= 		require('../APIs/schicki_storage/createstore'),		  
 	  title				=		'schicki',
 	  lastChecked,
@@ -66,23 +67,32 @@ router.get('/admin/**1*5*2/login', prevAdminRelogin, (req, res, next)=>{
 });
 router.post('/admin/login', (req, res)=>{
 	Admin.findOne({username: req.body.username}, (err, admin)=>{
-		if( !admin || !bcrypt.compareSync(req.body.password, admin.password)){
-			var error;
-			console.log(err);
-			return res.render('forms/authentication/login', {
-				error : 'Incorrect email / password.', lastChecked: null, action: '/admin/login', title:'admin login'
-				
-			}
-							 );
-		}
-		req.schikiSession.adminId = admin._id;
-		req.schikiSession.userId  = null;	
-		if(!req.body.lastChecked){
-			res.redirect('/admin/dashboard');
-		}else{
-			res.redirect(req.body.lastChecked);
-		};
-});
+			if( !admin || !bcrypt.compareSync(req.body.password, admin.password)){
+				var error;
+				console.log(err);
+				return res.render('forms/authentication/login', {
+					error : 'Incorrect email / password.', lastChecked: null, action: '/admin/login', title:'admin login'
+
+				}
+								 );
+			}else{
+					if(!admin.notification_id){
+							Notification.create({userId	:	admin._id}).then((adminN)=>{
+																						admin.notification_id = adminN._id;
+																						adminN.save();
+																						admin.save();
+							})
+						}
+					req.schikiSession.adminId = admin._id;
+					req.schikiSession.userId  = null;	
+					if(!req.body.lastChecked){
+						res.redirect('/admin/dashboard');
+					}else{
+						res.redirect(req.body.lastChecked);
+					};
+				}
+		
+		});
 		
 	});
 
