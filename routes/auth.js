@@ -99,6 +99,17 @@ router.post('/login', (req, res)=>{
 																									userN.save();
 																									user.save();
 					})
+				}else{
+					Notification.findById(user.notification_id , (d_err, notf)=>{
+						if(!notf){
+									Notification.create({userId	:	user._id}).then((userN)=>{
+																						user.notification_id = userN._id;
+																											userN.save();
+																											user.save();
+									})
+						}
+						
+					})
 				}
 				req.schikiSession.userId  = user._id;
 				req.schikiSession.adminId = null;	
