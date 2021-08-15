@@ -5,13 +5,14 @@
 		ai 	= document.querySelector('div#pbar'),
 		dh	= document.querySelectorAll('div#NotDropMenu a'),
 		ej  = document.querySelector('div#notificationdiv'),
+		fj  = document.querySelector('div#NotDropMenu'),
 		prg = document.getElementById('spl');
 
-const notEvts = new EventSource("/notify/notStream.js");
+const notEvts = new EventSource("/notStream");
 	
-	notEvts.addEventListener("usermessage", function(event) {
-  console.log('event received');
-});
+notEvts.onmessage = (event)=> {
+  console.log(JSON.parse(event.data))
+};
 	
 function progressBar(o){
 		var f = new XMLHttpRequest();
@@ -37,7 +38,21 @@ function progressBar(o){
 		f.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		f.send();
 						}
-
+function notfn(i){
+		var w = new XMLHttpRequest();
+		w.onreadystatechange	=	()=>{
+										if(w.readyState === XMLHttpRequest.DONE && w.status === 200){		
+																										w.responseXML.querySelectorAll('a').forEach((x)=>{
+																											fj.append(x);
+																										 })
+																									}
+									}								
+																	var j = `/notf/${i.dataset.id}`;
+																	w.open('GET', j, true);
+																	w.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+																	w.responseType = "document";
+																	w.send();
+}
 ah.forEach((a)=>{
 	a.addEventListener("mouseover", ()=>{
 		a.classList.add('bg-secondary');
@@ -70,8 +85,9 @@ ww.addEventListener('unload', ()=>{
 })
 	
 if(ej){
-		document.querySelector('a#notificationdropdown').addEventListener('click', ()=>{
+		document.querySelector('a#notificationdropdown').addEventListener('click', (e)=>{
 			ej.setAttribute('hidden', '');
+			notfn(e.target);
 		})
 	}
 

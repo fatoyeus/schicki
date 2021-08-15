@@ -13,6 +13,7 @@ let express  		    =  		require('express'),
 	  productRoutes		=		require('./routes/products'),
 	  userRoutes		=		require('./routes/users'),
 	  emailRoutes		=		require('./routes/emails'),
+	  notStream			=		require('./routes/notStream'),
 	  phoneRoutes		=		require('./routes/phones'),
 	  vendorRoutes		=		require('./routes/vendors'),
 	  inventoryRoutes	=		require('./routes/inventory'),
@@ -34,12 +35,13 @@ const url 				= 		process.env.DB_URL || "mongodb://localhost/schickidb",
 	  sessions			=		require('client-sessions'),
 	  csrf				=		require('csurf');
 
-
+app.locals.title	    =		"Schicki";
+app.locals.notf			=		{};
 app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.set('view engine', 'ejs');
-app.use('/notify', express.static('notifications', not_options));
+//app.use('/notify', express.static('notifications', not_options));
 //app.use(helmet());
 app.use(sessions({
 					cookieName	:	"schikiSession",
@@ -73,7 +75,7 @@ app.use((req, res, next)=>{
 							return res.redirect('/');
 							return next ();
 						}
-						User.populate(user,[{path:'notification_id', model:'notification'}], (n_err, nuser)=>{
+						User.populate(user,[{path:'notification_id', model:'notification', select:'unreadNot userId'}], (n_err, nuser)=>{
 									console.log(user);
 									req.user		 = user;
 									res.locals.user  = user;
@@ -195,6 +197,7 @@ mongoose.connect(url , {useNewUrlParser: true, useUnifiedTopology: true}).then((
 app.use(adminRoutes);
 app.use(authRoutes);
 app.use(emailRoutes);
+app.use(notStream);
 app.use(phoneRoutes);
 app.use(productRoutes);
 app.use(storeRoutes);

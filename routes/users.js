@@ -104,7 +104,7 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 	
 	
 	console.log('User profile updated successfully');
-	req.notify(2001, req.user.notification_id);
+	req.notify(1003, req.user.notification_id);
 	res.redirect('/');
 		
 															});
@@ -211,40 +211,37 @@ router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
 																								id: req.user.id,
 																								username: req.user.username
 																							};
-																				Association.findOne({vendor_id: req.params.id}, (err, fassc)=>{
+																	Association.findOne({vendor_id: req.params.id}, (err, fassc)=>{
 																												if(fassc){
-																															fassc.users.push(user);
-																															fassc.save();
-																															User.findByIdAndUpdate(	req.user._id, 
-																																				   { 
-																																						vendorAssoc: 100101,
-																																						assocVendor: fassc._id,
-																																					}, 
-																															(err, auser)=>{
-																																		/*	if(auser){
-																																						req.user.vendorAssoc = 100101;
-																																					} */
-																																			var fyy = {
-																																			vendorname : fassc.vendorname,
-																																			rdate	   : new Date().toISOString(),
-																																			status	   : 'Requested'
-																																		 }
-																																var fy;
-																																let fz = res.render('forms/snippets/associate', {fy : fyy})
-																																res.send(fz);
-
-
-																																		});
-																														
+																													fassc.users.push(user);
+																													fassc.save();
+																													User.findByIdAndUpdate(	req.user._id, 
+																																	   { 
+																																			vendorAssoc: 100101,
+																																			assocVendor: fassc._id,
+																																		}, 
+																													(err, auser)=>{
+																													/*	if(auser){
+																														req.user.vendorAssoc = 100101;
+																														} */
+																											var fyy = {
+																														vendorname : fassc.vendorname,
+																														rdate	   : new Date().toISOString(),
+																														status	   : 'Requested'
+																													 }
+																						var fy;
+																						let fz = res.render('forms/snippets/associate', {fy : fyy})
+																																		res.send(fz);
+																																	});
 																														}else{
 																																//alert security
 																																res.sendStatus(404);
 																																}													
-																										});
-																										}else{
-																											//alert security
-																											res.redirect('/user/vendor/associate');
-																										}
+																				});
+																				}else{
+																					//alert security
+																					res.redirect('/user/vendor/associate');
+																					}
 																	});
 //Accept granted association request
 router.post('/user/vendor/associationaccept', checkLogin, (req, res)=>{

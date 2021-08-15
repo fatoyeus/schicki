@@ -21,3 +21,28 @@
 	</div>
 </form>
 <%}%>
+<%if(snippets.notf){%>
+<div class="bg-secondary border-0 shadow dropdown-menu mt-4 p-0"  style="font-size: 10px" id="NotDropMenu" aria-labelledby="notificationdropdown">
+										
+										<%for (let x = notif.notifications.length -1; x >=0 ; x-- ){%>
+											<a class="bg-dark text-white text-left dropdown-item border-0 p-1" style="height: 10px, width: 120px" data="<%=notif._id%>" href="<%=notif.notifications[x].link%>"><%=notif.notifications[x].notif_id%><span><p class="m-0 ml-4 p-0">
+							  	<% var time = Date.now() - notif.notifications[x].timestamp; %>
+							  	<%  if(Math.round(time/31104000000)){%>
+								<%=Math.round(time/31104000000) + ' years ago' %>
+								<%}else  if(Math.round(time/2592000000)){%>
+								<%=Math.round(time/2592000000) + ' months ago' %>
+								<%}else  if(Math.round(time/86400000)){%>
+								<%=Math.round(time/86400000) + ' days ago' %>
+								<%}else  if(Math.round(time/3600000)){%>
+								<%=Math.round(time/3600000) + ' hours ago' %>
+								<%}else  if(Math.round(time/60000)){%>
+								<%=Math.round(time/60000) + ' minutes ago' %>
+								<%}else  if(Math.round(time/1000)){%>
+								<%=Math.round(time/1000) + ' seconds ago' %>
+								<%}else{%>
+								<%='Just now'%>
+												<%}%>			
+												</p></span></a>
+										<%}%>
+</div>
+<%}%>

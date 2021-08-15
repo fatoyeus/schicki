@@ -27,37 +27,19 @@
 						<li class="nav-item mt-2 mr-2">
 							<div class="d-flex">
 								<div class="dropdown dropleft mr-3">
-								<a type="button" data-toggle="dropdown" id="notificationdropdown"><svg xmlns="http://www.w3.org/2000/svg" width="16" z-index="3" height="16" fill="currentColor" class="bi bi-bell text-light" viewBox="0 0 16 16">
-  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+								<a type="button" data-toggle="dropdown" id="notificationdropdown" data-id="<%=(user||admin).notification_id._id%>"><svg xmlns="http://www.w3.org/2000/svg" width="16" z-index="3" height="16" fill="currentColor" class="bi bi-bell text-light" viewBox="0 0 16 16" data-id="<%=(user||admin).notification_id._id%>">
+  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" data-id="<%=(user||admin).notification_id._id%>"/>
 									</svg>
-									<%if((user||admin).notification_id.notifications.find((x)=>x.readStatus === false)){%>
-									<div id="notificationdiv">
-										<div class="d-inline-flex justify-content-center rounded-circle text-white bg-danger" style="font-size: 0.5rem; position:absolute; z-index: 4; right: -7px; bottom: 1px; width:12px; height: 12px"><%=(user||admin).notification_id.notifications.length%></div>
-									</div>
+								<div id="notificationdiv" data-id="<%=(user||admin).notification_id._id%>">
+									<%if((user||admin).notification_id.unreadNot > 0){%>
+									
+								<div class="d-inline-flex justify-content-center rounded-circle text-white bg-danger" style="font-size: 0.5rem; position:absolute; z-index: 4; right: -7px; bottom: 1px; width:12px; height: 12px" data-id="<%=(user||admin).notification_id._id%>"><%=(user||admin).notification_id.unreadNot%></div>
 									<%}%>
+								</div>
+									
 									</a>
 									<div class="bg-secondary border-0 shadow dropdown-menu mt-4 p-0"  style="font-size: 10px" id="NotDropMenu" aria-labelledby="notificationdropdown">
-										
-										<%for (let x = ((user||admin).notification_id.notifications.length - 1); x >= 0 ; x-- ){%>
-											<a class="bg-dark text-white text-left dropdown-item border-0 p-1" style="height: 10px, width: 120px" data="<%=(user||admin).notification_id.notifications[x]._id%>" href="<%=(user||admin).notification_id.notifications[x].link%>"><%=(user||admin).notification_id.notifications[x].notif_id%><span><p class="m-0 ml-4 p-0">
-							  	<% var time = Date.now() - (user||admin).notification_id.notifications[x].timestamp; %>
-							  	<%  if(Math.round(time/31104000000)){%>
-								<%=Math.round(time/31104000000) + ' years ago' %>
-								<%}else  if(Math.round(time/2592000000)){%>
-								<%=Math.round(time/2592000000) + ' months ago' %>
-								<%}else  if(Math.round(time/86400000)){%>
-								<%=Math.round(time/86400000) + ' days ago' %>
-								<%}else  if(Math.round(time/3600000)){%>
-								<%=Math.round(time/3600000) + ' hours ago' %>
-								<%}else  if(Math.round(time/60000)){%>
-								<%=Math.round(time/60000) + ' minutes ago' %>
-								<%}else  if(Math.round(time/1000)){%>
-								<%=Math.round(time/1000) + ' seconds ago' %>
-								<%}else{%>
-								<%='Just now'%>
-												<%}%>			
-												</p></span></a>
-										<%}%>
+									
 									</div>
 								</div>
 							</div>

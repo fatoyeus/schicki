@@ -1,12 +1,5 @@
-
-
 console.log("loaded script");
 let hpinput		 = document.querySelector("#sb_react");
-
-
-
-
-
 
 
 hpinput.addEventListener("mouseover", ()=>{

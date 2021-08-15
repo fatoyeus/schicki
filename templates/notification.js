@@ -17,19 +17,33 @@ const notification = [
 								link		:	'/user/profile/new'
 							},
 							{
-								code		:	2001,
+								code		:	1003,
 								name		:	'vendor_start_message',
-								category	:	'vendor',
+								category	:	'user',
 								message		:	'Become a vendor',
 								link		:	'/vendor/enroll'
+							},
+							{
+								code		:	1013,
+								name		:	'vendor_created_message',
+								category	:	'user',
+								message		:	'vendor applications successful',
+								link		:	'/'
+							},
+							{
+								code		:	2001,
+								name		:	'vendor_approval_message',
+								category	:	'vendor',
+								message		:	'Vendor status now approved',
+								link		:	'/store/create'
 							},
 							{
 								code		:	2002,
 								name		:	'vendor_createstore_message',
 								category	:	'vendor',
-								message		:	'Create a store',
+								message		:	'Create a store now',
 								link		:	'/store/create'
 							}
-						]
+					]
 
 module.exports = notification;

@@ -188,7 +188,7 @@ router.post('/vendor/enroll', checkLogin, (req, res)=>{
 	}).catch((err)=>{
 		console.log(err);
 	});
-	req.notify(2002);
+	req.notify(1013, req.user.notification_id);
 	res.redirect('/');
 });
 //show vendor profile
@@ -290,7 +290,7 @@ router.post('/vendor/user/:id/association/accept', checkLogin, (req, res)=>{
 			//alert security
 		}else{
 		Association.findById(gvendor.association_id, (a_err, gasso)=>{
-			var snip = snippets;
+			var snip = snippets;	
 		
 			gasso.users.forEach((l)=>{
 				if(req.params.id.toString() === l.id.toString()){
