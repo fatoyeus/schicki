@@ -229,9 +229,9 @@ router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
 																														rdate	   : new Date().toISOString(),
 																														status	   : 'Requested'
 																													 }
-																						var fy;
-																						let fz = res.render('forms/snippets/associate', {fy : fyy})
-																																		res.send(fz);
+																						//let fz = 
+																						res.render('forms/snippets/associate', {fy : fyy})
+																																		//res.send(fz);
 																																	});
 																														}else{
 																																//alert security

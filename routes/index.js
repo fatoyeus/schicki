@@ -15,8 +15,9 @@ router.get('/notf/:id', (req, res)=>{
 	Notification.findById(req.params.id,'notifications', (err, notifications)=>{
 		console.log(notifications);
 		let snips 		=	Snippets;
-		let fz 			= 	res.render('forms/snippets/vendassocbtn', { snippets : snips, notif: notifications });
-	    res.send(fz);
+		//let fz 			= 	
+		res.render('forms/snippets/vendassocbtn', { snippets : snips, notif: notifications });
+	   // res.send(fz);
 	} )
 });
 router.get('/*', (req, res)=>{

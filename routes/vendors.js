@@ -300,8 +300,9 @@ router.post('/vendor/user/:id/association/accept', checkLogin, (req, res)=>{
 			})
 			
 			gasso.save();
-			var	rs = res.render('forms/snippets/vendassocbtn', { snippets : snip })
-			res.send(rs);
+			//var	rs = 
+			res.render('forms/snippets/vendassocbtn', { snippets : snip })
+			//res.send(rs);
 		});
 		
 		}

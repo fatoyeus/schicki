@@ -6,7 +6,8 @@
 		dh	= document.querySelectorAll('div#NotDropMenu a'),
 		ej  = document.querySelector('div#notificationdiv'),
 		fj  = document.querySelector('div#NotDropMenu'),
-		prg = document.getElementById('spl');
+		prg = document.getElementById('spl'),
+		notfPH = null;
 
 const notEvts = new EventSource("/notStream");
 	
@@ -39,10 +40,17 @@ function progressBar(o){
 		f.send();
 						}
 function notfn(i){
+		if(notfPH){
+					notfPH.forEach((l)=>{
+						fj.removeChild(l);
+					})
+		}
+		
 		var w = new XMLHttpRequest();
 		w.onreadystatechange	=	()=>{
-										if(w.readyState === XMLHttpRequest.DONE && w.status === 200){		
-																										w.responseXML.querySelectorAll('a').forEach((x)=>{
+										if(w.readyState === XMLHttpRequest.DONE && w.status === 200){	
+																										notfPH = w.responseXML.querySelectorAll('a');
+																										notfPH.forEach((x)=>{
 																											fj.append(x);
 																										 })
 																									}
