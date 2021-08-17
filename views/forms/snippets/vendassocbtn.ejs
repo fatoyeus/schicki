@@ -25,7 +25,12 @@
 <div class="bg-secondary border-0 shadow dropdown-menu mt-4 p-0"  style="font-size: 10px" id="NotDropMenu" aria-labelledby="notificationdropdown">
 								<%for (let x = notif.notifications.length -1; x >=0 ; x-- ){%>
 
-<a class="d-flex justify-content-between bg-dark text-white text-left dropdown-item border-0 p-2" style="height: 10px, width: 120px" data="<%=notif.notifications[x]._id%>" href="<%=notif.notifications[x].link%>">										<%=notif.notifications[x].notif_id%>
+<%if(notif.notifications[x].readStatus){%>
+	<a class="d-flex justify-content-between bg-dark text-white text-left dropdown-item border-0 p-2" style="height: 10px, width: 120px" data="<%=notif.notifications[x]._id%>" href="<%=notif.notifications[x].link%>">
+<%}else{%>
+	<a class="d-flex justify-content-between bg-secondary text-white text-left dropdown-item border-0 p-2" style="height: 10px, width: 120px" data="<%=notif.notifications[x]._id%>" href="<%=notif.notifications[x].link%>">
+<%}%>
+		<%=notif.notifications[x].notif_id%>
 			<span>
 					<p class="m-0 ml-4 p-0">
 											<% var time = Date.now() - notif.notifications[x].timestamp; %>
