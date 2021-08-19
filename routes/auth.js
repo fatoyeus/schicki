@@ -70,8 +70,8 @@ router.post('/register', (req, res)=>{
 																										}
 																						return res.render('forms/authentication/register', {error: error, title:'register'});
 																									}else{
-																										req.notify(1001, userN._id);
-																										req.notify(1002, userN._id);
+																										req.notify(userN._id, 1001, 1002);
+																										//req.notify(1002, userN._id);
 																										}
 
 																														}); 

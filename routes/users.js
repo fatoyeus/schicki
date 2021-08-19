@@ -104,7 +104,7 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 	
 	
 	console.log('User profile updated successfully');
-	req.notify(1003, req.user.notification_id);
+	req.notify(req.user.notification_id, 1003);
 	res.redirect('/');
 		
 															});

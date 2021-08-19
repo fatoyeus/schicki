@@ -44,6 +44,7 @@ function notfn(i){
 					notfPH.forEach((l)=>{
 						fj.removeChild(l);
 					})
+			notfPH = null;
 		}
 		
 		var w = new XMLHttpRequest();
@@ -54,7 +55,7 @@ function notfn(i){
 																											fj.append(x);
 																										 })
 																									}
-									}								
+										}								
 																	var j = `/notf/${i.dataset.id}`;
 																	w.open('GET', j, true);
 																	w.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

@@ -27,7 +27,7 @@ const notification = [
 								code		:	1013,
 								name		:	'vendor_created_message',
 								category	:	'user',
-								message		:	'vendor applications successful',
+								message		:	'vendor applications was submitted',
 								link		:	''
 							},
 							{
