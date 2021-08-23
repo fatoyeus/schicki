@@ -1,6 +1,5 @@
 var express			=		require('express');
 var router			=		express.Router(),
-	Snippets		=		require('../public/lib/snippets.js'),
 	Notification	=		require('../models/notification'),
 	title			=		'schicki';
 
@@ -11,13 +10,9 @@ router.get('/', (req, res)=>{
 	res.render('home', {title});
 });
 router.get('/notf/:id', (req, res)=>{
-	Snippets.notf 	= 	true;
 	Notification.findById(req.params.id,'notifications', (err, notifications)=>{
-		console.log(notifications);
-		let snips 		=	Snippets;
-		//let fz 			= 	
-		res.render('forms/snippets/vendassocbtn', { snippets : snips, notif: notifications });
-	   // res.send(fz);
+		res.render('notf', { notif: notifications });
+	   
 	} )
 });
 router.get('/*', (req, res)=>{

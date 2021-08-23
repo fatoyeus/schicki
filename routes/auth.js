@@ -68,7 +68,7 @@ router.post('/register', (req, res)=>{
 																										if(err.code === 11000) {
 																											error =  'username is already taken, please try another';
 																										}
-																						return res.render('forms/authentication/register', {error: error, title:'register'});
+																									return res.render('forms/authentication/register', {error: error, title:'register'});
 																									}else{
 																										req.notify(userN._id, 1001, 1002);
 																										//req.notify(1002, userN._id);

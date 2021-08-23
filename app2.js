@@ -36,7 +36,7 @@ const url 				= 		process.env.DB_URL || "mongodb://localhost/schickidb",
 	  csrf				=		require('csurf');
 
 app.locals.title	    =		"Schicki";
-app.locals.notf			=		{};
+app.locals.notf			=		0;
 app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));

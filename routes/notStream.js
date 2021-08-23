@@ -16,7 +16,7 @@ function eventHandler(request, response, next){
 			const data = `data: ${JSON.stringify(response.app.locals.notf)}`;
 			console.log(data);
 			response.write(data);
-	   		request.app.locals.notf = {};
+	   		request.app.locals.notf = 0;
 		
 	}
 
