@@ -83,9 +83,9 @@ dh.forEach((a)=>{
 
 
 
-ww.addEventListener('load', ()=>{
+/*ww.addEventListener('load', ()=>{
 	progressBar(ww.location.pathname);
-})
+})*/
 
 ww.addEventListener('unload', ()=>{
 	ai.removeAttribute('hidden');

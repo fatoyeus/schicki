@@ -110,7 +110,6 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 															});
 //user profile view
 router.get('/user/profile/show', checkLogin, (req, res)=>{ 
-	console.log(req.user);
 	User.findById(req.user._id, '-password').populate(['contact_id','birthday_id']).exec((err, foundUser)=>{
 																			if (err){
 																			    						 																										console.log(err.message);
@@ -246,35 +245,35 @@ router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
 //Accept granted association request
 router.post('/user/vendor/associationaccept', checkLogin, (req, res)=>{
 																		User.findById(req.user._id, '-password', (es_err, euser)=>{
-																																	if(euser.assocVendor){
-																																	Association.findById(euser.assocVendor, (ev_err, dfassoc)=>{
-																																	if(dfassoc){
-																																					dfassoc.users.forEach((fdu)=>{
-																																						if (euser._id.toString() === fdu.id.toString()){
-																																							//check if user request was granted
-																																							if(fdu.status === 100102){
-																																														fdu.status = 100103;
-																																														euser.vendorAssoc = 100103;
-																																														euser.save();
-																																														res.sendStatus(200);
-																																														}else{
-																																														fdu.status;
-																																														res.sendStatus(404);
-																																														//alert security
-																																														}
-																																						}
-																																					})
-																																				}else{
-																																					//Alert Security
-																																					res.sendStatus(404);
-																																				}
-																																				dfassoc.save();
-																																						});
-																																	}else{
-																																		//Alert Security
+																							if(euser.assocVendor){
+																								Association.findById(euser.assocVendor, (ev_err, dfassoc)=>{
+																								if(dfassoc){
+																									dfassoc.users.forEach((fdu)=>{
+																									if (euser._id.toString() === fdu.id.toString()){
+																									//check if user request was granted
+																										if(fdu.status === 100102){
+																											fdu.status = 100103;
+																											euser.vendorAssoc = 100103;
+																											euser.save();
+																											res.sendStatus(200);
+																																}else{
+																																		fdu.status;
 																																		res.sendStatus(404);
-																																		res.redirect('/user/vendor/associate');
-																																	}
+																																		//alert security
+																																		}
+																																					}
+																																		})
+																											}else{
+																									//Alert Security
+																									res.sendStatus(404);
+																												}
+																											dfassoc.save();
+																																						});
+																												}else{
+																												//Alert Security
+																												res.sendStatus(404);
+																												res.redirect('/user/vendor/associate');
+																												}
 																																	});
 																	});
 //Remove association request 
@@ -283,13 +282,11 @@ router.post('/user/vendor/disassociate', checkLogin, (req, res)=>{
 		if(duser.assocVendor){
 			Association.findById(duser.assocVendor, (dv_err, dfassoc)=>{
 							if(dfassoc){
-	//									 dfassoc.users.splice(duser.assUser_ind, 1);
 											dfassoc.users.forEach((fdu)=>{
-												if (duser._id.toString() === fdu.id.toString()){
-													console.log('I tried to remove');
-													dfassoc.users.splice(dfassoc.users.indexOf(fdu), 1);
-												}
-											}) 
+																			if (duser._id.toString() === fdu.id.toString()){
+																								dfassoc.users.splice(dfassoc.users.indexOf(fdu), 1);
+																							}
+																		}) 
 										}else{
 											res.sendStatus(404);
 										}

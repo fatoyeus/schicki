@@ -2,22 +2,22 @@ var 	express			=		require('express'),
 	 	router			=		express.Router(),
 		Notification	=		require('../models/notification'),
 		title			=		'schicki',
-	    cid,
-		notf			=		{};
+	    cid;
+
 const	action			=		require('../templates/notification');
 
-function eventHandler(request, response, next){
-		response.set({
+function eventHandler(req, res, next){
+		res.set({
 					'Content-Type'	:	'text/event-stream',
 					'Connection'	: 	'keep-alive',
 					'Cache-Control'	:	'no-cache'
 				});	
-	    
-			const data = `data: ${JSON.stringify(response.app.locals.notf)}`;
+	    if(req.user && req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)){
+			const data = `data: ${JSON.stringify((req.app.locals.csessions.find( ele => ele.agent.toString  === req.user._id.toString)).notf)}`;
 			console.log(data);
-			response.write(data);
-	   		request.app.locals.notf = 0;
-		
+			res.write(data);
+	   		(req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)).notf = 0;
+		}
 	}
 
 //function notHandler(req, res, next){

@@ -81,7 +81,7 @@ router.post('/register', (req, res)=>{
 });
 
 //login
-router.get('/login', prevRelogin, (req, res, next)=>{
+router.get('/login', prevRelogin, (req, res)=>{
 	res.render('forms/authentication/login', {lastChecked:null, action:'/login', title:'login'});
 });
 
@@ -113,6 +113,10 @@ router.post('/login', (req, res)=>{
 					})
 				}
 				req.schikiSession.userId  = user._id;
+				req.app.locals.csessions.push({
+											agent	:	user._id,
+											notf	:	0
+										 });
 				req.schikiSession.adminId = null;	
 				
 				if(!req.body.lastChecked){
@@ -128,6 +132,7 @@ router.post('/login', (req, res)=>{
 
 router.get('/logout', (req, res)=>{
 	if(req.schikiSession.userId){
+		req.app.locals.csessions = req.app.locals.csessions.filter(rclient => {rclient.agent.toString() !== req.user._id.toString()});
 		req.schikiSession.userId  = null;
 		res.redirect('/');
 	}else if(req.schikiSession.adminId){

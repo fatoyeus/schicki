@@ -19,8 +19,8 @@ function notify(req ,res, next){
 				w.forEach((x)=>{
 									fnotification.notifications.push({notif_id: action.find(v => v.code === x).message, link: action.find(v => v.code === x).link, timestamp: Date.now()});
 									fnotification.unreadNot = fnotification.notifications.filter(notification => !notification.readStatus ).length;
-									if(x > 1999){
-													req.app.locals.notf += 1;
+									if(x > 1999 && req.app.locals.csessions.find( element  => element.agent  === fnotification.userId)){
+													(req.app.locals.csessions.find( element  => element.agent  === fnotification.userId)).notf+=1
 												}
 								});
 									fnotification.save();
