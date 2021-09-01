@@ -56,7 +56,7 @@ app.use((req, res, next)=>{
 	if(req.schikiSession.userId||req.schikiSession.adminId){
 		var loggedIn = (req.schikiSession.userId ? req.schikiSession.userId : req.schikiSession.adminId);
 	}else{
-		var loggedIn = null;
+		var loggedIn = "not loggedIn";
 	}
 	switch(loggedIn){
 			case 	req.schikiSession.userId	: 
@@ -125,7 +125,7 @@ app.use((req, res, next)=>{
 						break;
 			default  :  res.locals.user = null;
 						res.locals.admin = null;
-						return next();
+						next();
 		}
 	}); 
 //middleware for notifications
