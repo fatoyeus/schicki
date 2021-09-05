@@ -36,7 +36,9 @@ router.get('/notificationread/:notfnid/*', (req, res)=>{
 	var redpath	= req._parsedUrl.pathname.slice(plen);
 	res.redirect(redpath);
 })
-router.get('/notStream', eventHandler);
+router.get('/notStream', eventHandler, (req, res)=>{
+	res.sendStatus(200);
+});
 
 //router.post('/notStream', notHandler);
 
