@@ -113,10 +113,12 @@ router.post('/login', (req, res)=>{
 					})
 				}
 				req.schikiSession.userId  = user._id;
-				req.app.locals.csessions.push({
-											agent	:	user._id,
-											notf	:	0
-										 });
+			if(req.app.locals.csessions.some(ele =>{ele.agent.toString() !== user._id})){
+												req.app.locals.csessions.push({
+																			agent		:	user._id,
+																			notf		:	0
+																		 });
+			}
 				req.schikiSession.adminId = null;	
 				
 				if(!req.body.lastChecked){

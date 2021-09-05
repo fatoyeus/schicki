@@ -13,10 +13,10 @@ function eventHandler(req, res, next){
 					'Cache-Control'	:	'no-cache'
 				});	
 	    if(req.user && req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)){
-			const data = `data: ${JSON.stringify((req.app.locals.csessions.find( ele => ele.agent.toString  === req.user._id.toString)).notf)}`;
+			const data = `data: ${JSON.stringify((req.app.locals.csessions.find( ele => ele.agent.toString()  === req.user._id.toString())).notf)}`;
 			console.log(data);
 			res.write(data);
-	   		(req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)).notf = 0;
+	   		(req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf = 0;
 		}
 	}
 
