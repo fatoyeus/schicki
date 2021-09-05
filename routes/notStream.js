@@ -8,9 +8,10 @@ const	action			=		require('../templates/notification');
 
 function eventHandler(req, res, next){
 		res.set({
-					'Content-Type'	:	'text/event-stream',
-					'Connection'	: 	'keep-alive',
-					'Cache-Control'	:	'no-cache'
+					'Content-Type'		:	'text/event-stream',
+					'Connection'		: 	'keep-alive',
+					'Cache-Control'		:	'no-cache',
+					'Content-Encoding'	:	'identity'
 				});	
 	    if(req.user && req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)){
 			const data = `data: ${JSON.stringify((req.app.locals.csessions.find( ele => ele.agent.toString()  === req.user._id.toString())).notf)}`;
