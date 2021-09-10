@@ -121,11 +121,12 @@ router.post('/admin/c10/vendor/:id/approve',(req, res)=>{
 				console.log(err);
 				res.send('Status: Awaiting Approval');
 				}else{
-						User.findByIdAndUpdate(vendor.user_id, { isVendor : true }, (err)=>{
+						User.findByIdAndUpdate(vendor.user_id, { isVendor : true }, (err, user)=>{
 							if(err){
 									console.log(err.message);
 									}	
 							   else{
+								    req.notify(user.notification_id, 2001, 2002);
 									res.send('Status: Active');
 									}
 								});

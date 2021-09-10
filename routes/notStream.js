@@ -14,10 +14,14 @@ function eventHandler(req, res, next){
 					'Content-Encoding'	:	'identity'
 				});	
 	    if(req.user && req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)){
-			const data = `data: ${JSON.stringify((req.app.locals.csessions.find( ele => ele.agent.toString()  === req.user._id.toString())).notf)}`;
-			console.log(data);
-			res.write(data);
-	   		(req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf = 0;
+			let cnotf = (req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf;
+			if(cnotf){
+						console.log(`event: notify\n data: ${JSON.stringify(cnotf)}  \n\n`);
+						res.send(`event: notify\n data: ${JSON.stringify(cnotf)}  \n\n`);
+						(req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf = cnotf = 0;
+			}else{
+						res.send(":keep-alive");
+				}
 		}
 	}
 

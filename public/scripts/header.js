@@ -10,11 +10,16 @@
 		notfPH = null;
 
 const notEvts = new EventSource("/notStream");
+const newNot = new BroadcastChannel('notify-channel');
+notEvts.addEventListener("notify", function(e){
+	newNot.postMessage(e.data);
+});
 	
-notEvts.onmessage = (event)=> {
-  console.log(JSON.parse(event.data))
-};
-	
+const recNot = new BroadcastChannel('notify-channel');
+recNot.onmessage = function(e){
+	console.log('received notification');
+	document.querySelector('div#unreadNotCount').innerHTML = e.data;
+}
 function progressBar(o){
 		var f = new XMLHttpRequest();
 		f.onloadstart = function (ode){

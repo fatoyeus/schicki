@@ -14,15 +14,20 @@ const  	close			=	curl.close.bind(curl);
 
 function notify(req ,res, next){
 	req.notify 		= function (y, ...w){
-		Notification.findById(y, 'notifications',(err, fnotification)=>{
+		console.log('Notify Called');
+		Notification.findById(y, 'userId notifications',(err, fnotification)=>{
 			if(fnotification){
-				w.forEach((x)=>{
-									fnotification.notifications.push({notif_id: action.find(v => v.code === x).message, link: action.find(v => v.code === x).link, timestamp: Date.now()});
+				for(let x = 0; x< w.length; x++){
+									fnotification.notifications.push({notif_id: action.find(v => v.code === w[x]).message, link: action.find(v => v.code === w[x]).link, timestamp: Date.now()});
 									fnotification.unreadNot = fnotification.notifications.filter(notification => !notification.readStatus ).length;
-									if(x > 1999 && req.app.locals.csessions.find( element  => element.agent  === fnotification.userId)){
-													(req.app.locals.csessions.find( element  => element.agent  === fnotification.userId)).notf+=1
+									if(w[x] > 1999 && req.app.locals.csessions.find( element  => element.agent.toString()  === fnotification.userId.toString())){
+										            console.log("increment on notf");
+													(req.app.locals.csessions.find( element  => element.agent.toString()  === fnotification.userId.toString())).notf+=1;
+													console.log((req.app.locals.csessions.find( element  => element.agent.toString()  === fnotification.userId.toString())).notf);
+												}else{
+													console.log('************ no update *************');
 												}
-								});
+								}
 									fnotification.save();
 									return true;
 			}else{
