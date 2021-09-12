@@ -334,6 +334,7 @@ router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 										if(delEmail){
 											Phone.findByIdAndRemove(delContact.userPhone_id, (p_err, delPhone)=>{
 												if(delPhone){
+													req.app.locals.csessions = req.app.locals.csessions.filter(rclient => {rclient.agent.toString() !== req.user._id.toString()});
 													res.redirect('/logout');
 												}else{
 													console.log('Phone not found');

@@ -10,13 +10,14 @@
 		notfPH = null;
 
 const notEvts = new EventSource("/notStream");
-const newNot = new BroadcastChannel('notify-channel');
+
+
 notEvts.addEventListener("notify", function(e){
-	newNot.postMessage(e.data);
+	
 });
 	
-const recNot = new BroadcastChannel('notify-channel');
-recNot.onmessage = function(e){
+
+notEvts.onmessage = function(e){
 	console.log('received notification');
 	document.querySelector('div#unreadNotCount').innerHTML = e.data;
 }

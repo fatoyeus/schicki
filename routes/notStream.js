@@ -16,9 +16,11 @@ function eventHandler(req, res, next){
 	    if(req.user && req.app.locals.csessions.find( element  => element.agent.toString  === req.user._id.toString)){
 			let cnotf = (req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf;
 			if(cnotf){
-						console.log(`event: notify\n data: ${JSON.stringify(cnotf)}  \n\n`);
-						res.send(`event: notify\n data: ${JSON.stringify(cnotf)}  \n\n`);
-						(req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf = cnotf = 0;
+						console.log('this is cnotf: '+ cnotf);
+						console.log(req.user.notification_id.unreadNot );
+						console.log(`event: notify\n data: ${JSON.stringify(req.user.notification_id.unreadNot + cnotf)}\n\n`);
+						res.send(`data: ${JSON.stringify(req.user.notification_id.unreadNot)}  \n\n`);
+						(req.app.locals.csessions.find( element  => element.agent.toString()  === req.user._id.toString())).notf = 0;
 			}else{
 						res.send(":keep-alive");
 				}
