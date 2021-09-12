@@ -19,7 +19,14 @@ notEvts.addEventListener("notify", function(e){
 
 notEvts.onmessage = function(e){
 	console.log('received notification');
-	document.querySelector('div#unreadNotCount').innerHTML = e.data;
+	let notdiv = document.querySelector('div#unreadnotDiv');
+	if(notdiv){
+		notdiv.querySelector('div#unreadNotCount').innerHTML = e.data;
+		notdiv.removeAttribute('hidden');
+		
+	}else{
+			document.querySelector('div#unreadNotCount').innerHTML = e.data;
+			}
 }
 function progressBar(o){
 		var f = new XMLHttpRequest();

@@ -34,6 +34,11 @@
 									<%if((user||admin).notification_id.unreadNot > 0){%>
 									
 								<div class="d-inline-flex justify-content-center rounded-circle text-white bg-danger" id="unreadNotCount" style="font-size: 0.5rem; position:absolute; z-index: 4; right: -7px; bottom: 1px; width:12px; height: 12px" data-id="<%=(user||admin).notification_id._id%>"><%=(user||admin).notification_id.unreadNot%></div>
+									<%}else{%>
+									<div id="unreadnotDiv" hidden>
+										<div class="d-inline-flex justify-content-center rounded-circle text-white bg-danger" id="unreadNotCount" hidden style="font-size: 0.5rem; position:absolute; z-index: 4; right: -7px; bottom: 1px; width:12px; height: 12px" data-id="<%=(user||admin).notification_id._id%>"><%=(user||admin).notification_id.unreadNot%></div>
+									</div>
+									
 									<%}%>
 								</div>
 									
