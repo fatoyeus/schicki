@@ -6,10 +6,12 @@
 		dh	= document.querySelectorAll('div#NotDropMenu a'),
 		ej  = document.querySelector('div#notificationdiv'),
 		fj  = document.querySelector('div#NotDropMenu'),
+		gj  = document.querySelector('div#spinnerdiv'),
 		prg = document.getElementById('spl'),
 		notfPH = null;
 
 const notEvts = new EventSource("/notStream");
+
 
 
 notEvts.addEventListener("notify", function(e){
@@ -59,12 +61,15 @@ function notfn(i){
 					})
 			notfPH = null;
 		}
+		fj.append(gj);
+		
 		
 		var w = new XMLHttpRequest();
 		w.onreadystatechange	=	()=>{
 										if(w.readyState === XMLHttpRequest.DONE && w.status === 200){	
 																										notfPH = w.responseXML.querySelectorAll('a');
 																										notfPH.forEach((x)=>{
+																											gj.remove();
 																											fj.append(x);
 																										 })
 																									}

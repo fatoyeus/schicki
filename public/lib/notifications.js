@@ -14,7 +14,6 @@ const  	close			=	curl.close.bind(curl);
 
 function notify(req ,res, next){
 	req.notify 		= function (y, ...w){
-		console.log('Notify Called');
 		Notification.findById(y, 'userId notifications',(err, fnotification)=>{
 			if(fnotification){
 								for(let x = 0; x< w.length; x++){
@@ -28,9 +27,9 @@ function notify(req ,res, next){
 																}
 								fnotification.save();
 								return true;
-							}else{
+			}else{
 								return false;
-								}	
+					}	
 																		}) 
 		  
 										}
