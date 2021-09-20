@@ -9,11 +9,13 @@ var router			=		express.Router(),
 router.get('/', (req, res)=>{
 	res.render('home', {title});
 });
+router.get('/menuitems', (req, res)=>{
+	res.render('menu');
+});
 router.get('/notf/:id', (req, res)=>{
 	Notification.findById(req.params.id,'notifications', (err, notifications)=>{
 		res.render('notf', { notif: notifications });
-	   
-	} )
+	})
 });
 router.get('/*', (req, res)=>{
 	var path;

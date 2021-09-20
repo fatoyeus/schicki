@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="bg-dark border-0 shadow dropdown-menu dropdown-menu-right p-1" id="dropMenu" aria-labelledby="dropdownMenuOffset">
+					<div id="dropMenuDiv">											
+											<div class="dropdown-header d-flex flex-column  text-white text-capitalize ml-3 p-2">
+											<%=(user||admin).fullName%>
+											</div>
+											<%if(user){%>
+											<div class="dropdown-divider"></div>
+											<%if(user.isProfiled){%>
+											<a class="text-white dropdown-item" href="/user/profile/show">Profile</a>
+											<%}else{%>
+											<a class="text-white dropdown-item" href="/user/profile/new">Create Profile</a>
+											<%}%>
+											<%if(user.isVendor || user.isVendorUser){%>
+											<a class="text-white dropdown-item" href="/vendor/dashboard">Vendor Dashboard</a>
+											<%}else{%>
+											<a class="text-white dropdown-item" href="/vendor/enroll">Register as vendor</a>
+											<%}%>
+											<a class="text-white dropdown-item" href="#">Wishlist</a>
+											<a class="text-white dropdown-item" href="#">Cart <span>2 Items</span></a>
+											<a class="text-white dropdown-item" href="/logout">Logout</a>	
+											<%}else if(admin){%>
+											<div class="dropdown-divider"></div>
+											<a class="text-white dropdown-item" href="/admin/dashboard">Dashboard</a>		  
+											<a class="text-white dropdown-item" href="/logout">Admin Profile</a>
+											<a class="text-white dropdown-item" href="/logout">Logout</a>
+											<%}%>
+					</div>
+</div>
+</html>

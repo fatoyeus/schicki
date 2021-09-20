@@ -4,11 +4,11 @@ let		Notification 	= 	require('../../models/notification'),
 
 const	action			=	require('../../templates/notification');
 const 	querystring		=	require('querystring');
-const	{Curl}			=	require('node-libcurl');
 
 
-const   curl			=	new Curl;
-const  	close			=	curl.close.bind(curl);
+
+
+
 
 
 
