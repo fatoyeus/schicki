@@ -65,6 +65,7 @@ router.post('/store/:store_id/assignuser/:assigneduser', checkLogin, checkStoreO
 																	}
 															});
 	});
+//create inventory
 router.post('/store/:store_id/createInventory', checkLogin, checkStoreOwner, (req, res)=>{
 	Store.findById(req.params.store_id, (k_err, kstore)=>{
 		if(kstore.users.includes(req.user._id)){
