@@ -6,6 +6,7 @@ var	User			= 		require('../models/user'),
 	Store			=		require('../models/store'),
 	Storecat		=		require('../models/storecat'),
 	Inventory 		=		require('../models/inventory'),
+	Product			=		require('../models/product'),
 	snippets		=		require('../public/lib/snippets.js'),
 	title			=		'schicki';
 
@@ -49,11 +50,16 @@ function checkVendor(req, res,next){
 //Inventory console
 router.get('/inventory/:inventory_id/management', checkLogin, (req, res)=>{
 			Inventory.findById(req.params.inventory_id, (err, invn)=>{
-				Store.findById(invn.storeId, 'storename', (serr, lstore)=>{
+				Store.findById(invn.storeId, 'storename inventory', (serr, lstore)=>{
+					console.log(lstore);
 					res.render('marketplace/store/updateinventory', {title : `${lstore.storename} Inventory`, store: lstore});
 				})
 			});
 });
+router.get('/inventory/addnewitem', checkLogin, (req, res)=>{
+	res.render('marketplace/store/additem');
+})
+//list inventory
 router.get('/inventory/:inventory_id/manageitems', checkLogin, (req, res)=>{
 			Inventory.findById(req.params.inventory_id, (err, finvn)=>{
 				if(err){
@@ -61,8 +67,10 @@ router.get('/inventory/:inventory_id/manageitems', checkLogin, (req, res)=>{
 				}else{
 						Inventory.populate(finvn, [{path:'stocklist', model:'product', select:'inventoryId stock productImage sku'}], (nerr, nfinvn)=>{
 							if(nerr){
+								console.log('not found: '+ nerr.message);
 								res.sendStatus(404);
 							}else{
+								console.log(finvn);
 								res.render('marketplace/store/listitems', {inventory: finvn.stocklist});
 							}
 						});
