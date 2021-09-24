@@ -4,7 +4,7 @@ var mongoose 		=	require('mongoose');
 var productSchema	=	new mongoose.Schema({
 											inventoryId		:	{
 																	type	:	mongoose.Schema.Types.ObjectId,
-																	ref		:	'inventor'
+																	ref		:	'inventory'
 																},
 											productname		:	String,
 											description		:	String,

@@ -156,7 +156,8 @@ mongoose.connect(url , {useNewUrlParser: true, useUnifiedTopology: true}).then((
 app.use(adminRoutes);
 app.use(authRoutes);
 app.use(emailRoutes);
-app.use(inventoryRoutes);
+
+
 app.use(notStream);
 app.use(phoneRoutes);
 app.use(productRoutes);

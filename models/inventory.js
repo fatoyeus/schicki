@@ -5,7 +5,7 @@ var inventorySchema		=		new mongoose.Schema({
 																			ref			:	'store',
 																			required	:	true 
 																		},
-													Stocklist	:		[
+													stocklist	:		[
 																			{
 																				type		:	mongoose.Schema.Types.Array,
 																				ref			:	'product'

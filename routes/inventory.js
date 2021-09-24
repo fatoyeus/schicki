@@ -46,11 +46,28 @@ function checkVendor(req, res,next){
 		next();
 	}
 }
-router.get('/inventory/:inventory_id/management',checkLogin, (req, res)=>{
+//Inventory console
+router.get('/inventory/:inventory_id/management', checkLogin, (req, res)=>{
 			Inventory.findById(req.params.inventory_id, (err, invn)=>{
 				Store.findById(invn.storeId, 'storename', (serr, lstore)=>{
 					res.render('marketplace/store/updateinventory', {title : `${lstore.storename} Inventory`, store: lstore});
 				})
 			});
 });
+router.get('/inventory/:inventory_id/manageitems', checkLogin, (req, res)=>{
+			Inventory.findById(req.params.inventory_id, (err, finvn)=>{
+				if(err){
+					res.sendStatus(404);
+				}else{
+						Inventory.populate(finvn, [{path:'stocklist', model:'product', select:'inventoryId stock productImage sku'}], (nerr, nfinvn)=>{
+							if(nerr){
+								res.sendStatus(404);
+							}else{
+								res.render('marketplace/store/listitems', {inventory: finvn.stocklist});
+							}
+						});
+					}
+			})
+})
+
 module.exports	=		router;
