@@ -16,13 +16,13 @@
 				
 			}
 		}
-		var d = `/inventory/${b.dataset.id}/manageitems`;
+		var d = `/inventory/${b.dataset.storeId}/storeitems/${b.dataset.id}/manageitems`;
 		c.open('GET', d, true);
 		c.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		c.responseType = "document";
 		c.send();
 	}
-	function additms(){
+	function additms(h){
 		ivp.lastChild.remove();
 		spp.removeAttribute('hidden');
 		var f = new XMLHttpRequest();
@@ -40,8 +40,8 @@
 		f.send();
 	}
 	
-	mib.addEventListener('click', (e)=>{
-		mngitms(e.target);
+	mib.addEventListener('click', (j)=>{
+		mngitms(j.target);
 	})
 	nib.addEventListener('click', (e)=>{
 		additms();

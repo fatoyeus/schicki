@@ -72,7 +72,7 @@ router.post('/store/:store_id/createInventory', checkLogin, checkStoreOwner, (re
 												Inventory.create({storeId : req.params.store_id}).then((inventory)=>{
 																														kstore.inventory = inventory._id
 																														kstore.save();
-																													   	res.redirect(`/inventory/${inventory._id}/management`);
+																													 //  	res.redirect(`/inventory/${inventory._id}/management`);
 																													})
 												}
 	})
@@ -159,7 +159,7 @@ router.get('/stores/view/:store_id/detail', checkLogin, (req, res)=>{
 	
 	Vendor.findById(req.user.vendor_id, (v_err, gv)=>{
 		if(gv.stores.includes(req.params.store_id)){
-			var opt = {path: "users", select: ['fname', 'lname', 'username'], model: "user"};
+			var opt = {path: "users", select: ['fname', 'lname', 'username', '_id'], model: "user"};
 			User.populate(gv, opt, (p_err, pusers)=>{
 				console.log(req.user);
 				Store.findById(req.params.store_id, (err, fstore)=>{

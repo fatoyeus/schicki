@@ -48,7 +48,7 @@ function checkVendor(req, res,next){
 	}
 }
 //Inventory console
-router.get('/inventory/:inventory_id/management', checkLogin, (req, res)=>{
+router.get('/inventory/:store_id/store/:inventory_id/management', checkLogin, checkStoreOwner, (req, res)=>{
 			Inventory.findById(req.params.inventory_id, (err, invn)=>{
 				Store.findById(invn.storeId, 'storename inventory', (serr, lstore)=>{
 					console.log(lstore);
@@ -60,18 +60,18 @@ router.get('/inventory/addnewitem', checkLogin, (req, res)=>{
 	res.render('marketplace/store/additem');
 })
 //list inventory
-router.get('/inventory/:inventory_id/manageitems', checkLogin, (req, res)=>{
-			Inventory.findById(req.params.inventory_id, (err, finvn)=>{
+router.get('/inventory/:store_id/storeitems/:inventory_id/manageitems', checkLogin, (req, res)=>{
+			Inventory.findById(req.params.inventory_id, (err, ffvn)=>{
 				if(err){
-					res.sendStatus(404);
+						res.sendStatus(404);
 				}else{
-						Inventory.populate(finvn, [{path:'stocklist', model:'product', select:'inventoryId stock productImage sku'}], (nerr, nfinvn)=>{
+						Inventory.populate(ffvn, [{path:'stocklist', model:'product', select:'inventoryId stock productImage sku'}], (nerr, nffvn)=>{
 							if(nerr){
 								console.log('not found: '+ nerr.message);
 								res.sendStatus(404);
 							}else{
-								console.log(finvn);
-								res.render('marketplace/store/listitems', {inventory: finvn.stocklist});
+								console.log("found inventory: " + nffvn);
+								res.render('marketplace/store/listitems', {inventory: nffvn.stocklist});
 							}
 						});
 					}

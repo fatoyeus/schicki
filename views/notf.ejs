@@ -1,4 +1,7 @@
 <div class="bg-secondary border-0 shadow dropdown-menu mt-4 p-0"  style="font-size: 10px" id="NotDropMenu" aria-labelledby="notificationdropdown">
+<%if(notif.notifications.length < 1){%>
+	<a class="d-flex justify-content-center bg-dark text-white text-left dropdown-item border-0 p-2" style="height: 10px, width: 120px" href="#">You have no notifications</a>
+<%}else{%>
 <%for (let x = notif.notifications.length -1; x >=0 ; x-- ){%>
 
 <%if(notif.notifications[x].readStatus){%>
@@ -29,5 +32,6 @@
 			</span>
 </a>
 
-											<%}%>
+<%}%>
+<%}%>
 </div>

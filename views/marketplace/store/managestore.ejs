@@ -171,7 +171,7 @@
 					<form>
 						<div class="form-group">
 						<%if(store.inventory){%>
-						<a class="btn btn-sm btn-success form-control shadow" href="/inventory/<%=store.inventory%>/management">Manage Inventory</a>
+						<a class="btn btn-sm btn-success form-control shadow" href="/inventory/<%=store._id%>/store/<%=store.inventory%>/management">Manage Inventory</a>
 						<%}else{%>
 						<a class="btn btn-sm btn-success form-control shadow" href="#createInventory">Manage Inventory</a>
 						<%}%>
