@@ -56,8 +56,8 @@ router.get('/inventory/:store_id/store/:inventory_id/management', checkLogin, ch
 				})
 			});
 });
-router.get('/inventory/addnewitem', checkLogin, (req, res)=>{
-	res.render('marketplace/store/additem');
+router.get('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLogin, (req, res)=>{
+	res.render('marketplace/store/additem', {storeId: req.params.store_id, inventorId: req.params.inventory_id});
 })
 //list inventory
 router.get('/inventory/:store_id/storeitems/:inventory_id/manageitems', checkLogin, (req, res)=>{

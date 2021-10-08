@@ -1,6 +1,19 @@
 var express			=		require('express'),
 	router			=		express.Router(),
+	AWS				=		require('aws-sdk'),
+	S3 				= 		require('aws-sdk/clients/s3'),
+	uuid			=		require('uuid'),
  	Vendor 			=		require('../models/vendor');
+
+var bucketName = 'schickidev' + uuid.v4();
+AWS.config.apiVersions = {
+  s3: '2006-03-01',
+  // other service API versions
+};
+
+var s3 = new AWS.S3();
+var BucketPromise	=		s3.createBucket({Bucket: bucketName}).promise().then().catch((err)=>{console.log(err, err.stack)});
+
 
 function checkLogin(req, res, next){
 	var lastChecked;

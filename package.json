@@ -9,7 +9,7 @@
   "author": "Olakunle Fajorin",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/storage": "^5.11.0",
+    "aws-sdk": "^2.999.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "client-sessions": "^0.8.0",
@@ -24,6 +24,7 @@
     "mongoose": "^5.13.2",
     "node-libcurl": "^2.3.3",
     "request": "^2.88.0",
+    "uuid": "^8.3.2",
     "xmlbuilder2": "^2.4.0"
   }
 }

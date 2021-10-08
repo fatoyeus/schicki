@@ -33,7 +33,7 @@
 			   
 			   }
 		}
-		var g = '/inventory/addnewitem';
+		var g = `/inventory/${h.dataset.storeId}/storeitems/${h.dataset.id}/addnewitem`;
 		f.open('GET', g, true);
 		f.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		f.responseType = "document";
@@ -44,7 +44,7 @@
 		mngitms(j.target);
 	})
 	nib.addEventListener('click', (e)=>{
-		additms();
+		additms(e.target);
 	})
 
 }())
