@@ -11,7 +11,12 @@ var productSchema	=	new mongoose.Schema({
 											stock			:	Number,
 											productImage	:	String,
 											sku				: 	String,
-											promotion		:	{	 type 	: Boolean, default	: false },
+											promotion		:	{	type 	: Boolean, 
+																 	default	: false },
+											discount     	: 	{
+																	type	: Number,
+																	default	: null
+																},
 											price			:	Number,
 																					});
 

@@ -3,8 +3,37 @@
 		nib		=	document.querySelector('a#newitembtn'),
 		ivp		=	document.querySelector('div#inventoryplug'),
 		spp		=	document.querySelector('div#spinnerplug');
+		
+	function newitem(){
+						var	adit =	document.querySelector('form#addnewitem');
+						var	sbtn =  document.querySelector('button#additem');
+						if(adit){
+									sbtn.onclick = (k)=>{
+															console.log(k.target);
+															k.preventDefault();
+															psitm(k.target);
+														}
+								}
 
-	
+					}
+	document.onreadystatechange = function(){
+		if(document.readyState === 'complete'){
+			console.log('document is ready');
+			newitem()
+		}
+		
+	}
+	function newadd(){
+				var	adit =	document.querySelector('form#addnewitem');
+				var	sbtn =  document.querySelector('button#additem');
+						if(adit){
+									sbtn.onclick = (k)=>{
+															console.log(k.target);
+															k.preventDefault();
+															psitm(k.target);
+														}
+								}
+			}
 	function mngitms(b){
 		ivp.lastChild.remove();
 		spp.removeAttribute('hidden');
@@ -13,12 +42,12 @@
 			if(c.readyState === XMLHttpRequest.DONE && c.status === 200){
 																			spp.setAttribute('hidden', '');
 																			ivp.append(c.responseXML.querySelector('div#listitemsdiv'));
-				
 			}
 		}
 		var d = `/inventory/${b.dataset.storeId}/storeitems/${b.dataset.id}/manageitems`;
 		c.open('GET', d, true);
-		c.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		c.setRequestHeader('Content-Type'	, 	'application/x-www-form-urlencoded');
+		c.setRequestHeader('Cache-Control'	,	'no-cache');
 		c.responseType = "document";
 		c.send();
 	}
@@ -30,21 +59,57 @@
 			if(f.readyState === XMLHttpRequest.DONE && f.status === 200){
 																			spp.setAttribute('hidden', '');
 																			ivp.append(f.responseXML.querySelector('div#additemdiv'));
-			   
-			   }
+																			var z = ivp.querySelector('form#addnewitem');
+																			var y = ivp.querySelector('button');
+																			
+																				if(z){
+																					z.onsubmit = (event)=>{
+																						event.preventDefault();
+																						var x = new FormData(z);
+																						psitm(x, y);
+																						
+																					}
+																				}
+																		 }
 		}
-		var g = `/inventory/${h.dataset.storeId}/storeitems/${h.dataset.id}/addnewitem`;
+		var g = `/inventory/${h.dataset.storeid}/storeitems/${h.dataset.id}/addnewitem`;
+		
 		f.open('GET', g, true);
-		f.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		f.setRequestHeader(	'Content-Type'	, 	'multipart/form-data');
+		f.setRequestHeader(	'Cache-Control'	,	'no-cache');
 		f.responseType = "document";
 		f.send();
 	}
 	
+	function psitm(p, u){
+		ivp.querySelector('form#addnewitem').setAttribute('hidden', ' ');
+		spp.removeAttribute('hidden');
+		var i = new XMLHttpRequest();
+		i.onreadystatechange = ()=>{
+			if(i.readyState === XMLHttpRequest.DONE && i.status === 200){
+																			spp.setAttribute('hidden', '');
+																			ivp.lastChild.remove();
+																			ivp.append(i.responseXML.querySelector('div#listitemsdiv'));
+																		
+																			
+			}
+		}
+		var j = `/inventory/${u.dataset.storeid}/storeitems/${u.dataset.inventoryid}/addnewitem`;
+	//	var boundary = '------------------------------------------';
+	//	boundary += Math.floor(Math.random()*78699);
+	//	boundary += Math.floor(Math.random()*78899);
+	//	boundary += Math.floor(Math.random()*90099);
+		i.open('POST', j, true);
+		i.setRequestHeader('Cache-Control', 'no-cache');
+		i.responseType = "document";
+		i.send(p);
+	}
 	mib.addEventListener('click', (j)=>{
 		mngitms(j.target);
 	})
 	nib.addEventListener('click', (e)=>{
 		additms(e.target);
 	})
+	
 
 }())

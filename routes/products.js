@@ -12,7 +12,20 @@ AWS.config.apiVersions = {
 };
 
 var s3 = new AWS.S3();
-var BucketPromise	=		s3.createBucket({Bucket: bucketName}).promise().then().catch((err)=>{console.log(err, err.stack)});
+// var BucketPromise	=		s3.createBucket({Bucket: bucketName}).promise().then().catch((err)=>{console.log(err, err.stack)});
+var params	=	{
+					ACL		:	"public-read",
+					Body	:	"Hello World I am here to reign",
+					Bucket	:	"schicki-dev-bucket",
+					Key		: 	"products/tester.txt"
+				};
+s3.putObject(params, (err, data)=>{
+	if(err){
+		console.log(err.message);
+	}else{
+		console.log(data);
+	}
+});
 
 
 function checkLogin(req, res, next){

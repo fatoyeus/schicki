@@ -7,7 +7,7 @@ var inventorySchema		=		new mongoose.Schema({
 																		},
 													stocklist	:		[
 																			{
-																				type		:	mongoose.Schema.Types.Array,
+																				type		:	mongoose.Schema.Types.ObjectId,
 																				ref			:	'product'
 																			}
 																		]
