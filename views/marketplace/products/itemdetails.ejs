@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<div id="detailitemdiv">
+		<div class="container-fluid col-lg-10">
+			<div class="row" id="imagerow">
+			<div class="col-lg-12 d-flex flex-row justify-content-between">
+				<div class="container d-flex flex-row justify-content-sm-between border border-secondary bg-light  shadow rounded mt-3 p-2">
+					<img class="img-fluid rounded mx-auto" src="<%=product.productImage%>" alt="<%=product.productname%>">
+				</div>
+			</div>
+			</div>
+			<div class="row" id="thumbnailrow mx-0">
+				<div class="col-lg-12 d-flex flex-row justify-content-between mx-0">
+					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 mx-0 p-1">
+						<%product.otherImages.forEach((image)=>{%>
+						<div class="col-2 mx-0">
+							<img src="<%=image%>" class="img-fluid img-thumbnail">
+						</div>
+						<%})%>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid border border-secondary rounded mt-3 p-3">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-row justify-content--between">
+
+							<div class="container d-flex flex-row justify-content-between mt-0 p-3">
+								<%=product.productname%>
+							</div>
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-row justify-content-between">
+						<div class="container d-flex flex-row justify-content-between mt-0 p-3">
+								<span class="text-secondary"><%=product.description%></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid border border-secondary rounded mt-3 p-3">
+				<table>
+					<tbody>
+						<tr>
+							<td><p class="text-secondary font-italic col-lg-3">Sku:</p></td>
+							<td><p class="col-lg-3"><%=product.sku%></p></td>
+						</tr>
+						<tr>
+							<td><p class="text-secondary font-italic col-lg-3">Stock:</p></td>
+							<td><p class="col-lg-3"><%=product.stock%></p></td>
+						</tr>
+						<tr>
+							<td><p class="text-secondary font-italic col-lg-3">Price:</p></td>
+							<td><p class="col-lg-3"><%=product.price%></p></td>
+						</tr>
+						<tr>
+							<td>
+								<p class="text-secondary font-italic col-lg-3">Promo:</p>
+							</td>
+							<td>
+								<% if(product.promotion){%>
+								<p class="col-lg-3 text-success">Yes<p>
+								<%}else{%>
+								<p class="col-lg-3 text-danger">No</p>
+								<%}%>
+							</td>
+						</tr>
+						<tr>
+							<td><p class="text-secondary font-italic col-lg-3">Discount:</p></td>
+							<td><p class="col-lg-3"><%=product.discount%>%</p></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-row justify-content-end">
+						<div class="row col-lg-6">
+							<div class="container d-flex flex-row justify-content-between mt-3 p-2">
+								<div class="container-fluid p-2">
+									<button class="btn btn-success btn-lg text-nowrap shadow w-100" type="submit" id="edititem" data-productId="<%=product._id%>" >Edit</button>
+								</div>
+								<div class="container-fluid p-2">
+									<button class="btn btn-danger btn-lg text-nowrap shadow w-100" type="submit" id="deleteitem" data-productId="<%=product._id%>" >Delete</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

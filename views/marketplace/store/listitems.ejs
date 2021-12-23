@@ -4,7 +4,7 @@
 	<%if(!inventory){%>
 		<div class="row">
 			<div class="col-lg-12" id="inventorydetail">
-				<div class="container d-flex flex-row justify-content-center border border-success rounded shadow mt-3 p-3">
+				<div class="container d-flex flex-row justify-content-center border border-success rounded mt-3 p-3">
 					<p class="text-success">
 						Your Product has been added successfully
 					</p>
@@ -14,7 +14,7 @@
 	<%}else if(inventory.length < 1){%>
 		<div class="row">
 			<div class="col-lg-12" id="inventorydetail">
-				<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded shadow mt-3 p-3">
+				<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 p-3">
 					<p>
 						There are no items in this inventory
 					</p>
@@ -25,7 +25,7 @@
 	<%inventory.forEach((product)=>{%>
 		<div class="row">
 			<div class="col-lg-12" id="inventorydetail">
-				<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded shadow mt-3 p-3">
+				<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 p-3">
 					<div class="row col-lg-2">
 						<div class="container d-flex flex-column justify-content-center">
 							<div>
@@ -33,24 +33,31 @@
 							</div>
 						</div>
 					</div>
-					<div class="row col-lg-4">
+					<div class="row col-lg-2">
 							<div class="container d-flex flex-column justify-content-center">
 								<div class="align-self-center">
-								<p><%=product.sku%></p>
+								<%=product.sku%>
 								</div>
 							</div>
 					</div>
 					<div class="row col-lg-2">
 							<div class="container d-flex flex-column justify-content-center">
 								<div class="align-self-center">
-								<p><%=product.stock%></p>
+								<%=product.stock%>
 								</div>
 							</div>
 					</div>
-					<div class="row col-lg-4">
+					<div class="row col-lg-3">
+							<div class="container d-flex flex-column justify-content-center">
+								<div class="align-self-center">
+								<%=product.price%>
+								</div>
+							</div>
+					</div>
+					<div class="row col-lg-3">
 						<div class="container d-flex flex-column justify-content-center">
 							<div clas="align-self-center">
-								<a class="btn btn-outline-success btn-md shadow" href="/product/<%=product._id%>/manage">Manage</a>
+								<a class="btn btn-outline-success btn-md shadow" id="itemdetailsbtn" data-id="<%=product._id%>">Manage</a>
 							</div>
 						</div>
 					</div>	

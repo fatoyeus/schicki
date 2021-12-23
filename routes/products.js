@@ -1,31 +1,14 @@
 var express			=		require('express'),
 	router			=		express.Router(),
-	AWS				=		require('aws-sdk'),
-	S3 				= 		require('aws-sdk/clients/s3'),
-	uuid			=		require('uuid'),
+	AWS				=		require('../lib/API/AWS/schicki_aws'),
+	Product			=		require('../models/product'),
  	Vendor 			=		require('../models/vendor');
 
-var bucketName = 'schickidev' + uuid.v4();
-AWS.config.apiVersions = {
-  s3: '2006-03-01',
-  // other service API versions
-};
+
+
 
 var s3 = new AWS.S3();
-// var BucketPromise	=		s3.createBucket({Bucket: bucketName}).promise().then().catch((err)=>{console.log(err, err.stack)});
-var params	=	{
-					ACL		:	"public-read",
-					Body	:	"Hello World I am here to reign",
-					Bucket	:	"schicki-dev-bucket",
-					Key		: 	"products/tester.txt"
-				};
-s3.putObject(params, (err, data)=>{
-	if(err){
-		console.log(err.message);
-	}else{
-		console.log(data);
-	}
-});
+
 
 
 function checkLogin(req, res, next){
@@ -41,11 +24,19 @@ function checkLogin(req, res, next){
 
 //Product routes 
 
-router.get('/:vendor_id/products/register', (req, res)=>{
-	 res.render('forms/products/register');
-});
+router.get('/products/:productId/itemdetails', checkLogin, (req, res)=>{
+																Product.findById(req.params.productId, (err, fprod)=>{
+																	if(err){
 
-router.post('/:vendor_id/products/register', (req, res)=>{
+																			}else{
+																					res.render('marketplace/products/itemdetails', { product: fprod });
+																				    console.log('details sent: '+ fprod );
+																					}
+																															})
+
+															});
+
+router.post('/:vendor_id/products/register', checkLogin, (req, res)=>{
 	console.log(req.body);
 	 res.rediret('/');
 });

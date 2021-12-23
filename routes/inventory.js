@@ -6,8 +6,9 @@ var	User			= 		require('../models/user'),
 	Store			=		require('../models/store'),
 	Storecat		=		require('../models/storecat'),
 	Inventory 		=		require('../models/inventory'),
-	AWS				=		require('aws-sdk'),
-	S3 				= 		require('aws-sdk/clients/s3'),
+	AWS				=		require('../lib/API/AWS/schicki_aws'),
+//	AWS				=		require('aws-sdk'),
+//	S3 				= 		require('aws-sdk/clients/s3'),
 	Product			=		require('../models/product'),
 	snippets		=		require('../public/lib/snippets.js'),
 	title			=		'schicki';
@@ -16,13 +17,11 @@ const multer 		= 		require('multer'),
 	  storage		=		multer.memoryStorage(),
 	  upload 		= 		multer({ storage: storage });
 
-AWS.config.apiVersions = {
-  s3: '2006-03-01',
+//AWS.config.apiVersions = {
+// s3: '2006-03-01',
   // other service API versions
-};
+//};
 var s3 = new AWS.S3();
-var imgbody;
-var imgname;
 
 
 function checkLogin(req, res, next){
@@ -83,7 +82,6 @@ router.get('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLogi
 router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLogin, upload.single('productimg'), (req, res)=>{ 
 	if(req.file && req.body){
 		var ckey = `products/${req.params.store_id}/${req.params.inventory_id}/${req.file.originalname}`
-		console.log('ckey: '+ ckey );
 								var productname 	= 	req.body.productname,
 									description		=	req.body.description,
 									sku				=	req.body.sku,
@@ -101,7 +99,8 @@ router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLog
 		if(err){
 			console.log(err);
 		}else{
-				Product.create(product).then((nproduct)=>{
+				Product.create(product).then((nproduct)=>{  
+															nproduct.otherImages.push(productImage);
 															Inventory.findById(req.params.inventory_id, (i_err, finventory)=>{
 																																if(i_err){
 																																	
@@ -111,6 +110,7 @@ router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLog
 																																		res.render('marketplace/store/listitems', {inventory: null});
 																																		}
 															})
+															nproduct.save();
 															}).catch((err)=>{
 																console.log(err);
 															
@@ -134,7 +134,7 @@ router.get('/inventory/:store_id/storeitems/:inventory_id/manageitems', checkLog
 				if(err){
 						res.sendStatus(404);
 				}else{
-						var opt = {path:'stocklist', model:'product', select:'inventoryId stock productImage sku'};
+						var opt = {path:'stocklist', model:'product', select:'inventoryId stock productImage sku price'};
 						Inventory.populate(ffvn, opt, (nerr, nffvn)=>{
 							if(nerr){
 								console.log('not found: '+ nerr.message);

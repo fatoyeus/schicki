@@ -3,7 +3,7 @@
 	<div class="container col-md-8 col-xl-6 mt-5">
 		<div class="container mt-2">
 			<div class="container d-flex flex-column">
-				<div class="container d-flex flex-row justify-content-sm-center border border-secondary rounded my-2 p-4">
+				<div class="container d-flex flex-row justify-content-sm-center border border-secondary shadow rounded my-2 p-4">
 					<div class="row mb-3 d-flex align-items-center">
 
 							<h1 class="text-capitalize"><%=user.fullName%></h1>
@@ -13,7 +13,7 @@
 			</div>	
 			<div class="container d-flex flex-column">
 			<dl>
-				<div class="container d-flex flex-column justify-content-sm-center border border-secondary rounded my-3 p-4">
+				<div class="container d-flex flex-column justify-content-sm-center border border-secondary shadow rounded my-3 p-4">
 						<div class="d-sm-flex flex-row p-auto">
 							<dt class="col-sm-6">Firstname</dt>
 							<dd class="col-sm-6"><%=user.fname%></dd>
@@ -31,7 +31,7 @@
 							<dd class="col-sm-6"><%=userProfile.birthday_id.birthday.toDateString()%></dd>
 						</div>
 					</div>
-				<div class="container d-flex flex-column justify-content-sm-center border border-secondary rounded my-3 p-4">
+				<div class="container d-flex flex-column justify-content-sm-center border border-secondary shadow rounded my-3 p-4">
 						<div class="d-sm-flex flex-row p-auto">
 							<dt class="col-sm-6">Email</dt>
 							<dd class="col-sm-6"><%=userProfile.contact_id.userEmail_id.email%></dd>
@@ -44,7 +44,7 @@
 							<a class="btn btn-secondary" href="#">Edit</a>
 						</div>
 				</div>	
-				<div class="container d-flex flex-column justify-content-sm-center border border-secondary rounded my-3 p-4">
+				<div class="container d-flex flex-column justify-content-sm-center border border-secondary shadow rounded my-3 p-4">
 						<div class="d-sm-flex flex-row p-auto">
 							<dt class="col-sm-6">Country</dt>
 							<dd class="col-sm-6"><%=userProfile.contact_id.userLocation_id.country%></dd>

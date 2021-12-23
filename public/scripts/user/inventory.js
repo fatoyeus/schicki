@@ -4,7 +4,7 @@
 		ivp		=	document.querySelector('div#inventoryplug'),
 		spp		=	document.querySelector('div#spinnerplug');
 		
-	function newitem(){
+/*	function newitem(){
 						var	adit =	document.querySelector('form#addnewitem');
 						var	sbtn =  document.querySelector('button#additem');
 						if(adit){
@@ -15,7 +15,7 @@
 														}
 								}
 
-					}
+					} 
 	document.onreadystatechange = function(){
 		if(document.readyState === 'complete'){
 			console.log('document is ready');
@@ -33,7 +33,7 @@
 															psitm(k.target);
 														}
 								}
-			}
+			} */
 	function mngitms(b){
 		ivp.lastChild.remove();
 		spp.removeAttribute('hidden');
@@ -42,6 +42,13 @@
 			if(c.readyState === XMLHttpRequest.DONE && c.status === 200){
 																			spp.setAttribute('hidden', '');
 																			ivp.append(c.responseXML.querySelector('div#listitemsdiv'));
+																			var w = ivp.querySelectorAll('a#itemdetailsbtn');
+																			w.forEach((r)=>{
+																				r.onclick = (e)=>{
+																					console.log(e.target.dataset.id);
+																					geitm(e.target.dataset.id);
+																				}
+																			})
 			}
 		}
 		var d = `/inventory/${b.dataset.storeId}/storeitems/${b.dataset.id}/manageitems`;
@@ -103,6 +110,22 @@
 		i.setRequestHeader('Cache-Control', 'no-cache');
 		i.responseType = "document";
 		i.send(p);
+	}
+	function geitm(v){
+		ivp.lastChild.remove();
+		spp.removeAttribute('hidden');
+		var g = new XMLHttpRequest();
+		g.onreadystatechange = ()=>{
+			if(g.readyState === XMLHttpRequest.DONE && g.status === 200 ){
+																			spp.setAttribute('hidden', '');
+																			ivp.append(g.responseXML.querySelector('div#detailitemdiv'));
+			}
+		}
+		var k = `/products/${v}/itemdetails`
+		g.open('GET', k, true);
+		g.setRequestHeader('Cache-Control', 'no-cache');
+		g.responseType = "document";
+		g.send();
 	}
 	mib.addEventListener('click', (j)=>{
 		mngitms(j.target);
