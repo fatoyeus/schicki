@@ -82,7 +82,8 @@ router.get('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLogi
 router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLogin, upload.single('productimg'), (req, res)=>{ 
 	if(req.file && req.body){
 		var ckey = `products/${req.params.store_id}/${req.params.inventory_id}/${req.file.originalname}`
-								var productname 	= 	req.body.productname,
+								var inventoryId		=   req.params.inventory_id,
+									productname 	= 	req.body.productname,
 									description		=	req.body.description,
 									sku				=	req.body.sku,
 									stock			=	req.body.stockunits,
@@ -94,7 +95,7 @@ router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLog
 															Body	:	req.file.buffer,
 															Key		:   ckey
 														},
-									product   		=	{productname, description, sku, stock, productImage, price}
+									product   		=	{inventoryId, productname, description, sku, stock, productImage, price}
 	s3.putObject(params, (err, data)=>{
 		if(err){
 			console.log(err);

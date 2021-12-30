@@ -5,16 +5,16 @@
 			<div class="row" id="imagerow">
 			<div class="col-lg-12 d-flex flex-row justify-content-between">
 				<div class="container d-flex flex-row justify-content-sm-between border border-secondary bg-light  shadow rounded mt-3 p-2">
-					<img class="img-fluid rounded mx-auto" src="<%=product.productImage%>" alt="<%=product.productname%>">
+					<img class="img-fluid rounded mx-auto" src="<%=product.productImage%>" alt="<%=product.productname%>" width="900">
 				</div>
 			</div>
 			</div>
 			<div class="row" id="thumbnailrow mx-0">
 				<div class="col-lg-12 d-flex flex-row justify-content-between mx-0">
-					<div class="container d-flex flex-row justify-content-sm-between border border-secondary rounded mt-3 mx-0 p-1">
+					<div class="row border border-secondary no-gutters rounded mt-3 mx-0 p-0">
 						<%product.otherImages.forEach((image)=>{%>
-						<div class="col-2 mx-0">
-							<img src="<%=image%>" class="img-fluid img-thumbnail">
+						<div class="d-flex justify-content-center col-2 mx-0">
+							<img src="<%=image%>" type="button" class="img-fluid img-thumbnail" width="900">
 						</div>
 						<%})%>
 					</div>
@@ -51,7 +51,7 @@
 						</tr>
 						<tr>
 							<td><p class="text-secondary font-italic col-lg-3">Price:</p></td>
-							<td><p class="col-lg-3"><%=product.price%></p></td>
+							<td><p class="col-lg-3 text-nowrap"><%=product.price%><span class="text-secondary mx-2">Naira</span></p></td>
 						</tr>
 						<tr>
 							<td>
@@ -76,10 +76,10 @@
 						<div class="row col-lg-6">
 							<div class="container d-flex flex-row justify-content-between mt-3 p-2">
 								<div class="container-fluid p-2">
-									<button class="btn btn-success btn-lg text-nowrap shadow w-100" type="submit" id="edititem" data-productId="<%=product._id%>" >Edit</button>
+									<button class="btn btn-success btn-sm text-nowrap shadow w-100" type="submit" id="edititem" data-productId="<%=product._id%>" >Edit</button>
 								</div>
 								<div class="container-fluid p-2">
-									<button class="btn btn-danger btn-lg text-nowrap shadow w-100" type="submit" id="deleteitem" data-productId="<%=product._id%>" >Delete</button>
+									<button class="btn btn-danger btn-sm text-nowrap shadow w-100" type="submit" id="deleteitem" data-productId="<%=product._id%>" >Delete</button>
 								</div>
 							</div>
 						</div>

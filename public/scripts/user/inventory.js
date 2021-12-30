@@ -3,7 +3,7 @@
 		nib		=	document.querySelector('a#newitembtn'),
 		ivp		=	document.querySelector('div#inventoryplug'),
 		spp		=	document.querySelector('div#spinnerplug');
-		
+	
 /*	function newitem(){
 						var	adit =	document.querySelector('form#addnewitem');
 						var	sbtn =  document.querySelector('button#additem');
@@ -35,13 +35,14 @@
 								}
 			} */
 	function mngitms(b){
-		ivp.lastChild.remove();
 		spp.removeAttribute('hidden');
 		var c = new XMLHttpRequest();
 		c.onreadystatechange = ()=>{
 			if(c.readyState === XMLHttpRequest.DONE && c.status === 200){
-																			spp.setAttribute('hidden', '');
+																			
+																			ivp.lastChild.remove();
 																			ivp.append(c.responseXML.querySelector('div#listitemsdiv'));
+																			spp.setAttribute('hidden', '');
 																			var w = ivp.querySelectorAll('a#itemdetailsbtn');
 																			w.forEach((r)=>{
 																				r.onclick = (e)=>{
@@ -59,13 +60,13 @@
 		c.send();
 	}
 	function additms(h){
-		ivp.lastChild.remove();
 		spp.removeAttribute('hidden');
 		var f = new XMLHttpRequest();
 		f.onreadystatechange = ()=>{
 			if(f.readyState === XMLHttpRequest.DONE && f.status === 200){
-																			spp.setAttribute('hidden', '');
+																			ivp.lastChild.remove();
 																			ivp.append(f.responseXML.querySelector('div#additemdiv'));
+																			spp.setAttribute('hidden', '');
 																			var z = ivp.querySelector('form#addnewitem');
 																			var y = ivp.querySelector('button');
 																			
@@ -89,36 +90,40 @@
 	}
 	
 	function psitm(p, u){
-		ivp.querySelector('form#addnewitem').setAttribute('hidden', ' ');
 		spp.removeAttribute('hidden');
+		ivp.querySelector('form#addnewitem').setAttribute('hidden', ' ');
 		var i = new XMLHttpRequest();
 		i.onreadystatechange = ()=>{
 			if(i.readyState === XMLHttpRequest.DONE && i.status === 200){
-																			spp.setAttribute('hidden', '');
 																			ivp.lastChild.remove();
 																			ivp.append(i.responseXML.querySelector('div#listitemsdiv'));
-																		
-																			
+																			spp.setAttribute('hidden', '');
 			}
 		}
 		var j = `/inventory/${u.dataset.storeid}/storeitems/${u.dataset.inventoryid}/addnewitem`;
-	//	var boundary = '------------------------------------------';
-	//	boundary += Math.floor(Math.random()*78699);
-	//	boundary += Math.floor(Math.random()*78899);
-	//	boundary += Math.floor(Math.random()*90099);
 		i.open('POST', j, true);
 		i.setRequestHeader('Cache-Control', 'no-cache');
 		i.responseType = "document";
 		i.send(p);
 	}
-	function geitm(v){
-		ivp.lastChild.remove();
+	function geitm(v){		
 		spp.removeAttribute('hidden');
 		var g = new XMLHttpRequest();
 		g.onreadystatechange = ()=>{
 			if(g.readyState === XMLHttpRequest.DONE && g.status === 200 ){
-																			spp.setAttribute('hidden', '');
+																			ivp.lastChild.remove();
 																			ivp.append(g.responseXML.querySelector('div#detailitemdiv'));
+																			spp.setAttribute('hidden', '');
+																			var w = ivp.querySelector('button#edititem');
+																			var t = ivp.querySelector('button#deleteitem');
+																			if(w && t){
+																				w.onclick = (event)=>{
+																					editm(event.target.dataset.productid);
+																				}
+																				t.onclick = (event)=>{
+																					console.log(event.target.dataset.productid);
+																				}
+																			}
 			}
 		}
 		var k = `/products/${v}/itemdetails`
@@ -126,6 +131,73 @@
 		g.setRequestHeader('Cache-Control', 'no-cache');
 		g.responseType = "document";
 		g.send();
+	}
+	function editm(s){
+		spp.removeAttribute('hidden');
+		var h = new XMLHttpRequest();
+		h.onreadystatechange = ()=>{
+			if(h.readyState === XMLHttpRequest.DONE && h.status === 200 ){
+																			ivp.lastChild.remove();
+																			ivp.append(h.responseXML.querySelector('div#edititemdiv'));
+																			spp.setAttribute('hidden', '');
+																			var u = ivp.querySelector("input#promobox"),
+																				r = ivp.querySelector("label#promotion"),
+																			    q = ivp.querySelector("input#discount"),
+																				p = ivp.querySelector("form#additionalimg"),
+																				n = ivp.querySelector("button#updatetitem"),
+																				m = ivp.querySelector("button#cancelitemupdate"),
+																				j = ivp.querySelector("div#modalcont"),
+																				e = ivp.querySelector("div#modalspinnerplug");
+																				
+																				
+																			if(u){
+																					
+																					u.oninput = (event)=>{
+																					r.innerHTML = event.target.checked ? "Remove item from promotion" : "Put this item on promotion";
+																					event.target.checked ? q.removeAttribute("disabled"): q.setAttribute("disabled", " "),q.value = 0;
+																					}
+																				}
+																			if(p){
+																					p.onsubmit = (event)=>{
+																						event.preventDefault();
+																						e.removeAttribute('hidden');
+																						var o = new FormData(p);
+																						addimg(o, s, j);
+																					}
+																				}
+																			if(n){}
+																			if(m){
+																					m.onclick = (event)=>{
+																						geitm(event.target.dataset.productid);
+																					}
+																				}
+																			
+			}
+		}
+		var l = `/products/${s}/edititem`;
+		h.open('GET', l, true);
+		h.setRequestHeader('Cache-Control', 'no-cache');
+		h.responseType = "document";
+		h.send();
+	}
+	function addimg(v, u, t){
+		console.log(v);
+		var n = new XMLHttpRequest();
+		n.onreadystatechange = ()=>{
+			if(n.readyState === XMLHttpRequest.DONE && n.status === 200){
+																			t.firstElementChild.remove();
+																			t.append(n.responseXML.querySelector('div#modcont'));
+																			t.onclick = ()=>{
+																				geitm(u);
+																			}
+																			
+			}
+		}
+		var k = `/products/${u}/edititem/image`;
+		n.open('POST', k, true);
+		n.setRequestHeader('Cache-Control', 'no-cache');
+		n.responseType = "document";
+		n.send(v);
 	}
 	mib.addEventListener('click', (j)=>{
 		mngitms(j.target);
