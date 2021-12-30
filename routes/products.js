@@ -89,5 +89,22 @@ router.post('/:vendor_id/products/register', checkLogin, (req, res)=>{
 	console.log(req.body);
 	 res.rediret('/');
 });
-
+//update a product
+router.post('/products/:productId/updateitem', checkLogin, upload.none(), (req, res)=>{
+	console.log('I was called');
+	console.log(req.body);
+	if(!req.body.promotion){
+		req.body.promotion = false;
+		req.body.discount = 0;
+	};
+	Product.findByIdAndUpdate(req.params.productId, req.body, {returnDocument: "after"}, (err, updprod)=>{
+																			if(err){
+																				console.log("this is the error :" + err.message);
+																				res.sendStatus(404);
+																			}else{
+																				console.log(updprod);
+																				res.sendStatus(200);
+																			}
+	});
+})
 module.exports	=		router;

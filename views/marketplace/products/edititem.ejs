@@ -59,12 +59,14 @@
 						<tr>
 							<td><p class="text-secondary font-italic mt-3 col-lg-3">Stock:</p></td>
 							<td class="text-nowrap">
-								<select class="form-control custom-select col-6" name="stockunits" id="stockunits" required>
+								<div>
+								<select class="form-control custom-select col-6" form="edititem" name="stock" id="stockunits" required>
 								  	<option selected><%=product.stock%></option>
 								 	<%for(var stock = 1; stock <= 50; stock++ ){%>
 									<option value="<%=stock%>"><%=stock%></option>
 									<%}%>
 								</select>
+								</div>
 							</td>
 						</tr>
 						<tr class="mb-2">
@@ -79,14 +81,17 @@
 							</td>
 							<td>
 								<div class="custom-control custom-checkbox">
-								  <input type="checkbox" class="custom-control-input" id="promobox" name="promotion">
+								  <input type="checkbox" class="custom-control-input form-control" id="promobox" name="promotion" value ="true" <%if(product.promotion){%>
+											 <%=`checked`%>
+										 <%}%>
+										 >
 								  <label class="custom-control-label text-secondary font-italic" for="promobox" id="promotion">Put this item on promotion</label>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td><p class="text-secondary font-italic mt-3 col-3">Discount:</p></td>
-							<td> <input type="Number" class="form-control d-inline col-6" min="0" max="100" name="price" value="<%=product.discount%>" aria-label="discount (with dot and two decimal places)" id="discount" disabled><span class="col-lg-3 d-inline text-secondary">%</span></td>
+							<td> <input type="Number" class="form-control d-inline col-6" min="0" max="100" name="discount" value="<%=product.discount%>" aria-label="discount (with dot and two decimal places)" id="discount" disabled><span class="col-lg-3 d-inline text-secondary">%</span></td>
 						</tr>
 					</tbody>
 				</table>

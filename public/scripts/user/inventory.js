@@ -4,36 +4,7 @@
 		ivp		=	document.querySelector('div#inventoryplug'),
 		spp		=	document.querySelector('div#spinnerplug');
 	
-/*	function newitem(){
-						var	adit =	document.querySelector('form#addnewitem');
-						var	sbtn =  document.querySelector('button#additem');
-						if(adit){
-									sbtn.onclick = (k)=>{
-															console.log(k.target);
-															k.preventDefault();
-															psitm(k.target);
-														}
-								}
 
-					} 
-	document.onreadystatechange = function(){
-		if(document.readyState === 'complete'){
-			console.log('document is ready');
-			newitem()
-		}
-		
-	}
-	function newadd(){
-				var	adit =	document.querySelector('form#addnewitem');
-				var	sbtn =  document.querySelector('button#additem');
-						if(adit){
-									sbtn.onclick = (k)=>{
-															console.log(k.target);
-															k.preventDefault();
-															psitm(k.target);
-														}
-								}
-			} */
 	function mngitms(b){
 		spp.removeAttribute('hidden');
 		var c = new XMLHttpRequest();
@@ -46,7 +17,6 @@
 																			var w = ivp.querySelectorAll('a#itemdetailsbtn');
 																			w.forEach((r)=>{
 																				r.onclick = (e)=>{
-																					console.log(e.target.dataset.id);
 																					geitm(e.target.dataset.id);
 																				}
 																			})
@@ -144,7 +114,7 @@
 																				r = ivp.querySelector("label#promotion"),
 																			    q = ivp.querySelector("input#discount"),
 																				p = ivp.querySelector("form#additionalimg"),
-																				n = ivp.querySelector("button#updatetitem"),
+																				n = ivp.querySelector("form#edititem"),
 																				m = ivp.querySelector("button#cancelitemupdate"),
 																				j = ivp.querySelector("div#modalcont"),
 																				e = ivp.querySelector("div#modalspinnerplug");
@@ -154,7 +124,7 @@
 																					
 																					u.oninput = (event)=>{
 																					r.innerHTML = event.target.checked ? "Remove item from promotion" : "Put this item on promotion";
-																					event.target.checked ? q.removeAttribute("disabled"): q.setAttribute("disabled", " "),q.value = 0;
+																	event.target.checked ? q.removeAttribute("disabled"): q.setAttribute("disabled", " "),q.setAttribute("value", 0);
 																					}
 																				}
 																			if(p){
@@ -165,7 +135,13 @@
 																						addimg(o, s, j);
 																					}
 																				}
-																			if(n){}
+																			if(n){
+																					n.onsubmit = (event)=>{
+																						event.preventDefault();
+																						var d = new FormData(n);
+																						upditm(d, s);
+																					}
+																			}
 																			if(m){
 																					m.onclick = (event)=>{
 																						geitm(event.target.dataset.productid);
@@ -181,7 +157,6 @@
 		h.send();
 	}
 	function addimg(v, u, t){
-		console.log(v);
 		var n = new XMLHttpRequest();
 		n.onreadystatechange = ()=>{
 			if(n.readyState === XMLHttpRequest.DONE && n.status === 200){
@@ -198,6 +173,27 @@
 		n.setRequestHeader('Cache-Control', 'no-cache');
 		n.responseType = "document";
 		n.send(v);
+	}
+	function upditm(c, i){
+		var b = new XMLHttpRequest();
+		b.onreadystatechange = ()=>{
+			if(b.readyState === XMLHttpRequest.DONE && b.status === 200){
+																			geitm(i)
+			}
+		}
+		var a = `/products/${i}/updateitem`;
+		b.open('POST', a, true);
+		b.setRequestHeader('Cache-Control', 'no-cache');
+		b.responseType = 'text';
+		b.send(c);
+	}
+	function delitm(z){
+		var az = new XMLHttpRequest();
+		az.onreadystatechange = ()=>{
+			if(az.readyState === XMLHttpRequest.DONE && az.status === 200){
+				
+			}
+		}
 	}
 	mib.addEventListener('click', (j)=>{
 		mngitms(j.target);
