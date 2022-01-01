@@ -84,14 +84,15 @@
 																			ivp.lastChild.remove();
 																			ivp.append(g.responseXML.querySelector('div#detailitemdiv'));
 																			spp.setAttribute('hidden', '');
-																			var w = ivp.querySelector('button#edititem');
-																			var t = ivp.querySelector('button#deleteitem');
+																			var w	= ivp.querySelector('button#edititem'),
+																				t	= ivp.querySelector('button#imgdeletebtn'),
+																				ax	= ivp.querySelector("div#modalcont");
 																			if(w && t){
 																				w.onclick = (event)=>{
 																					editm(event.target.dataset.productid);
 																				}
 																				t.onclick = (event)=>{
-																					console.log(event.target.dataset.productid);
+																					delitm(event.target.dataset.productid, ax);
 																				}
 																			}
 			}
@@ -163,7 +164,7 @@
 																			t.firstElementChild.remove();
 																			t.append(n.responseXML.querySelector('div#modcont'));
 																			t.onclick = ()=>{
-																				geitm(u);
+																				editm(u);
 																			}
 																			
 			}
@@ -187,13 +188,23 @@
 		b.responseType = 'text';
 		b.send(c);
 	}
-	function delitm(z){
+	function delitm(z, y){
 		var az = new XMLHttpRequest();
 		az.onreadystatechange = ()=>{
 			if(az.readyState === XMLHttpRequest.DONE && az.status === 200){
-				
+																			y.firstElementChild.remove();
+																			y.append(az.responseXML.querySelector('div#modcont'));
+																			y.onclick = ()=>{
+																				mngitms(mib);
+																			}
 			}
 		}
+		
+		var ay = `/products/${z}/delete?_method=DELETE`
+		az.open('POST', ay, true);
+		az.setRequestHeader('Cache-Control', 'no-cache');
+		az.responseType = 'document';
+		az.send();
 	}
 	mib.addEventListener('click', (j)=>{
 		mngitms(j.target);

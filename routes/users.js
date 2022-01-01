@@ -160,14 +160,12 @@ router.get('/user/vendor/associate', checkLogin, (req, res)=>{
 		asD;
 	User.findById(req.user._id, '-password', (fu_err, guser)=>{
 		if( guser.isVendor || guser.isVendorUser ){
-							console.log('came here via e');
 							res.redirect('/user/profile/show');
 							}else if(guser.vendorAssoc !== 100100){
 							Association.findById(guser.assocVendor, (a_err, fassoc)=>{
 												var userassoc = false;
 												if(fassoc){
-													console.log('found vendor: '+ fassoc._id);
-												fassoc.users.forEach((fu)=>{
+															fassoc.users.forEach((fu)=>{
 																		if (guser._id.toString() === fu.id.toString()){
 																							asD 	=	fu;
 																							//update association status to user
@@ -175,7 +173,6 @@ router.get('/user/vendor/associate', checkLogin, (req, res)=>{
 																							guser.save();
 																							userassoc = true;
 																							asU = {vendorname : fassoc.vendorname, user : asD };
-																							console.log('I came via a');
 																							res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: asU});
 																		}
 																});
@@ -220,9 +217,7 @@ router.post('/user/vendor/:id/associate', checkLogin,  (req, res)=>{
 																																			assocVendor: fassc._id,
 																																		}, 
 																													(err, auser)=>{
-																													/*	if(auser){
-																														req.user.vendorAssoc = 100101;
-																														} */
+																													
 																											var fyy = {
 																														vendorname : fassc.vendorname,
 																														rdate	   : new Date().toISOString(),

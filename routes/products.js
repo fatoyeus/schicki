@@ -60,10 +60,10 @@ router.post('/products/:productId/edititem/image', checkLogin, upload.single('pr
 																if(err){
 																							
 																		}else{
-								var productImage	=	`https://schicki-dev-bucket.s3.eu-west-3.amazonaws.com/products/${finventory.storeId}/${finventory._id}/${req.file.originalname}`
-								dfprod.otherImages.push(productImage);
+							//	var productImage	=	`https://schicki-dev-bucket.s3.eu-west-3.amazonaws.com/products/${finventory.storeId}/${finventory._id}/${req.file.originalname}`
+								dfprod.otherImages.push(req.file.originalname);
 								dfprod.save();
-								res.render('marketplace/products/modal');
+								res.render('marketplace/products/modal', { modal : "Add" });
 																				}
 																	})
 											}
@@ -99,12 +99,42 @@ router.post('/products/:productId/updateitem', checkLogin, upload.none(), (req, 
 	};
 	Product.findByIdAndUpdate(req.params.productId, req.body, {returnDocument: "after"}, (err, updprod)=>{
 																			if(err){
-																				console.log("this is the error :" + err.message);
-																				res.sendStatus(404);
+																					res.sendStatus(404);
 																			}else{
-																				console.log(updprod);
-																				res.sendStatus(200);
+																					res.sendStatus(200);
 																			}
 	});
 })
+
+//delete item
+router.delete('/products/:productId/delete', checkLogin, (req, res)=>{
+																	 	Product.findByIdAndRemove(req.params.productId, (err, gprod)=>{
+																		  if(gprod){
+																			  Inventory.findById(gprod.inventoryId, (ferr, finv)=>{
+																				  if(ferr){
+																					  
+																						  }else{
+																									finv.stocklist.splice(finv.stocklist.indexOf(req.params.productId), 1);
+																							  		for(var j = 0; j < gprod.otherImages.length; j++){
+																									var dkey = `products/${finv.storeId}/${finv._id}/${gprod.otherImages[j]}`;
+																																			console.log(typeof dkey);
+																																		  var params = {
+																																						Bucket	: 	"schicki-dev-bucket",
+																																						Key 	:	dkey	
+																																		  };
+																																		  s3.deleteObject(params, (gerr, data)=>{
+																																			  if(gerr){
+																																						console.log(gerr, gerr.stack);
+																																			  }else{
+																																						console.log(data);
+																																			  }
+																																		  })
+																																	  					}
+																							  		res.render('marketplace/products/modal', { modal : "Delete" });
+																						  }
+																				  
+																			  })
+																		  	}
+																		});
+																	});
 module.exports	=		router;

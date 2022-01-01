@@ -88,14 +88,15 @@ router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLog
 									sku				=	req.body.sku,
 									stock			=	req.body.stockunits,
 									price			=	req.body.price,
-									productImage	=	`https://schicki-dev-bucket.s3.eu-west-3.amazonaws.com/products/${req.params.store_id}/${req.params.inventory_id}/${req.file.originalname}`,
+									url_path		=	`https://schicki-dev-bucket.s3.eu-west-3.amazonaws.com/products/${req.params.store_id}/${req.params.inventory_id}/`,
+									productImage	=	req.file.originalname,
 									params			=	{
 															Bucket	:	"schicki-dev-bucket",
 															ACL		: 	"public-read",
 															Body	:	req.file.buffer,
 															Key		:   ckey
 														},
-									product   		=	{inventoryId, productname, description, sku, stock, productImage, price}
+									product   		=	{inventoryId, productname, description, sku, stock, productImage, price, url_path}
 	s3.putObject(params, (err, data)=>{
 		if(err){
 			console.log(err);
@@ -135,7 +136,7 @@ router.get('/inventory/:store_id/storeitems/:inventory_id/manageitems', checkLog
 				if(err){
 						res.sendStatus(404);
 				}else{
-						var opt = {path:'stocklist', model:'product', select:'inventoryId stock productImage sku price'};
+						var opt = {path:'stocklist', model:'product', select:'inventoryId stock productImage sku price url_path'};
 						Inventory.populate(ffvn, opt, (nerr, nffvn)=>{
 							if(nerr){
 								console.log('not found: '+ nerr.message);

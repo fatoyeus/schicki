@@ -11,6 +11,7 @@ var productSchema	=	new mongoose.Schema({
 											stock			:	Number,
 											productImage	:	String,
 											otherImages		:	[],
+											url_path		:	String,
 											sku				: 	String,
 											promotion		:	{	type 	: Boolean, 
 																 	default	: false },
