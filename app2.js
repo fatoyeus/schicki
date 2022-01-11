@@ -31,9 +31,11 @@ var   express  		    =  		require('express'),
 	 							 };
 	  
 
-const url 				= 		process.env.DB_URL || "mongodb://localhost/schickidb",
-	  sessions			=		require('client-sessions'),
-	  csrf				=		require('csurf');
+const url 						= 		process.env.DB_URL || "mongodb://localhost/schickidb",
+	  sessions					=		require('client-sessions'),
+	  csrf						=		require('csurf'),
+	  AWS_ACCESS_KEY_ID			=		process.env.AWS_ACCESS_KEY_ID,
+	  AWS_SECRET_ACCESS_KEY		=		process.env.AWS_SECRET_ACCESS_KEY;
 
 app.locals.title	    =		"Schicki";
 app.locals.csessions	=		[];
