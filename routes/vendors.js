@@ -9,7 +9,7 @@ var 	express			=		require('express'),
 		VendorLocation	=		require('../models/vendorlocation'),
 		Association		=		require('../models/association'),
 		Store			=		require('../models/store'),
-		snippets		=		require('../public/lib/snippets.js'),
+		snippets		=		require('../lib/utilities/snippets.js'),
 		title			=		'schicki';
 const 	vlevel			=  		require('../templates/vendorlevel');
 	

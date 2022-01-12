@@ -7,20 +7,15 @@ var	User			= 		require('../models/user'),
 	Storecat		=		require('../models/storecat'),
 	Inventory 		=		require('../models/inventory'),
 	AWS				=		require('../lib/API/AWS/schicki_aws'),
-//	AWS				=		require('aws-sdk'),
-//	S3 				= 		require('aws-sdk/clients/s3'),
 	Product			=		require('../models/product'),
-	snippets		=		require('../public/lib/snippets.js'),
+	snippets		=		require('../lib/utilities/snippets.js'),
 	title			=		'schicki';
 
 const multer 		= 		require('multer'),
 	  storage		=		multer.memoryStorage(),
 	  upload 		= 		multer({ storage: storage });
 
-//AWS.config.apiVersions = {
-// s3: '2006-03-01',
-  // other service API versions
-//};
+
 var s3 = new AWS.S3();
 
 
@@ -122,12 +117,7 @@ router.post('/inventory/:store_id/storeitems/:inventory_id/addnewitem', checkLog
 	}else{
 		console.log('File missing');
 	}
-/*	
-		productimg	=   `https://schicki-dev-bucket.s3.eu-west-3.amazonaws.com/products/${req.params.store_id}/${req.params.inventory_id}/${req.body.productimg}`
-	//Product.create();
-	console.log(req.params.store_id);
-	console.log(req.params.inventory_id);
-	res.redirect(`/inventory/${req.params.store_id}/storeitems/${req.params.inventory_id}/manageitems`); */
+
 }); 
 
 //list inventory

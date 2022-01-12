@@ -19,7 +19,7 @@ var   express  		    =  		require('express'),
 	  inventoryRoutes	=		require('./routes/inventory'),
 	  indexRoutes		=		require('./routes/index'),
 	  storeRoutes		=		require('./routes/store'),
-	  notify			= 		require('./public/lib/notifications'),
+	  notify			= 		require('./lib/utilities/notifications'),
 	  port 				= 		process.env.PORT || 3000,
 	  not_options		=		{
 		  							setHeaders	:	(res, path, stat)=>{
@@ -43,7 +43,6 @@ app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.set('view engine', 'ejs');
-//app.use('/notify', express.static('notifications', not_options));
 //app.use(helmet());
 app.use(sessions({ 
 					cookieName	:	"schikiSession",

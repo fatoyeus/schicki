@@ -6,7 +6,7 @@ var	User			= 		require('../models/user'),
 	Store			=		require('../models/store'),
 	Storecat		=		require('../models/storecat'),
 	Inventory 		=		require('../models/inventory'),
-	snippets		=		require('../public/lib/snippets.js'),
+	snippets		=		require('../lib/utilities/snippets.js'),
 	title			=		'schicki';
 
 function checkLogin(req, res, next){

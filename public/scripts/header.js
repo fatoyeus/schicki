@@ -36,13 +36,13 @@ function progressBar(o){
 		var f = new XMLHttpRequest();
 		f.onloadstart = function (ode){
 										ai.classList.add( 'w-25');
-										//	ai.classList.add( `w-${(cde.loaded/cde.total) * 100}`);
+										ai.classList.add( `w-${(ode.loaded/ode.total) * 100}`);
 										}
 		f.onprogress = function (cde){
 										if(cde.lengthComputable){
 												ai.classList.remove('w-*');
 												ai.classList.add( `w-${Math.trunc((cde.loaded/cde.total) * 100)}`);
-											//	ai.classList.add( `w-${(cde.loaded/cde.total) * 100}`);
+												ai.classList.add( `w-${(cde.loaded/cde.total) * 100}`);
 																}
 										}
 		f.onloadend  = function(dde){
@@ -95,12 +95,6 @@ function notfn(i){
 		w.send();
 }
 function menuitm(k){
-	/*if(menu){
-		menu.forEach((item)=>{
-			kj.removeChild
-		})
-		menu = null;
-	}*/
 	var u = new XMLHttpRequest();
 	u.onreadystatechange	=	()=>{
 										if(u.readyState === XMLHttpRequest.DONE && u.status === 200){	
@@ -108,7 +102,6 @@ function menuitm(k){
 																										menu.forEach((item)=>{
 																											kj.remove();
 																											ij.append(item);
-																											console.log(item);
 																										})
 																									var	ah 	= document.querySelectorAll('div#dropMenu a');
 																									ah.forEach((a)=>{
@@ -134,9 +127,9 @@ function menuitm(k){
 
 
 
-/*ww.addEventListener('load', ()=>{
+ww.addEventListener('load', ()=>{
 	progressBar(ww.location.pathname);
-})*/
+})
 
 ww.addEventListener('unload', ()=>{
 	ai.removeAttribute('hidden');

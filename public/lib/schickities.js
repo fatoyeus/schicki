@@ -6,23 +6,21 @@
 	var nameexists 		= "Already in use";
  	_i.prototype		= 	{
 								checkallinputs 	: async function(z, y, v, r, ...names){ 
-																				console.log('this is r: '+ r );
 																				z.forEach((x)=>{
 																					 if(names.includes(x.name) && x.value.length > 0){
 																						 if(x.name === r){
-																						console.log('checking '+ x.value + ' for ' + x.name);															 			    this.checkvalue(x.value, x.name, y, v, x);
+																							 			    this.checkvalue(x.value, x.name, y, v, x);
 																									}
 																								}
 																							});
 																						},
 								checkvalue		: function(q, r, s, u, y){	
 													var self = this;
-																	console.log('checkvalue called for ' + r);
-																	w = new XMLHttpRequest();
+																	
+																	var w = new XMLHttpRequest();
 																	w.onreadystatechange	=	function(){
 																		if(this.readyState === XMLHttpRequest.DONE){
-																			console.log(w.responseText);
-																			self.checkstatus(w.responseText, r, s, u, y);
+																														self.checkstatus(w.responseText, r, s, u, y);
 																		}
 																	}
 																	var v = `/${r}/search/${q}/check`;
