@@ -1,10 +1,11 @@
-let express  		    =  		require('express'),
+var   express  		    =  		require('express'),
       app 	 		    =  		express(),
 	  mongoose			=  		require('mongoose'),
 	  request			=  		require('request'),
       bodyParser 		=  		require('body-parser'),
 	  bcrypt			=		require('bcryptjs'),
 	  helmet			=		require('helmet'),
+	  methodOverride	= 		require('method-override'),
 	  Admin				=		require('./models/admin'),
 	  User				= 		require('./models/user'),
 	  adminRoutes		=		require('./routes/admins'),
@@ -12,26 +13,38 @@ let express  		    =  		require('express'),
 	  productRoutes		=		require('./routes/products'),
 	  userRoutes		=		require('./routes/users'),
 	  emailRoutes		=		require('./routes/emails'),
+	  notStream			=		require('./routes/notStream'),
 	  phoneRoutes		=		require('./routes/phones'),
 	  vendorRoutes		=		require('./routes/vendors'),
 	  inventoryRoutes	=		require('./routes/inventory'),
-	  methodOverride	= 		require("method-override"),
 	  indexRoutes		=		require('./routes/index'),
 	  storeRoutes		=		require('./routes/store'),
-	  port 				= 		process.env.PORT || 3000;
+	  notify			= 		require('./lib/utilities/notifications'),
+	  port 				= 		process.env.PORT || 3000,
+	  not_options		=		{
+		  							setHeaders	:	(res, path, stat)=>{
+										res.set({
+													'Content-Type'	:	'text/event-stream',
+													'Cache-Control'	:	'no-cache'
+												});
+									}
+	 							 };
 	  
 
-const url 				= 		"mongodb://localhost/schickidb",
-	  sessions			=		require('client-sessions'),
-	  csrf				=		require('csurf');
+const url 						= 		process.env.DB_URL || "mongodb://localhost/schickidb",
+	  sessions					=		require('client-sessions'),
+	  csrf						=		require('csurf'),
+	  AWS_ACCESS_KEY_ID			=		process.env.AWS_ACCESS_KEY_ID,
+	  AWS_SECRET_ACCESS_KEY		=		process.env.AWS_SECRET_ACCESS_KEY;
 
-
+app.locals.title	    =		"Schicki";
+app.locals.csessions	=		[];
 app.use('/sc_static', express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.set('view engine', 'ejs');
 //app.use(helmet());
-app.use(sessions({
+app.use(sessions({ 
 					cookieName	:	"schikiSession",
 					secret		:	"ug70&&%$hdh3$@1d",
 					duration	:	30 * 60 * 1000
@@ -44,43 +57,46 @@ app.use((req, res, next)=>{
 	if(req.schikiSession.userId||req.schikiSession.adminId){
 		var loggedIn = (req.schikiSession.userId ? req.schikiSession.userId : req.schikiSession.adminId);
 	}else{
-		var loggedIn = 'not loggedIn';
+		var loggedIn = "not loggedIn";
 	}
-		switch(loggedIn){
-			case 	req.schikiSession.userId : 
-						console.log('using case of user');
-						
+	switch(loggedIn){
+			case 	req.schikiSession.userId	: 
 						User.findById(req.schikiSession.userId, '-password -orders -birthday_id -contact_id ', (err, user)=>{
-						if(err){
-							res.locals.user = null;
-							req.schikiSession.userId = null;
-							return res.redirect('/');
-							return next (err);
-						}
-						if(!user){
-							req.schikiSession.userId = null;
-							res.locals.user = null;
-							return res.redirect('/');
-							return next ();
-						}
 						
-						User.populate(user,[{path:'notification_id', model:'notification', select:'notifications maxlength'}], (n_err, nuser)=>{
-									console.log(user);
+						if(!user || err){
+							if(app.locals.csessions.length > 0 ){
+								console.log('******************I was called********************');
+								app.locals.csessions = app.locals.csessions.filter(ele => ele.agent !== req.schikiSession.userId);
+							}
+								req.schikiSession.userId = null;
+								res.locals.user = null;
+								res.redirect('/login');
+							
+						}else{
+										 console.log('using   ******************************************** ' +  user._id.toString());
+						console.log('testing********************************************* '+ app.locals.csessions.some(element => element.agent.toString() === user._id.toString()));				 
+						if(!app.locals.csessions.some(element => element.agent.toString() === user._id.toString())){
+								         console.log('trying ********************************************* ' + user._id);					
+																		app.locals.csessions.push({
+																									agent		:	user._id,
+																									notf		:	0
+																								});
+														}
+							
+						User.populate(user,[{path:'notification_id', model:'notification', select:'unreadNot userId'}], (n_err, nuser)=>{
+									console.log(app.locals.csessions);
 									req.user		 = user;
 									res.locals.user  = user;
-									req.admin		 = null;
+									req.admin		 = null;  
 									res.locals.admin = null;
 									next();
 								})
-
+							}
 						});
-					
+						
 						break;
 			case  	req.schikiSession.adminId 	: 
-				 	console.log('using case of admin');
-					
-					
-						Admin.findById(req.schikiSession.adminId, '-password', (err, admin)=>{
+				 		Admin.findById(req.schikiSession.adminId, '-password', (err, admin)=>{
 						if(err){
 							res.locals.admin = null;
 							req.schikiSession.adminId = null;
@@ -93,69 +109,32 @@ app.use((req, res, next)=>{
 							return res.redirect('/admin/dashboard');
 							return next ();
 						}
-						req.user		 = null;
-						res.locals.user  = null;
-						req.admin		 = admin;
-						res.locals.admin = admin;
+						Admin.populate(admin,[{path:'notification_id', model:'notification'}], (n_err, na)=>{
+									console.log(admin);
 							
-						next();
+									req.user		 = null;
+									res.locals.user  = null;
+									req.admin		 = admin;
+									res.locals.admin = admin;
+
+									next();
+								})
+						
 
 						});
 					
 						break;
 			default  :  res.locals.user = null;
 						res.locals.admin = null;
-						return next();
+						next();
 		}
-	
-	
-	
-	
-	
-}); 
+	}); 
+//middleware for notifications
+app.use(notify);
+//middleware for server-events
 
 //app.disable('x-powered-by');
 
-/*app.use('/admin', (req, res, next)=>{
-					Admin.findById(req.schikiSession.adminId, '-password', (err, admin)=>{
-						if(err){
-							return next (err);
-						}
-						if(!admin)
-							return next ();
-
-						req.user		 = null;
-						res.locals.user  = null;
-						req.admin		 = admin;
-						res.locals.admin = admin;
-							
-						next();
-
-						});
-});
-app.use('/user', (req, res, next)=>{
-			User.findById(req.schikiSession.userId, '-password', (err, user)=>{
-						if(err){
-							return next (err);
-						}
-						if(!user)
-							return next ();
-
-
-						req.user		 = user;
-						res.locals.user  = user;
-						req.admin		 = null;
-						res.locals.admin = null;
-						next();
-
-						});
-});
-app.use((req, res, next)=>{
-						res.locals.user = null;
-						res.locals.admin = null;
-						
-						return next();
-}); */
 
 
 
@@ -178,12 +157,16 @@ mongoose.connect(url , {useNewUrlParser: true, useUnifiedTopology: true}).then((
 app.use(adminRoutes);
 app.use(authRoutes);
 app.use(emailRoutes);
+app.use(inventoryRoutes);
+app.use(notStream);
 app.use(phoneRoutes);
 app.use(productRoutes);
 app.use(storeRoutes);
 app.use(userRoutes);
 app.use(vendorRoutes);
 app.use(indexRoutes);
+
+
 
 
 
