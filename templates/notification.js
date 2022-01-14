@@ -43,6 +43,20 @@ const notification = [
 								category	:	'vendor',
 								message		:	'Create a store now',
 								link		:	'store/create'
+							},
+							{
+								code		:	2003,
+								name		:	'store_approval_message',
+								category	:	'vendor',
+								message		:	'Your store has been approved',
+								link		:	'stores/view'
+							},
+							{
+								code		:	2004,
+								name		:	'store_manage_message',
+								category	:	'vendor',
+								message		:	'Manage your store',
+								link		:	'stores/view'
 							}
 					]
 

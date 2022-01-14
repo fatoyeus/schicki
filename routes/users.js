@@ -30,7 +30,6 @@ function checkLogin(req, res, next){
 //create user profile
 router.get('/user/profile/new', checkLogin, (req, res)=>{
 	User.findById(req.user._id, 'isProfiled', (err, user)=>{
-		console.log('isprofiled: '+ user);
 		if(user.isProfiled){
 			res.redirect('/user/profile/show');
 		}else{
@@ -58,52 +57,44 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 																
 			User.findByIdAndUpdate(req.user._id, {birthday_id : nUserBirthday._id}, (b_err, foundUser)=>{
 																					if(b_err||!foundUser){
-																						console.log('Unable to create profile');
+																						//alert user profile creatiom failed
 																						res.redirect('/');
 																						}else{
 				Contact.create(contact).then((usercontact)=>{
 		
 					Email.create(userEmail).then((nUserEmail)=>{
 														usercontact.userEmail_id = nUserEmail._id;
-														console.log('email created');
 		    			Phone.create(userPhone).then((nUserPhone)=>{
 														usercontact.userPhone_id = nUserPhone._id;
-														console.log('phone created');
 							Location.create(userLocation).then((nUserLocation)=>{
 																usercontact.userLocation_id = nUserLocation._id;
 																usercontact.save();
-																console.log('location created and contact saved');
 															}).catch((err)=>{
-																console.log(err);
+																//alert error
 															});	
 													}).catch((err)=>{
-														console.log(err);
+														//alert error
 													});
 										}).catch((err)=>{
-											console.log(err);
+											//alert error
 										});
 						
-			
-			
-			
-			
-			User.findByIdAndUpdate(req.user._id, {isProfiled : true, contact_id : usercontact._id}, (err, foundUser)=>{
-				if(err||!foundUser){
-					console.log(err.message);
-					res.redirect('/');
-				}
-		})
+								User.findByIdAndUpdate(req.user._id, {isProfiled : true, contact_id : usercontact._id}, (err, foundUser)=>{
+																										if(err||!foundUser){
+																											//alert error
+																											res.redirect('/');
+																										}
+																								})
 															}).catch((err)=>{
-																	console.log(err.message);
+																	//alert user
 															});
 														}
 													});														
 												}).catch((err)=>{
-													console.log(err);
+													//alert user
 											});
 	
 	
-	console.log('User profile updated successfully');
 	req.notify(req.user.notification_id, 1003);
 	res.redirect('/');
 		
@@ -112,7 +103,7 @@ router.post('/user/profile/new', checkLogin, (req, res)=>{
 router.get('/user/profile/show', checkLogin, (req, res)=>{ 
 	User.findById(req.user._id, '-password').populate(['contact_id','birthday_id']).exec((err, foundUser)=>{
 																			if (err){
-																			    						 																										console.log(err.message);
+																			    		//alert user
 																		       							 }
 																				else{
 				var opts = [{ path:'contact_id.userEmail_id', model:'email' },
@@ -123,7 +114,7 @@ router.get('/user/profile/show', checkLogin, (req, res)=>{
 	User.populate(foundUser, opts, (err,exfoundUser)=>{
 		var userProfile;
 		if(err){
-			console.log(err.message);
+			//alert user
 		}else{
 			res.render('forms/users/showprofile', {userProfile : exfoundUser, title: req.user.fullName});
 		}
@@ -142,14 +133,12 @@ router.get('/user/vendorsearch/:id/check', checkLogin, (req, res)=>{
 					fw.txt(fv[i].vendorname).up();
 					}
 		  const fx = root.end({format:'xml', prettyPrint:true});
-			console.log(fx);
 			res.set({'Content-Type' : 'text/xml'});
 			res.send(fx);
 					});
 		}else{
 			//alert security
 			res.sendStatus(404);
-			console.log('user is alread associated');
 		}
 																	});
 //Associate user to vendor 
@@ -180,7 +169,6 @@ router.get('/user/vendor/associate', checkLogin, (req, res)=>{
 																guser.vendorAssoc = 100100;
 																guser.assocVendor = null;
 																guser.save();
-																console.log('I came via b');
 																res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
 																}
 												}else{
@@ -188,13 +176,11 @@ router.get('/user/vendor/associate', checkLogin, (req, res)=>{
 														guser.assocVendor = null;
 														guser.assUser_ind = null;
 														guser.save();
-														console.log('i came via here c');
 														res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
 													} 
 																					})
 								
 							}else{
-								console.log('i came via here d');
 								res.render('forms/users/associatevendor', { title : 'Vendor Association', avendor: null});
 								}
 														
@@ -243,26 +229,26 @@ router.post('/user/vendor/associationaccept', checkLogin, (req, res)=>{
 																							if(euser.assocVendor){
 																								Association.findById(euser.assocVendor, (ev_err, dfassoc)=>{
 																								if(dfassoc){
-																									dfassoc.users.forEach((fdu)=>{
-																									if (euser._id.toString() === fdu.id.toString()){
-																									//check if user request was granted
-																										if(fdu.status === 100102){
-																											fdu.status = 100103;
-																											euser.vendorAssoc = 100103;
-																											euser.save();
-																											res.sendStatus(200);
-																																}else{
-																																		fdu.status;
-																																		res.sendStatus(404);
-																																		//alert security
-																																		}
+																												dfassoc.users.forEach((fdu)=>{
+																																	if (euser._id.toString() === fdu.id.toString()){
+																																					//check if user request was granted
+																																						if(fdu.status === 100102){
+																																							fdu.status = 100103;
+																																							euser.vendorAssoc = 100103;
+																																							euser.save();
+																																							res.sendStatus(200);
+																																												}else{
+																																														fdu.status;
+																																														res.sendStatus(404);
+																																														//alert security
+																																														}
 																																					}
 																																		})
 																											}else{
-																									//Alert Security
-																									res.sendStatus(404);
+																													//Alert Security
+																													res.sendStatus(404);
 																												}
-																											dfassoc.save();
+																													dfassoc.save();
 																																						});
 																												}else{
 																												//Alert Security
@@ -294,7 +280,6 @@ router.post('/user/vendor/disassociate', checkLogin, (req, res)=>{
 		}else{
 			//Alert Security
 			res.sendStatus(404);
-			console.log('You have no existing association');
 			res.redirect('/user/vendor/associate');
 		}
 	});
@@ -332,24 +317,24 @@ router.delete('/user/:id/profile/delete', checkLogin, (req, res)=>{
 													req.app.locals.csessions = req.app.locals.csessions.filter(rclient => {rclient.agent.toString() !== req.user._id.toString()});
 													res.redirect('/logout');
 												}else{
-													console.log('Phone not found');
+													//alert user no phone found
 												}
 											})
 										}else{
-											console.log('Email not found');
+											//alert user no email found
 										}
 									})
 								}else{
-									console.log('User location not found');
+									 //alert user no location found
 								}
 							})
 						}else{
-							console.log('User contact not found');
+							 //alert user no contact found
 						}
 					})	
-				console.log('User account successfully deleted');
+						//alert user contact deleted
 				}else{
-				console.log('User not found')
+						//alert user contact not found
 				}
 			});
 				}
