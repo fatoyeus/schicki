@@ -50,9 +50,9 @@ function checkVendor(req, res,next){
 router.post('/store/:store_id/assignuser/:assigneduser', checkLogin, checkStoreOwner, (req, res)=>{
 	Store.findById(req.params.store_id, (au_err, gstore)=>{
 																if(!gstore.users.includes(req.params.assigneduser)){
-																									gstore.users.push(req.params.assigneduser);
-																									gstore.save();
-																									let opt = {path: "users", select: ['fname', 'lname', 'username'], model: "user"};
+																								gstore.users.push(req.params.assigneduser);
+																								gstore.save();
+																								let opt = {path: "users", select: ['fname', 'lname', 'username'], model: "user"};
 																									User.populate(gstore, opt, (bu_err, hstore)=>{
 																										let snip = snippets;
 																										snip.store = hstore;
@@ -209,7 +209,7 @@ router.delete('/store/:store_id', checkLogin, checkStoreOwner, (req, res)=>{
 												Store.findByIdAndRemove(req.params.store_id, (e_err, estore)=>{
 													if(estore){
 														Vendor.findById(estore.vendor_id, (f_err, fvendor)=>{
-															fvendor.stores.pull(estore._id);
+															fvendor.stores.splice(fvendor.stores.indexOf(estore._id));
 															fvendor.save((g_err, savedVendor)=>{
 															console.log(savedVendor);
 															res.redirect('/stores/view');

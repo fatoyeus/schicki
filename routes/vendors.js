@@ -113,7 +113,7 @@ router.post('/vendor/disassociation', checkLogin, (req, res)=>{
 													})
 //vendor dashboard
 router.get('/vendor/dashboard', checkLogin, (req, res)=>{
-	Vendor.findById(req.user.vendor_id, 'users stores malls associate level status', (err, vendor)=>{
+	Vendor.findById(req.user.vendor_id, 'vendorname users stores malls associate level status', (err, vendor)=>{
 		let vendorLevel = checkMaxlimits(req.user._id, vendor.level);
 		res.render('marketplace/vendor/dashboard', {title: 'vendor dashboard', vendor, vendorLevel})	
 	})
@@ -327,11 +327,11 @@ router.post('/vendor/user/:id/association/admit', checkLogin, (req, res)=>{
 																	if(err){
 																			res.sendStatus(404);
 																			}
-																	if(u_user){
+																	if(u_user && !ivendor.users.includes(u_user._id)){
 																				ivendor.users.push(u_user._id);
 																				ivendor.save();
 																				Association.findById(ivendor.association_id, (j_err, iasso)=>{
-																																		iasso.users.pull(req.params.id);
+																													iasso.users.splice(iasso.users.indexOf(req.params.id));
 																																		iasso.save();
 																																		res.sendStatus(200);
 																																			});
@@ -354,7 +354,7 @@ router.post('/vendor/user/:id/association/reject', checkLogin, (req, res)=>{
 																				n.splice(m, 1);
 																			}
 																		})*/
-																		hasso.users.pull(req.params.id);
+																		hasso.users.splice(hasso.users.indexOf(req.params.id));
 																		hasso.save();
 																		res.sendStatus(200);
 																		});
