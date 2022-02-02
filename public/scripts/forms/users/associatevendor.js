@@ -158,8 +158,9 @@ function aa(event){
 	b.classList.remove('text-success')||b.classList.remove('text-danger');
 	b.removeAttribute('hidden');
 	b.innerHTML = 'Searching';
-	
-	if(s.length !== 0){
+	const patrn = /[!@#$%/^&*()/_+{}]/
+	if(s.length !== 0 && !s.match(patrn)){
+		 event.preventDefault();
 		 xy(s);
 	}else{
 		rr();
