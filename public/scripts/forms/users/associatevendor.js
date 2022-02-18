@@ -11,6 +11,8 @@
 		m = document.querySelector('button#assocancel'),
 		n = document.querySelector('button#assoaccept'),
 		c;
+	
+const prtn = /[!@#$%&/*(){}+-/^//]/;
 function stringToHTML(str) {
 								var parser = new DOMParser();
 								var doc = parser.parseFromString(str, 'text/html');
@@ -158,8 +160,7 @@ function aa(event){
 	b.classList.remove('text-success')||b.classList.remove('text-danger');
 	b.removeAttribute('hidden');
 	b.innerHTML = 'Searching';
-	const patrn = /[!@#$%/^&*()/_+{}]/
-	if(s.length !== 0 && !s.match(patrn)){
+	if(s.length !== 0 ){
 		 event.preventDefault();
 		 xy(s);
 	}else{
@@ -173,6 +174,11 @@ function aa(event){
  					}
 
 a.oninput	=	aa;
+a.onkeydown = 	function(event){
+								if(event.key.match(prtn)){
+															event.preventDefault();
+														}
+							}
 f.onclick	=	ff;	
 if(m){
 		m.onclick 	=	mm;	

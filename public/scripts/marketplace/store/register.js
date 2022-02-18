@@ -6,6 +6,7 @@ var e = document.querySelector('#storecat');
 var f = document.querySelector('#submitButton');
 var g = document.querySelector('form#storecreate');
 
+const prtn = /[!@#$%&/*(){}+-/^//]/;
 	
 function ab(){
 				d.removeAttribute('hidden');
@@ -50,14 +51,12 @@ function qr (){
 	let s = event.target.value;
 	b.innerHTML = 'Searching';
 	if(s.length > 0){
-						var u =  xy(event.target.value, s);
+							var u =  xy(event.target.value, s);
 					}else{
-						bb(null, s);
+							bb(null, s);
 					}
-	}	
+	}
 function bb(v, u){
-		console.log('bb called');
-		console.log('v is: '+ v);
 		if( v === 'false' || u.length === 0){
 		b.innerHTML = (u.length === 0 ? 'Name cannot be empty': 'Already Taken');
 		b.classList.remove('text-success');
@@ -88,6 +87,9 @@ function bb(v, u){
 }
 
 	a.oninput 		= aa;
+	a.onkeydown     = function(event){if(event.key.match(prtn)){
+						event.preventDefault();
+	}}
 	
 }())
 
