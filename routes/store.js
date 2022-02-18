@@ -81,7 +81,7 @@ router.post('/store/:store_id/createInventory', checkLogin, checkStoreOwner, (re
 router.post('/store/:store_id/removeuser/:removeduser', checkLogin, checkStoreOwner, (req, res)=>{
 																Store.findById(req.params.store_id, (bu_err, istore)=>{
 																if(istore.users.includes(req.params.removeduser)){
-																				istore.users.pull(req.params.removeduser);
+																				istore.users.splice(istore.users.indexOf(req.params.removeduser));
 																				istore.save();
 																				let opt = {path: "users", select: ['fname', 'lname', 'username'], model: "user"};
 																									User.populate(istore, opt, (cu_err, jstore)=>{
@@ -209,9 +209,8 @@ router.delete('/store/:store_id', checkLogin, checkStoreOwner, (req, res)=>{
 												Store.findByIdAndRemove(req.params.store_id, (e_err, estore)=>{
 													if(estore){
 														Vendor.findById(estore.vendor_id, (f_err, fvendor)=>{
-															fvendor.stores.pull(estore._id);
+															fvendor.stores.splice(fvendor.stores.indexOf(estore._id));
 															fvendor.save((g_err, savedVendor)=>{
-															console.log(savedVendor);
 															res.redirect('/stores/view');
 															})
 														})

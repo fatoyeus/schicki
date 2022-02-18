@@ -331,7 +331,7 @@ router.post('/vendor/user/:id/association/admit', checkLogin, (req, res)=>{
 																				ivendor.users.push(u_user._id);
 																				ivendor.save();
 																				Association.findById(ivendor.association_id, (j_err, iasso)=>{
-																																		iasso.users.pull(req.params.id);
+																																		iasso.users.splice(iasso.users.indexOf(req.params.id));
 																																		iasso.save();
 																																		res.sendStatus(200);
 																																			});
@@ -354,7 +354,7 @@ router.post('/vendor/user/:id/association/reject', checkLogin, (req, res)=>{
 																				n.splice(m, 1);
 																			}
 																		})*/
-																		hasso.users.pull(req.params.id);
+																		hasso.users.splice(hasso.users.indexOf(req.params.id));
 																		hasso.save();
 																		res.sendStatus(200);
 																		});
