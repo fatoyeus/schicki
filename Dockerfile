@@ -1,4 +1,4 @@
-FROM node: 10.1.2
+FROM node:10-alpine
 
 WORKDIR /usr/app
 RUN npm ci --omit=dev

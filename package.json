@@ -1,31 +1,31 @@
 {
-  "name": "schicknglam",
-  "version": "1.0.0",
-  "description": "schicknglam webapp",
-  "main": "app.js",
-  "scripts": {
-    "start": "NODE_ENV=production node app2.js"
-  },
-  "author": "Olakunle Fajorin",
-  "license": "ISC",
-  "dependencies": {
-    "aws-sdk": "^2.999.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "client-sessions": "^0.8.0",
-    "crypto-js": "^4.0.0",
-    "csurf": "^1.11.0",
-    "ejs": "^3.0.1",
-    "express": "^4.17.1",
-    "fs": "0.0.1-security",
-    "helmet": "^4.1.1",
-    "method-override": "^3.0.0",
-    "mongodb": "^3.6.9",
-    "mongoose": "^5.13.2",
-    "multer": "^1.4.3",
-    "node-libcurl": "^2.3.3",
-    "request": "^2.88.0",
-    "uuid": "^8.3.2",
-    "xmlbuilder2": "^2.4.0"
-  }
+	"name": "schicknglam",
+	"version": "1.0.0",
+	"description": "schicknglam webapp",
+	"main": "app.js",
+	"scripts": {
+		"start": "NODE_ENV=production node app2.js"
+	},
+	"author": "Olakunle Fajorin",
+	"license": "ISC",
+	"dependencies": {
+		"aws-sdk": "^2.999.0",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.19.0",
+		"client-sessions": "^0.8.0",
+		"crypto-js": "^4.0.0",
+		"csurf": "^1.11.0",
+		"ejs": "^3.0.1",
+		"express": "^4.17.1",
+		"fs": "0.0.1-security",
+		"helmet": "^4.1.1",
+		"method-override": "^3.0.0",
+		"mongodb": "^3.6.9",
+		"mongoose": "^5.13.2",
+		"multer": "^1.4.3",
+		"node-libcurl": "^2.3.3",
+		"request": "^2.88.0",
+		"uuid": "^8.3.2",
+		"xmlbuilder2": "^2.4.0"
+	}
 }
